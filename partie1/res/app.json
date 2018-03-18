@@ -1,0 +1,39 @@
+{
+   "debug":false,
+   "simulation":{
+      "time":{
+         "factor":0.5,
+         "max dt":0.05
+      },
+       "substance":{
+	   "max" : 20000,
+	   "diffusion radius" : 2,
+	   "diffusion constant" : 60,
+	   "glucose": {
+	       "base": 6000,
+	       "range": 600,
+	       "delta": 100
+	   },
+	   "bromopyruvate":{
+	       "delta": 10
+	   },
+	   "vgef":{
+	       "diffusion radius" : 5
+	   }
+       }
+   },
+   "stats":{
+      "refresh rate":1
+   },
+   "window":{
+      "antialiasing level":4,
+      "title":"INFOSV Simulation",
+      "simulation":{
+         "width":800,
+         "height":800
+      },
+      "stats":{
+         "height":100
+      }
+   }
+}

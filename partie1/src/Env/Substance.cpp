@@ -90,7 +90,7 @@ double Substance::operator[](SubstanceId index) const
 			return cBMP;
 			
 		default:
-			throw std::invalid_argument;
+			throw std::invalid_argument("Valid arguments are [0,1,2]");
 	} 
 }
 
@@ -162,7 +162,7 @@ void update(SubstanceId subId, double scalaire)
 			break;
 			
 		default:
-			throw std::invalid_argument;
+			throw std::invalid_argument("Valid arguments are [0,1,2]");
 	}
 	normalise();
 }
