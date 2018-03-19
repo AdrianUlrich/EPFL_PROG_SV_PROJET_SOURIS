@@ -1,7 +1,7 @@
 #ifndef I_SUBSTANCE_HPP
 #define I_SUBSTANCE_HPP
 
-#include <Application.hpp>
+#include <Types.hpp>
 #include <Utility/Constants.hpp>
 
 class Substance 
@@ -24,20 +24,23 @@ public:
 
 	bool operator==(Substance const&) const;
 	double operator[](const SubstanceId index) const;
-	Substance& Substance::operator +=(Substance const&);
-	Substance& Substance::operator -=(Substance const&);
-	Substance& Substance::operator *=(double);
+	Substance& operator +=(Substance const&);
+	Substance& operator -=(Substance const&);
+	Substance& operator *=(double);
+	
+
 private:
 	void normalise();
-
-	const static double cMAX = getAppConfig().substance_max_value;
+	
+	double cMAX;
 
 	double cVGEF;
 	double cGLU;
 	double cBMP;
-}
+};
 
-Substance Substance::operator *(Substance,Substance const&);
-bool operator !=(Substance const&,Substance const&) const;
+Substance operator*(Substance,double);
+bool operator!=(Substance const&,Substance const&);
+std::ostream& operator<<(std::ostream&, Substance const&);
 
 #endif //I_SUBSTANCE_HPP

@@ -1,0 +1,6 @@
+[Q1.1] En utilisant les fonctions codées précédemment
+[Q1.2] Externe, car je n'accède qu'à des methodes publiques
+[Q1.3] Il faut passer en const& les instances de classes (Collider et Vec2d)
+[Q1.4] Excepté le constructeur, aucune d'entre elles ne change l'instance courante
+[Q1.5] Il faut passer en const& toutes les structures de données volumineuses que l'on ne souhaite pas modifier
+[Q1.6] Toutes les methodes internes qui ne modifient pas l'instance

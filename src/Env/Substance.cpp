@@ -1,4 +1,4 @@
-#include <Substance.hpp>
+#include "Substance.hpp"
 #include <Utility/Constants.hpp>
 #include <Utility/Utility.hpp>
 #include <Application.hpp>
@@ -13,28 +13,29 @@ Substance::Substance()
 {}
 
 Substance::Substance(double cVGEF, double cGLU, double cBMP)
-:	cVGEF(cVGEF),
+:	cMAX(getAppConfig().substance_max_value),
+	cVGEF(cVGEF),
 	cGLU(cGLU),
-	cBMP(cBMP),
+	cBMP(cBMP)
 {
 	normalise();	
 }
 
 void Substance::normalise()
 {
-	if (isNull()) cVGEF = cGLU = cBMP = 0.0;
-	/* potentially faster
+	if (isNull()) {cVGEF = cGLU = cBMP = 0.0; return;}
 	if (cVGEF > cMAX)	cVGEF = cMAX;
 	if (cGLU > cMAX)	cGLU = cMAX;
 	if (cBMP > cMAX)	cBMP = cMAX;
-	if (cVGEF < 0)		cVGEF = 0;
-	if (cGLU < 0)		cGLU = 0;
-	if (cBMP < 0)		cBMP = 0;
-	*/
+	if (cVGEF < SUBSTANCE_PRECISION)	cVGEF = 0;
+	if (cGLU < SUBSTANCE_PRECISION)		cGLU = 0;
+	if (cBMP < SUBSTANCE_PRECISION)		cBMP = 0;
+	
+	/*
 	cVGEF= min(cMAX,max(0,cVGEF));
 	cGLU = min(cMAX,max(0,cGLU));
 	cBMP = min(cMAX,min(0,cBMP));
-
+	*/
 }
 
 bool Substance::isNull(double precision)
@@ -44,24 +45,24 @@ bool Substance::isNull(double precision)
 		and (isEqual(cBMP, 0, precision)));
 }
 
-double getFractVGEF() const;
+double Substance::getFractVGEF() const
 {
-	if (cVGEF==0) return 0;
+	if (cVGEF < SUBSTANCE_PRECISION) return 0;
 	return cVGEF/getTotalConcentration();
 }
-double getFractGlucose() const;
+double Substance::getFractGlucose() const
 {
-	if (cGLU==0) return 0;
+	if (cGLU < SUBSTANCE_PRECISION) return 0;
 	return cGLU/getTotalConcentration();
 }
-double getFractInhibitor() const
+double Substance::getFractInhibitor() const
 {
-	if (cBMP==0) return 0;
+	if (cBMP < SUBSTANCE_PRECISION) return 0;
 	return cBMP/getTotalConcentration();
 }
-double getTotalConcentration() const
+double Substance::getTotalConcentration() const
 {
-	return cVGEF + cGLU + cBMP;
+	return (cVGEF + cGLU + cBMP);
 }
 
 bool Substance::operator ==(Substance const& sub) const
@@ -71,7 +72,7 @@ bool Substance::operator ==(Substance const& sub) const
 		and (isEqual(cBMP, sub[BROMOPYRUVATE], 	SUBSTANCE_PRECISION)));
 }
 
-bool operator !=(Substance const& sub1, Substance const& sub2 ) const
+bool operator !=(Substance const& sub1, Substance const& sub2 )
 {
 	return not (sub1==sub2);
 }
@@ -90,7 +91,7 @@ double Substance::operator[](SubstanceId index) const
 			return cBMP;
 			
 		default:
-			throw std::invalid_argument;
+			throw std::invalid_argument("Valid arguments are [0,1,2]");
 	} 
 }
 
@@ -145,34 +146,52 @@ Substance operator*(Substance sub, double scalaire)
 	return sub *= scalaire;
 }
 
-void update(SubstanceId subId, double scalaire)
+void Substance::update(SubstanceId subId, double scalaire)
 {
-	switch (subID)
+	if ((scalaire<0?-scalaire:scalaire)<EPSILON)
+		cVGEF = cGLU = cBMP = 0;
+	switch (subId)
 	{
-		case VGEF:
+		case 2: // VGEF
 			cVGEF*= scalaire;
 			break;
 			
-		case GLUCOSE:
+		case 0: // GLUCOSE
 			cGLU *= scalaire;
 			break;
 			
-		case BROMOPYRUVATE:
+		case 1: // BROMOPYRUVATE
 			cBMP *= scalaire;
 			break;
 			
 		default:
-			throw std::invalid_argument;
+			throw std::invalid_argument("Valid arguments are [0,1,2]");
 	}
 	normalise();
 }
 
-void uptakeOnGradient(double fraction, Substance& receiver, SubstanceId id)
+void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 {
-	double grad((this->operator[](id))*(1-fraction));
+	double grad((this->operator[](id))*c);
 	if (grad<SUBSTANCE_PRECISION) return;
-	update(id,1-fraction);
-	reciever.update(id,(grad+reciever[id])/reciever[id]);
+	receiver.update(id,1+grad/receiver[id]);
+	switch (id)
+	{
+		case 2: // VGEF
+			cVGEF-=grad;
+			break;
+			
+		case 0: // GLUCOSE
+			cGLU -= grad;
+			break;
+			
+		case 1: // BROMOPYRUVATE
+			cBMP -= grad;
+			break;
+			
+		default:
+			throw std::invalid_argument("Valid arguments are [0,1,2]");
+	}
 }
 
 
