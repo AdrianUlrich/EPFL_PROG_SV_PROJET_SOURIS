@@ -13,6 +13,8 @@ class SimulatedEntity
 		void drawOn(sf::RenderTarget);
 
 	protected:
+		sf::Texture texture; //!< Texture SFML
+
 		Vec2d pos; 			//!< Membre "position"
 		Angle angle; 		//!< Membre "angle"
 

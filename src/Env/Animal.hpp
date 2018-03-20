@@ -8,10 +8,7 @@ class Animal : public SimulatedEntity
 {
 	public:
 		/** Default constructor */
-		Animal();
-
-	protected:
-
+		Animal() = delete;
 };
 
 #endif // ANIMAL_HPP
