@@ -48,7 +48,9 @@ sf::Text buildText(std::string const& msg, Vec2d const& position, sf::Font const
 {
     sf::Text txt(msg, font, size);
     txt.setPosition(position);
-#if SFML_VERSION_MAJOR >= 2 && (SFML_VERSION_MINOR > 3 || (SFML_VERSION_MINOR == 3 && SFML_VERSION_PATCH >= 2))
+#if SFML_VERSION_MAJOR >= 2 && (SFML_VERSION_MINOR >= 4)	
+/*#if SFML_VERSION_MAJOR >= 2 && (SFML_VERSION_MINOR > 3 || (SFML_VERSION_MINOR == 3 && SFML_VERSION_PATCH >= 2))
+ */
     txt.setFillColor(color);
 #else
     txt.setColor(color);
@@ -106,6 +108,16 @@ sf::RectangleShape buildRectangle(Vec2d const& topLeft, Vec2d const& bottomRight
     rect.setOutlineThickness(borderThickness);
     rect.setOutlineColor(borderColor);
 
+    return rect;
+}
+sf::RectangleShape buildRectangle(Vec2d const& topLeft, Vec2d const& bottomRight,
+                                  sf::Texture* texture)
+{
+    Vec2d size = bottomRight - topLeft;
+    sf::RectangleShape rect(size);
+    rect.setPosition(topLeft + size / 2.0);
+    rect.setOrigin(size / 2.0);
+    rect.setTexture(texture);
     return rect;
 }
 

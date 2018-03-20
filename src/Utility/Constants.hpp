@@ -23,7 +23,7 @@ std::string const GENERAL = "general";
 std::string const MOUSE   = "mouse";
 std::string const CHEESE  = "cheese";
 std::string const ANIMAL_INDIVIDUAL = "Tracked Animal";
-std::string const GRASS_INDIVIDUAL   = "Tracked grass";
+std::string const CHEESE_INDIVIDUAL   = "Tracked cheese";
 	
 std::string const INDIVIDUAL = "Tracked Animal";
 std::string const ENERGY = "energy";
