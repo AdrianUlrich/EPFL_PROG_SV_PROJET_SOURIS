@@ -11,7 +11,7 @@ class Cheese : public SimulatedEntity
 		Cheese();
 
 		/** masked draw function */
-		void drawOn(sf::RenderTarget);
+		void drawOn(sf::RenderTarget&);
 };
 
 #endif // CHEESE_HPP

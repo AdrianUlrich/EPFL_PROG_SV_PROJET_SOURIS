@@ -10,10 +10,11 @@ class SimulatedEntity
 		SimulatedEntity(Vec2d pos, double energy);
 
 		/** SFML draw function */
-		void drawOn(sf::RenderTarget);
+		void drawOn(sf::RenderTarget&);
 
 	protected:
 		sf::Texture texture; //!< Texture SFML
+		sf::Sprite entitySprite; //!< Sprite SFML
 
 		Vec2d pos; 			//!< Membre "position"
 		Angle angle; 		//!< Membre "angle"

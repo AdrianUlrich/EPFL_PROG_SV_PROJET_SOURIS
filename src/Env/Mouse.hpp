@@ -10,8 +10,12 @@ class Mouse : public Animal
 		/** Default constructor */
 		Mouse();
 
-		/** masked draw function */
-		void drawOn(sf::RenderTarget);
+		/**	masked draw function
+		 *	@param SFML window
+		 */
+		void drawOn(sf::RenderTarget&);
+	private:
+		double mouseSize;
 };
 
 #endif // MOUSE_HPP

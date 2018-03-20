@@ -4,17 +4,17 @@
 #include <Utility/Vec2d.hpp>
 #include <vector>
 
-typedef std::pair <Vec2d, Vec2d> Wall; //bottom right corner, top left corner
+typedef std::pair <Vec2d, Vec2d> Wall; //! <bottom right corner, top left corner>
 
 class Box
 {
 public:
 	Box (Vec2d position, double largeur, double hauteur, double epaisseur);
-	
-	Vec2d getCenter() const;
-	double getWidth() const;
-	double getHeight () const;
-	double getWallWidth () const;
+
+	Vec2d getCenter() const				{return position;}
+	double getWidth() const				{return largeur;}
+	double getHeight () const			{return hauteur;}
+	double getWallWidth () const	{return epaisseur;}
 
 	double getLeftlimit(bool intern = false);
 	double getRightLimit(bool intern = false);
@@ -29,14 +29,14 @@ private:
 	double largeur;
 	double hauteur;
 	double epaisseur;
-/*
+/**
  * mur gauche : mur[0]
  * mur droit : mur[1]
  * mur haut : mur[2]
  * mur bas : mur[3]
  */
-	Vector <Wall> mur (4);
-	
+	vector<Wall> mur (4);
+
 };
 
 

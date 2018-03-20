@@ -9,7 +9,7 @@ SimulatedEntity::SimulatedEntity(Vec2d pos, double energy)
 	age(sf::Time.Zero)
 {}
 
-void SimulatedEntity::drawOn(sf::RenderTarget target)
+void SimulatedEntity::drawOn(sf::RenderTarget& target)
 {
 	auto text = buildText
 	(
