@@ -2,7 +2,7 @@
 #define I_BOX_HPP
 
 #include <Utility/Vec2d.hpp>
-
+#include <vector>
 
 typedef std::pair <Vec2d, Vec2d> Wall; //bottom right corner, top left corner
 
@@ -24,9 +24,6 @@ public:
 	bool isPositionOnWall(const Vec2d&);
 
 
-
-
-
 private:
 	Vec2d position;
 	double largeur;
@@ -39,13 +36,8 @@ private:
  * mur bas : mur[3]
  */
 	Vector <Wall> mur (4);
-
-
-
 	
 };
-
-
 
 
 #endif //I_BOX_HPP
