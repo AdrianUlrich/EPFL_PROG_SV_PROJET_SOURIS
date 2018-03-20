@@ -10,14 +10,16 @@
 #include <Utility/Vec2d.hpp>
 
 #include <SFML/Graphics.hpp>
-
+#include <SFML/System.hpp>
 #include <string>
 #include <utility> // std::pair
 #include <vector>
 
 /* A few typedefs */
+using CellCoord = sf::Vector2i;
 using Uid = unsigned int;
 using Angle      = double;
+using Quantity   = double;
 using Prob       = double;
 using Probs      = std::vector<Prob>;
 using Intervals  = std::vector<Angle>;
@@ -110,6 +112,18 @@ sf::RectangleShape buildSquare(Vec2d const& position, double side, sf::Color col
 sf::RectangleShape buildRectangle(Vec2d const& topLeft, Vec2d const& bottomRight,
                                   sf::Color borderColor, double borderThickness,
                                   sf::Color fillColor = sf::Color::Transparent);
+/*!
+ * @brief Construct a rectable with a sf::RectangleShape.
+ *
+ * @param topLeft the top left corner
+ * @param bottomRight the bottom right corner
+ * @param texture the texture to be applied to the shape
+ *
+ * @return a shape with all these parameters set
+ */
+sf::RectangleShape buildRectangle(Vec2d const& topLeft, Vec2d const& bottomRight,
+                                  sf::Texture* texture);
+
 
 /**
  *  @brief Construct
