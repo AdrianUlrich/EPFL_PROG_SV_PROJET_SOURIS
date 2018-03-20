@@ -14,6 +14,7 @@ Cheese::Cheese()
 
 void Cheese::drawOn(sf::RenderTarget& target)
 {
+	//SimulatedEntity::drawOn(target);
 	entitySprite.setSize(energy);
 	entitySprite.setRotation(angle/ DEG_TO_RAD);
 	target.draw(entitySprite);

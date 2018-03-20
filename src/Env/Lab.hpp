@@ -3,8 +3,10 @@
 
 #include <vector>
 #include <Utility/Vec2d.hpp>
-#include <SFML/Graphics.hpp> 
+#include <SFML/Graphics.hpp>
 #include <Application.hpp>
+#include "Animal.hpp"
+#include "Cheese.hpp"
 
 class Lab
 {
@@ -15,13 +17,10 @@ public :
 	void drawOn(sf::RenderTarget& targetWindow);
 	void drawOn(sf::RenderTarget& targetWindow);
 
-
-
 private:
-	vector <Box*> boite ();
-	
+	vector<Box*> boite;
 
-	
+
 };
 
 #endif //I_LAB_HPP

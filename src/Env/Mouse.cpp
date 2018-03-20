@@ -15,6 +15,7 @@ Mouse::Mouse()
 
 void Mouse::drawOn(sf::RenderTarget& target)
 {
+	//SimulatedEntity::drawOn(target);
 	entitySprite.setRotation(angle/ DEG_TO_RAD);
 	target.draw(entitySprite);
 }
