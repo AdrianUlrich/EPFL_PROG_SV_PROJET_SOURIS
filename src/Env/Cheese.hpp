@@ -10,8 +10,10 @@ class Cheese : public SimulatedEntity
 		/** Default constructor */
 		Cheese();
 
-		/** masked draw function */
+		/** masking draw function */
 		void drawOn(sf::RenderTarget&);
+	private:
+    double maxSide;
 };
 
 #endif // CHEESE_HPP

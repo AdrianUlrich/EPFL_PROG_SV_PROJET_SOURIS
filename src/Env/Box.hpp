@@ -11,7 +11,7 @@ class Box
 public:
 	Box (Vec2d position, double largeur, double hauteur, double epaisseur);
 
-	Vec2d getCenter() const				{return position;}
+	Vec2d getCenter() const				{return position+Vec2d(largeur/2,hauteur/2);}
 	double getWidth() const				{return largeur;}
 	double getHeight () const			{return hauteur;}
 	double getWallWidth () const	{return epaisseur;}

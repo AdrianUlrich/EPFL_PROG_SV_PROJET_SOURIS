@@ -1,5 +1,6 @@
 #include "Cheese.hpp"
 #include <Application.hpp>
+#include <algorithm>
 
 Cheese::Cheese()
 : texture(getAppConfig().cheese_texture),
@@ -9,13 +10,14 @@ Cheese::Cheese()
 		pos,
 		energy,
 		texture
-	)
+	),
+	maxSide(std::max(texture.getSize().x, texture.getSize().y)
 {}
 
 void Cheese::drawOn(sf::RenderTarget& target)
 {
 	//SimulatedEntity::drawOn(target);
-	entitySprite.setSize(energy);
+	entitySprite.setScale(Vec2d(energy,energy)/maxSide);
 	entitySprite.setRotation(angle/ DEG_TO_RAD);
 	target.draw(entitySprite);
 }

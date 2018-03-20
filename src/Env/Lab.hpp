@@ -7,6 +7,7 @@
 #include <Application.hpp>
 #include "Animal.hpp"
 #include "Cheese.hpp"
+#include "Box.hpp"
 
 class Lab
 {
@@ -18,8 +19,9 @@ public :
 	void drawOn(sf::RenderTarget& targetWindow);
 
 private:
-	vector<Box*> boite;
-
+	vector<vector<Box*>> boite;
+	Animal* animal;
+	Cheese* animal;
 
 };
 
