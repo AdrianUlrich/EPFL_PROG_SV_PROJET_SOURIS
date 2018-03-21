@@ -2,6 +2,8 @@
 #define SIMULATEDENTITY_HPP
 
 #include <SFML/Graphics.hpp>
+#include <Utility/Utility.hpp>
+#include "Box.hpp"
 
 class SimulatedEntity
 {
