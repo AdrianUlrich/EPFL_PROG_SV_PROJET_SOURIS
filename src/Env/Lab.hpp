@@ -12,6 +12,14 @@
 class Lab
 {
 public :
+	/** default constructor
+		* uses makeboxes(getAppConfig().simulation_lab_nb_boxes)
+		*/
+	Lab();
+
+	/** destructor deletes pointers etc */
+	~Lab();
+
 	void makeBoxes(unsigned int nbCagesPerRow);
 	void destroyBoxes();
 	void update(sf::Time dt);

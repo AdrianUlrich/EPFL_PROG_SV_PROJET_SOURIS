@@ -1,6 +1,13 @@
 #include "Lab.hpp"
 #include <exception>
 
+Lab::Lab()
+:	animal(nullptr),
+	cheese(nullptr)
+{
+	makeBoxes(getAppConfig().simulation_lab_nb_boxes);
+}
+
 void Lab::makeBoxes(unsigned int nbCagesPerRow)
 {
 	if (!(boite.empty())) boite.clear();
