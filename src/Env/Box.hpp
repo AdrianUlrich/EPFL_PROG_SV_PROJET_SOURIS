@@ -3,6 +3,8 @@
 
 #include <Utility/Vec2d.hpp>
 #include <vector>
+#include <SFML/Graphics.hpp>
+
 
 typedef std::pair <Vec2d, Vec2d> Wall; //! <bottom right corner, top left corner>
 
@@ -23,6 +25,7 @@ public:
 	bool isPositionInside(const Vec2d&);
 	bool isPositionOnWall(const Vec2d&);
 
+	void drawOn(sf::RenderTarget&);
 
 private:
 	Vec2d position;
@@ -35,8 +38,9 @@ private:
  * mur haut : mur[2]
  * mur bas : mur[3]
  */
-	vector<Wall> mur (4);
-
+	vector<Wall> mur;
+	sf::Texture
+	vector<sf::RectangleShape> rectangle;
 };
 
 

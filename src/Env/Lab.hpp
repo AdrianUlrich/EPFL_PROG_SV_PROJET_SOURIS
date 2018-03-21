@@ -15,13 +15,13 @@ public :
 	void makeBoxes(unsigned int nbCagesPerRow);
 	void destroyBoxes();
 	void update(sf::Time dt);
-	void drawOn(sf::RenderTarget& targetWindow);
-	void drawOn(sf::RenderTarget& targetWindow);
+	void drawOn(sf::RenderTarget&);
+	void reset();
 
 private:
 	vector<vector<Box*>> boite;
 	Animal* animal;
-	Cheese* animal;
+	Cheese* cheese;
 
 };
 

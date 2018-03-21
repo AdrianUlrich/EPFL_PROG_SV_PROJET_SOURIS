@@ -10,9 +10,7 @@ class Mouse : public Animal
 		/** Default constructor */
 		Mouse();
 
-		/**	masked draw function
-		 *	@param SFML window
-		 */
+		/**	masked draw function*/
 		void drawOn(sf::RenderTarget&);
 	private:
 		double mouseSize;

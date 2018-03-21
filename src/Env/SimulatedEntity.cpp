@@ -22,3 +22,8 @@ void SimulatedEntity::drawOn(sf::RenderTarget& target)
 text.setRotation(angle / DEG_TO_RAD + 90);
 target.draw(text);
 }
+
+void SimulatedEntity::update(sf::Time dt)
+{
+  age += dt;
+}

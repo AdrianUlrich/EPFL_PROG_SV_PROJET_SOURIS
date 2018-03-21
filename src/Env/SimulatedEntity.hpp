@@ -12,6 +12,8 @@ class SimulatedEntity
 		/** SFML draw function */
 		void drawOn(sf::RenderTarget&);
 
+		/** aging function*/
+		void update(sf::Time dt);
 	protected:
 		sf::Texture texture; //!< Texture SFML
 		sf::Sprite entitySprite; //!< Sprite SFML

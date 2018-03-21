@@ -3,6 +3,7 @@
 
 void Lab::makeBoxes(unsigned int nbCagesPerRow)
 {
+	if (!(boite.empty())) boite.clear();
 	if (nbCagesPerRow<1)
 		throw std::invalid_argument("Cannot have zero or less cages");
 	double largeur(getApp().getLabSize().x);
@@ -32,16 +33,25 @@ void Lab::destroyBoxes()
 
 void Lab::update(sf::Time dt)
 {
-
+	animal->update(dt);
+	cheese->update(dt);
 }
 
-void Lab::drawOn(sf::RenderTarget& targetWindow)
+void Lab::drawOn(sf::RenderTarget& target)
 {
-
+	for (auto vec : boite)
+	{
+		for (auto val : vec)
+		{
+			val->drawOn(target);
+		}
+	}
+	animal->drawOn();
+	cheese->drawOn();
 }
 
-void Lab::drawOn(sf::RenderTarget& targetWindow)
+void Lab::reset()
 {
-
-
+delete animal; animal = nullptr;
+delete cheese; cheese = nullptr;
 }

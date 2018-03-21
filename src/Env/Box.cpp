@@ -1,7 +1,13 @@
 #include "Box.hpp"
+#include <Application.hpp>
 
 Box::Box (Vec2d position, double largeur, double hauteur, double epaisseur)
-	: position (position), largeur (largeur), hauteur (hauteur), epaisseur (epaisseur)
+:	position (position),
+	largeur (largeur),
+	hauteur (hauteur),
+	epaisseur (epaisseur),
+	mur(4),
+  texture(&getAppTexture(getAppConfig().simulation_lab_fence))
 {
 	mur[0].first = Vec2d(position.x,										position.y+epaisseur);
 	mur[0].second =Vec2d(position.x+epaisseur,					position.y+hauteur);
@@ -11,6 +17,8 @@ Box::Box (Vec2d position, double largeur, double hauteur, double epaisseur)
 	mur[2].second =Vec2d(position.x+largeur,						position.y+hauteur-epaisseur);
 	mur[3].first = Vec2d(position.x, 										position.y);
 	mur[3].second =Vec2d(position.x+largeur-epaisseur,	position.y+epaisseur);
+	for (auto val : mur)
+		rectangle.push_back(buildRectangle(val.second, val.first, texture);
 }
 
 double Box::getLeftLimit(bool intern)
@@ -59,8 +67,8 @@ bool isPositionInside(const Vec2d& position)
 bool isPositionOnWall(const Vec2d& position)
 {
 	return
-	(!
-				(isPointInside(position))
+	(
+			!	(isPointInside(position))
 		and	(position.x < getRightLimit())
 		and	(position.x > getLeftLimit())
 		and	(position.y > getTopLimit())
@@ -68,3 +76,7 @@ bool isPositionOnWall(const Vec2d& position)
 	);
 }
 
+void Box::drawOn(sf::RenderTarget& target)
+{
+	target.draw(rectangle);
+}
