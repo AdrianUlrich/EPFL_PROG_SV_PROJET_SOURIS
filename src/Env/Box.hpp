@@ -38,9 +38,9 @@ private:
  * mur haut : mur[2]
  * mur bas : mur[3]
  */
-	vector<Wall> mur;
-	sf::Texture
-	vector<sf::RectangleShape> rectangle;
+	std::vector<Wall> mur;
+	sf::Texture* texture;
+	std::vector<sf::RectangleShape> rectangle;
 };
 
 

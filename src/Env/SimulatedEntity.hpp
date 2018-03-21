@@ -6,7 +6,7 @@
 class SimulatedEntity
 {
 	public:
-		/** Default constructor */
+		/** constructor */
 		SimulatedEntity(Vec2d pos, double energy);
 
 		/** SFML draw function */
@@ -15,7 +15,7 @@ class SimulatedEntity
 		/** aging function*/
 		void update(sf::Time dt);
 	protected:
-		sf::Texture texture; //!< Texture SFML
+		sf::Texture* texture; //!< Texture SFML
 		sf::Sprite entitySprite; //!< Sprite SFML
 
 		Vec2d pos; 			//!< Membre "position"

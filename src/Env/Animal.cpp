@@ -1,4 +1,5 @@
 #include "Animal.hpp"
 
-Animal::Animal()
+Animal::Animal(Vec2d pos, double energy)
+:	SimulatedEntity(pos,energy)
 {}

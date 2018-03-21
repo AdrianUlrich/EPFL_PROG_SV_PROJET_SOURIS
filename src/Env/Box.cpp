@@ -1,5 +1,6 @@
 #include "Box.hpp"
 #include <Application.hpp>
+#include <Utility/Utility.hpp>
 
 Box::Box (Vec2d position, double largeur, double hauteur, double epaisseur)
 :	position (position),

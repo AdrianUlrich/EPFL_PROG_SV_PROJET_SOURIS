@@ -17,7 +17,7 @@ void Lab::makeBoxes(unsigned int nbCagesPerRow)
 	double hauteur(getApp().getLabSize().y);
 	for (int i(0); i<nbCagesPerRow; ++i)
 	{
-		boite.push_back(vector<Box*>);
+		boite.push_back(std::vector<Box*>);
 		for (int j(0); j<nbCagesPerRow; ++j)
 		{
 			boite[i].push_back(new Box(Vec2d(i*largeur,j*hauteur),largeur,hauteur,largeur/40))

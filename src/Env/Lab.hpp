@@ -27,7 +27,7 @@ public :
 	void reset();
 
 private:
-	vector<vector<Box*>> boite;
+	std::vector<std::vector<Box*>> boite;
 	Animal* animal;
 	Cheese* cheese;
 

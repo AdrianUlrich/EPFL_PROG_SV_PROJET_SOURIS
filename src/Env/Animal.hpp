@@ -7,8 +7,8 @@
 class Animal : public SimulatedEntity
 {
 	public:
-		/** Default constructor */
-		Animal();
+		/** constructor */
+		Animal(Vec2d pos, double energy);
 };
 
 #endif // ANIMAL_HPP
