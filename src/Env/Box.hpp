@@ -18,7 +18,7 @@ public:
 	double getHeight () const			{return hauteur;}
 	double getWallWidth () const	{return epaisseur;}
 
-	double getLeftlimit(bool intern = false);
+	double getLeftLimit(bool intern = false);
 	double getRightLimit(bool intern = false);
 	double getTopLimit(bool intern = false);
 	double getBottomLimit(bool intern = false);

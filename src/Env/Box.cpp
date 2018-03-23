@@ -8,16 +8,16 @@ Box::Box (Vec2d position, double largeur, double hauteur, double epaisseur)
 	hauteur (hauteur),
 	epaisseur (epaisseur),
 	mur(4),
-  texture(&getAppTexture(getAppConfig().simulation_lab_fence))
+	texture(&getAppTexture(getAppConfig().simulation_lab_fence))
 {
-	mur[0].first = Vec2d(position.x,									position.y+epaisseur);
-	mur[0].second =Vec2d(position.x+epaisseur,				position.y+hauteur);
-	mur[1].first = Vec2d(position.x+epaisseur,				position.y+hauteur-epaisseur);
-	mur[1].second =Vec2d(position.x+largeur,					position.y+hauteur);
-	mur[2].first = Vec2d(position.x+largeur-epaisseur,position.y);
-	mur[2].second =Vec2d(position.x+largeur,					position.y+hauteur-epaisseur);
-	mur[3].first = Vec2d(position.x, 									position.y);
-	mur[3].second =Vec2d(position.x+largeur-epaisseur,position.y+epaisseur);
+	mur[0].first = Vec2d(position.x-(largeur/2)+epaisseur, position.y+(hauteur/2));
+	mur[0].second =Vec2d(position.x-(largeur/2), position.y-(hauteur/2)+epaisseur);
+	mur[1].first = Vec2d(position.x+(largeur/2), position.y+(hauteur/2));
+	mur[1].second =Vec2d(position.x-(largeur/2)+epaisseur, position.y+(hauteur/2)+epaisseur);
+	mur[2].first = Vec2d(position.x+(largeur/2), position.y+(hauteur/2)-epaisseur);
+	mur[2].second =Vec2d(position.x+(largeur/2)-epaisseur, position.y-(hauteur/2));
+	mur[3].first = Vec2d(position.x+(largeur/2)-epaisseur, position.y-(hauteur/2)+epaisseur);
+	mur[3].second =Vec2d(position.x-(largeur/2), position.y-(hauteur/2));
 	for (auto val : mur)
 		rectangle.push_back(buildRectangle(val.second, val.first, texture));
 }
@@ -25,33 +25,33 @@ Box::Box (Vec2d position, double largeur, double hauteur, double epaisseur)
 double Box::getLeftLimit(bool intern)
 {
 	if (intern)
-		return mur[0].first.x;
-	else
 		return mur[0].second.x;
+	else
+		return mur[0].first.x;
 }
 
 double Box::getRightLimit(bool intern)
 {
 	if (intern)
-		return mur[1].second.x;
-	else
 		return mur[1].first.x;
+	else
+		return mur[1].second.x;
 }
 
 double Box::getTopLimit(bool intern)
 {
 	if (intern)
-		return mur[2].first.y;
-	else
 		return mur[2].second.y;
+	else
+		return mur[2].first.y;
 }
 
 double Box::getBottomLimit(bool intern)
 {
 	if (intern)
-		return mur[3].second.y;
-	else
 		return mur[3].first.y;
+	else
+		return mur[3].second.y;
 }
 
 bool Box::isPositionInside(const Vec2d& position)
@@ -69,7 +69,7 @@ bool Box::isPositionOnWall(const Vec2d& position)
 {
 	return
 	(
-			!	(isPointInside(position))
+			!	(isPositionInside(position))
 		and	(position.x < getRightLimit())
 		and	(position.x > getLeftLimit())
 		and	(position.y > getTopLimit())
@@ -84,3 +84,4 @@ void Box::drawOn(sf::RenderTarget& target)
 	target.draw(val);
 	}
 }
+
