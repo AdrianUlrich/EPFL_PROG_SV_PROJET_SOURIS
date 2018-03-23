@@ -5,11 +5,14 @@
 Cheese::Cheese()
 : texture(getAppConfig().cheese_texture),
 	energy(getAppConfig().cheese_initial_energy)
-	entitySprite(buildSprite
+	entitySprite
 	(
-		pos,
-		energy,
-		texture
+		buildSprite
+		(
+			pos,
+			energy,
+			texture
+		)
 	),
 	maxSide(std::max(texture.getSize().x, texture.getSize().y)
 {}
