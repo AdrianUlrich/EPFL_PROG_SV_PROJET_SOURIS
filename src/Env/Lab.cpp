@@ -17,7 +17,7 @@ void Lab::makeBoxes(unsigned int nbCagesPerRow)
 	double hauteur(getApp().getLabSize().y);
 	for (int i(0); i<nbCagesPerRow; ++i)
 	{
-		boite.push_back(std::vector<Box*>);
+		boite.push_back(std::vector<Box*>(0));
 		for (int j(0); j<nbCagesPerRow; ++j)
 		{
 			boite[i].push_back(new Box(Vec2d(i*largeur,j*hauteur),largeur,hauteur,largeur/40))
@@ -27,9 +27,9 @@ void Lab::makeBoxes(unsigned int nbCagesPerRow)
 
 void Lab::destroyBoxes()
 {
-	for (auto vec : boite)
+	for (auto& vec : boite)
 	{
-		for (auto val : vec)
+		for (auto& val : vec)
 		{
 			delete val;
 			val=nullptr;
