@@ -8,8 +8,8 @@
 
 #include <Tests/GraphicalTests/LabTest.hpp>
 #include <Env/Lab.hpp>
-//#include <Env/Mouse.hpp> // A DECOMENTER pour src2.2
-//#include <Env/Cheese.hpp> // A DECOMENTER pour src2.2
+#include <Env/Mouse.hpp> // A DECOMENTER pour src2.2
+#include <Env/Cheese.hpp> // A DECOMENTER pour src2.2
 #include <Utility/Utility.hpp>
 
 IMPLEMENT_MAIN(LabTest)
@@ -27,29 +27,28 @@ void LabTest::onEvent(sf::Event event, sf::RenderWindow&)
 {
 if (event.type == sf::Event::KeyPressed) {
 	switch (event.key.code) {
-		case sf::Keyboard::M:
+		case sf::Keyboard::M: // M for mouse
 			{
-				/*getAppEnv().addAnimal(new Mouse
-				  (getCursorPositionInView()));*/
+				getAppEnv().addAnimal(new Mouse
+				  (getCursorPositionInView()));
 			}
 				break;
 	
 		case sf::Keyboard::F: // F for food
 			{
-				/*
 				Cheese* pieceOfCheese(new Cheese
 									  (getCursorPositionInView()));
 				if (getAppEnv().addCheese(pieceOfCheese))
-				mLastCreatedCheese = pieceOfCheese; */
+				mLastCreatedCheese = pieceOfCheese;
 			}
 				break;
 
-		case sf::Keyboard::E: //E for "Eat"
-		{
-			/*if (mLastCreatedCheese != nullptr)
-			  mLastCreatedCheese->provideEnergy(10);*/
-		}
-		break;
+		case sf::Keyboard::E: // E for "Eat"
+			{
+				if (mLastCreatedCheese != nullptr)
+				  mLastCreatedCheese->provideEnergy(10);
+			}
+				break;
 				
 		case sf::Keyboard::Num0: 
 			{

@@ -84,3 +84,20 @@ void Lab::reset()
 	}
 }
 
+bool Lab::addAnimal(Mouse* mickey)
+{
+	if (animal != nullptr)
+		return false;
+	delete animal;
+	animal=mickey;
+	return true;
+}
+
+bool Lab::addCheese(Cheese* caprice_des_dieux)
+{
+	if (cheese != nullptr)
+		return false;
+	delete cheese;
+	cheese=caprice_des_dieux;
+	return true;
+}

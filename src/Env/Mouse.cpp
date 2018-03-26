@@ -6,22 +6,19 @@ Mouse::Mouse(Vec2d const& pos)
 	(
 		pos,
 		getAppConfig().mouse_energy_initial,
-		getAppTexture(getAppConfig().mouse_texture_white)
+		&getAppTexture(getAppConfig().mouse_texture_white)
 	),
 	mouseSize(getAppConfig().mouse_size)
 {
-	entitySprite = 
-	buildSprite
-	(
-		pos,
-		mouseSize,
-		texture
-	);
+	entitySprite = buildSprite(pos,mouseSize,*texture);
+	longevity = getAppConfig().mouse_longevity;
 }
 
 void Mouse::drawOn(sf::RenderTarget& target)
 {
-	//SimulatedEntity::drawOn(target);
+	if (isDebugOn())
+		SimulatedEntity::drawOn(target);
+	entitySprite.setPosition(pos);
 	entitySprite.setRotation(angle/ DEG_TO_RAD);
 	target.draw(entitySprite);
 }

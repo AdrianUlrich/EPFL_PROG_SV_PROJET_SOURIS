@@ -20,9 +20,8 @@ class LabTest : public Application
 {
 public:
 	LabTest(int argc, char const** argv)
-		: Application(argc, argv)
-		{
-		}
+	:	Application(argc, argv)
+	{}
 	virtual void onRun() override final;
 	virtual void onEvent(sf::Event event, sf::RenderWindow& window) override final;
 private:

@@ -22,12 +22,7 @@ Box::Box (Vec2d position, double largeur, double hauteur, double epaisseur)
 	murs[3].second=Vec2d(x,y)+Vec2d(0,0);
 	/*! initialisation rectangles */
 	for (int i(0); i<4; ++i)
-		builtRecs[i] = buildRectangle
-		(
-			murs[i].second,
-			murs[i].first,
-			texture
-		);
+		builtRecs[i] = buildRectangle(murs[i].second,murs[i].first,texture);
 }
 
 double Box::getLeftLimit(bool intern)

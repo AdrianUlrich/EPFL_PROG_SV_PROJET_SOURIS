@@ -12,8 +12,11 @@ class Cheese : public SimulatedEntity
 
 		/** masking draw function */
 		void drawOn(sf::RenderTarget&);
+		
+		/** get eaten you camembert */
+		Quantity provideEnergy(Quantity);
 	private:
-    double maxSide;
+		double maxSide;
 };
 
 #endif // CHEESE_HPP

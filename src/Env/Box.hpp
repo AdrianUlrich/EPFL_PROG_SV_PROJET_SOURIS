@@ -31,13 +31,14 @@ private:
 	double l; //!< Largeur de la boite
 	double h; //!< Hauteur de la boite
 	double e; //!< Epaisseur de la boite
-/**
- * mur gauche : [0]
- * mur bas : [1]
- * mur droit : [2]
- * mur haut : [3]
- */
+	
+	/**mur gauche : [0]
+	 * mur bas : [1]
+	 * mur droit : [2]
+	 * mur haut : [3]	*/
 	std::array<Wall,4> murs;
+	
+	/*! Graphic files that dont need to be created every time */
 	std::array<sf::RectangleShape,4> builtRecs;
 	sf::Texture* texture;
 };
