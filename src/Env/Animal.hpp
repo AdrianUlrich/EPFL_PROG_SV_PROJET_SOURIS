@@ -8,7 +8,7 @@ class Animal : public SimulatedEntity
 {
 	public:
 		/** constructor */
-		Animal(Vec2d pos, double energy);
+		Animal(Vec2d const& pos, double energy, sf::Texture texture);
 };
 
 #endif // ANIMAL_HPP

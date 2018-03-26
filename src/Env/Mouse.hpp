@@ -3,12 +3,11 @@
 
 #include "Animal.hpp"
 
-
 class Mouse : public Animal
 {
 	public:
-		/** Default constructor */
-		Mouse();
+		/** constructor */
+		Mouse(Vec2d const&);
 
 		/**	masked draw function*/
 		void drawOn(sf::RenderTarget&);

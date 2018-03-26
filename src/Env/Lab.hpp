@@ -4,14 +4,14 @@
 #include <vector>
 #include <Utility/Vec2d.hpp>
 #include <SFML/Graphics.hpp>
-#include <Application.hpp>
 #include "Animal.hpp"
 #include "Cheese.hpp"
 #include "Box.hpp"
 
-class Lab
+class Lab : public sf::NonCopyable
 {
 public :
+
 	/** default constructor
 		* uses makeboxes(getAppConfig().simulation_lab_nb_boxes)
 		*/
@@ -22,12 +22,13 @@ public :
 
 	void makeBoxes(unsigned int nbCagesPerRow);
 	void destroyBoxes();
+
 	void update(sf::Time dt);
 	void drawOn(sf::RenderTarget&);
 	void reset();
 
 private:
-	std::vector<std::vector<Box*>> boite;
+	std::vector<std::vector<Box*>> boites;
 	Animal* animal;
 	Cheese* cheese;
 

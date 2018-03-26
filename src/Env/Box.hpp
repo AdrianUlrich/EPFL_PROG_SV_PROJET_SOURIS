@@ -2,21 +2,20 @@
 #define I_BOX_HPP
 
 #include <Utility/Vec2d.hpp>
-#include <vector>
 #include <SFML/Graphics.hpp>
-
+#include <array>
 
 typedef std::pair <Vec2d, Vec2d> Wall; //! <bottom right corner, top left corner>
 
 class Box
 {
 public:
-	Box (Vec2d position, double largeur, double hauteur, double epaisseur);
+	Box (Vec2d position, double largeur=300, double hauteur=300, double epaisseur=10);
 
-	Vec2d getCenter() const				{return position+Vec2d(largeur/2,hauteur/2);}
-	double getWidth() const				{return largeur;}
-	double getHeight () const			{return hauteur;}
-	double getWallWidth () const	{return epaisseur;}
+	Vec2d getCenter() const	{return pos;}
+	double getWidth() const	{return l;}
+	double getHeight () const {return h;}
+	double getWallWidth () const {return e;}
 
 	double getLeftLimit(bool intern = false);
 	double getRightLimit(bool intern = false);
@@ -28,19 +27,19 @@ public:
 	void drawOn(sf::RenderTarget&);
 
 private:
-	Vec2d position;
-	double largeur;
-	double hauteur;
-	double epaisseur;
+	Vec2d pos;
+	double l; //!< Largeur de la boite
+	double h; //!< Hauteur de la boite
+	double e; //!< Epaisseur de la boite
 /**
- * mur gauche : mur[0]
- * mur droit : mur[1]
- * mur haut : mur[2]
- * mur bas : mur[3]
+ * mur gauche : [0]
+ * mur bas : [1]
+ * mur droit : [2]
+ * mur haut : [3]
  */
-	std::vector<Wall> mur;
+	std::array<Wall,4> murs;
+	std::array<sf::RectangleShape,4> builtRecs;
 	sf::Texture* texture;
-	std::vector<sf::RectangleShape> rectangle;
 };
 
 

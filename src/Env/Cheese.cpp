@@ -2,10 +2,16 @@
 #include <Application.hpp>
 #include <algorithm>
 
-Cheese::Cheese()
-: texture(getAppConfig().cheese_texture),
-	energy(getAppConfig().cheese_initial_energy)
-	entitySprite
+Cheese::Cheese(Vec2d const& pos)
+:	SimulatedEntity
+	(
+		pos,
+		getAppConfig().cheese_initial_energy,
+		getAppTexture(getAppConfig().cheese_texture)
+	),
+	maxSide(std::max(texture.getSize().x, texture.getSize().y))
+{
+	SimulatedEntity::entitySprite =
 	(
 		buildSprite
 		(
@@ -13,9 +19,8 @@ Cheese::Cheese()
 			energy,
 			texture
 		)
-	),
-	maxSide(std::max(texture.getSize().x, texture.getSize().y)
-{}
+	);
+}
 
 void Cheese::drawOn(sf::RenderTarget& target)
 {

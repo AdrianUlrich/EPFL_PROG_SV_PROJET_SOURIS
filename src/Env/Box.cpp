@@ -1,87 +1,87 @@
 #include "Box.hpp"
 #include <Application.hpp>
 #include <Utility/Utility.hpp>
+#include <array>
 
 Box::Box (Vec2d position, double largeur, double hauteur, double epaisseur)
-:	position (position),
-	largeur (largeur),
-	hauteur (hauteur),
-	epaisseur (epaisseur),
-	mur(4),
+:	pos (position),
+	l(largeur),
+	h(hauteur),
+	e(epaisseur),
 	texture(&getAppTexture(getAppConfig().simulation_lab_fence))
 {
-	mur[0].first = Vec2d(position.x-(largeur/2)+epaisseur, position.y+(hauteur/2));
-	mur[0].second =Vec2d(position.x-(largeur/2), position.y-(hauteur/2)+epaisseur);
-	mur[1].first = Vec2d(position.x+(largeur/2), position.y+(hauteur/2));
-	mur[1].second =Vec2d(position.x-(largeur/2)+epaisseur, position.y+(hauteur/2)+epaisseur);
-	mur[2].first = Vec2d(position.x+(largeur/2), position.y+(hauteur/2)-epaisseur);
-	mur[2].second =Vec2d(position.x+(largeur/2)-epaisseur, position.y-(hauteur/2));
-	mur[3].first = Vec2d(position.x+(largeur/2)-epaisseur, position.y-(hauteur/2)+epaisseur);
-	mur[3].second =Vec2d(position.x-(largeur/2), position.y-(hauteur/2));
-	for (auto val : mur)
-		rectangle.push_back(buildRectangle(val.second, val.first, texture));
+	/*! initialisation murs */
+	double x(pos.x-l/2),y(pos.y-h/2);
+	murs[0].first =Vec2d(x,y)+Vec2d(e,h);
+	murs[0].second=Vec2d(x,y)+Vec2d(0,e);
+	murs[1].first =Vec2d(x,y)+Vec2d(l,h);
+	murs[1].second=Vec2d(x,y)+Vec2d(e,h-e);
+	murs[2].first =Vec2d(x,y)+Vec2d(l,h-e);
+	murs[2].second=Vec2d(x,y)+Vec2d(l-e,0);
+	murs[3].first =Vec2d(x,y)+Vec2d(l-e,e);
+	murs[3].second=Vec2d(x,y)+Vec2d(0,0);
+	/*! initialisation rectangles */
+	for (int i(0); i<4; ++i)
+		builtRecs[i] = buildRectangle
+		(
+			murs[i].second,
+			murs[i].first,
+			texture
+		);
 }
 
 double Box::getLeftLimit(bool intern)
 {
-	if (intern)
-		return mur[0].second.x;
-	else
-		return mur[0].first.x;
+	return ((intern) ? murs[0].first.x : murs[0].second.x);
 }
 
 double Box::getRightLimit(bool intern)
 {
-	if (intern)
-		return mur[1].first.x;
-	else
-		return mur[1].second.x;
+	return ((intern) ? murs[2].second.x : murs[2].first.x);
 }
 
 double Box::getTopLimit(bool intern)
 {
-	if (intern)
-		return mur[2].second.y;
-	else
-		return mur[2].first.y;
+	return ((intern) ? murs[3].first.y : murs[3].second.y);
 }
 
 double Box::getBottomLimit(bool intern)
 {
-	if (intern)
-		return mur[3].first.y;
-	else
-		return mur[3].second.y;
+	return ((intern) ? murs[1].second.y : murs[1].first.y);
 }
 
-bool Box::isPositionInside(const Vec2d& position)
+bool Box::isPositionInside(const Vec2d& pos)
 {
 	return
 	(
-				(position.x < getRightLimit(true))
-		and	(position.x > getLeftLimit(true))
-		and	(position.y > getTopLimit(true))
-		and	(position.y < getBottomLimit(true))
+		(pos.x < getRightLimit(true))
+		and	(pos.x > getLeftLimit(true))
+		and	(pos.y > getTopLimit(true))
+		and	(pos.y < getBottomLimit(true))
 	);
 }
 
-bool Box::isPositionOnWall(const Vec2d& position)
+bool Box::isPositionOnWall(const Vec2d& pos)
 {
 	return
 	(
-			!	(isPositionInside(position))
-		and	(position.x < getRightLimit())
-		and	(position.x > getLeftLimit())
-		and	(position.y > getTopLimit())
-		and (position.y < getBottomLimit())
+		not	(isPositionInside(pos))
+		and	(pos.x < getRightLimit())
+		and	(pos.x > getLeftLimit())
+		and	(pos.y > getTopLimit())
+		and (pos.y < getBottomLimit())
 	);
 }
 
 void Box::drawOn(sf::RenderTarget& target)
 {
-	for (auto val : rectangle)
+	for (auto wal : builtRecs)
 	{
-	target.draw(val);
+		target.draw(wal);
 	}
 }
+
+
+
+
 

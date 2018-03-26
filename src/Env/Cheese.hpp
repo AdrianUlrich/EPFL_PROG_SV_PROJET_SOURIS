@@ -7,8 +7,8 @@
 class Cheese : public SimulatedEntity
 {
 	public:
-		/** Default constructor */
-		Cheese();
+		/** constructor */
+		Cheese(Vec2d const&);
 
 		/** masking draw function */
 		void drawOn(sf::RenderTarget&);

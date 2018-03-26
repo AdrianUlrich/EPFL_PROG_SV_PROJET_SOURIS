@@ -4,12 +4,13 @@
 #include <SFML/Graphics.hpp>
 #include <Utility/Utility.hpp>
 #include "Box.hpp"
+#include <Utility/Vec2d.hpp>
 
 class SimulatedEntity
 {
 	public:
 		/** constructor */
-		SimulatedEntity(Vec2d pos, double energy);
+		SimulatedEntity(Vec2d const& pos, double energy, sf::Texture& texture);
 
 		/** SFML draw function */
 		void drawOn(sf::RenderTarget&);
@@ -17,7 +18,7 @@ class SimulatedEntity
 		/** aging function*/
 		void update(sf::Time dt);
 	protected:
-		sf::Texture* texture; //!< Texture SFML
+		sf::Texture& texture; //!< Texture SFML
 		sf::Sprite entitySprite; //!< Sprite SFML
 
 		Vec2d pos; 			//!< Membre "position"
