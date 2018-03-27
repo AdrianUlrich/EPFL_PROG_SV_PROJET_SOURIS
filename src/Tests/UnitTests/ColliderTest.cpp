@@ -1,7 +1,9 @@
 /*
- * prjsv 2016
+ * prjsv 2018
  * 2016
  * Marco Antognini
+ * fev 2018
+ * Antoine Madrona
  */
 
 #include <Application.hpp>
@@ -13,12 +15,35 @@
 #include <iostream>
 
 
+class DummyCollider: public Collider
+{
+	
+  public:
+	DummyCollider(const Vec2d& pos, double rad)
+		:  center(pos), radius(rad)
+	{}
+	
+	Vec2d getCenter()  const override
+	{
+		return center;
+	}
+	
+	double getRadius() const
+	{
+		return radius;
+	}
+	
+  private:
+	Vec2d center;
+	double radius;
+};
+
 SCENARIO("Collision", "[Collider]")
 {
     GIVEN("Two identical Colliders")
     {
-        Collider o1({ 1, 1 }, 2);
-        Collider o2({ 1, 1 }, 2);
+        DummyCollider o1({ 1, 1 }, 2);
+        DummyCollider o2({ 1, 1 }, 2);
 
         THEN("they collide")
         {
@@ -37,8 +62,8 @@ SCENARIO("Collision", "[Collider]")
 
     GIVEN("A collider inside the other, with different centers and radius")
     {
-        Collider o1({ 0, 0 }, 4);
-        Collider o2({ 1, 1 }, 3);
+        DummyCollider o1({ 0, 0 }, 4);
+        DummyCollider o2({ 1, 1 }, 3);
 
         THEN("the two colliders collide")
         {
@@ -57,9 +82,9 @@ SCENARIO("Collision", "[Collider]")
 
     GIVEN("Colliders that overlap but are not inside of each other")
     {
-        Collider o1 ({ 0, 0 }, 4);
-        Collider o2 ({ 1, 1 }, 3);
-		Collider o3 ({ 5, 5 }, 4);
+        DummyCollider o1 ({ 0, 0 }, 4);
+        DummyCollider o2 ({ 1, 1 }, 3);
+		DummyCollider o3 ({ 5, 5 }, 4);
 
         THEN("they collide")
         {
@@ -77,10 +102,10 @@ SCENARIO("Collision", "[Collider]")
 
 	GIVEN("Colliders that don't overlap ")
 		{
-        Collider o1({ 0, 0 }, 4);
-        Collider o2({ 1, 1 }, 3);
-		Collider o3({ 5, 5 }, 4);
-		Collider o4({-9,-9 }, 4);
+        DummyCollider o1({ 0, 0 }, 4);
+        DummyCollider o2({ 1, 1 }, 3);
+		DummyCollider o3({ 5, 5 }, 4);
+		DummyCollider o4({-9,-9 }, 4);
 
         THEN("they don't collide")
         {
@@ -101,7 +126,7 @@ SCENARIO("Collision", "[Collider]")
 	
     GIVEN("A Collider and two points, one inside and one outside")
     {
-        Collider o ({ 0, 0 }, 5);
+        DummyCollider o ({ 0, 0 }, 5);
         auto p1 = Vec2d(0, 0);
         auto p2 = Vec2d(6, 0);
 

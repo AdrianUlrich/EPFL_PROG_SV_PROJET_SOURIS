@@ -65,13 +65,21 @@ public:
     /*!
      * @brief Get access to the execution environment of the application (the env)
      *
-     * @note This breaks the encapsulation but simplifies everything (on purpose)!
+     * @note This breaks the encapsulation but simplify everything!
      *
      * @return the app's env
      */
     Lab& getLab();
     Lab const& getLab() const;
 	View getCurrentView() const;
+
+    /*!
+     * @brief Get the animal tracker helper
+     *
+     * @return the app's animal tracker
+     */
+    // AnimalTracker& getAnimalTracker();
+    // AnimalTracker const& getAnimalTracker() const;
 
     /*!
      * @brief Get access to the application's configuration
@@ -246,7 +254,10 @@ protected:
      */
 	void switchDebug();
 
-
+	 /*!
+     * @brief upload new config file
+     */
+	void resetConfig();
 	
 protected:
     // The order is important since some fields need other to be initialised

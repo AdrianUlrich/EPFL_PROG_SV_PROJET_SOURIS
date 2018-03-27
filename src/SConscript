@@ -91,7 +91,7 @@ DefineProgram('EatableTest', Glob('Tests/UnitTests/EatableTest.cpp') + Glob('Tes
 DefineProgram('ColliderTest', Glob('Tests/UnitTests/ColliderTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('Vec2dTest', Glob('Tests/UnitTests/Vec2dTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('SubstanceTest', Glob('Tests/UnitTests/SubstanceTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
-DefineProgram('BoxTest', Glob('Tests/UnitTests/BoxTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
+DefineProgram('BoxTestWithAnimal', Glob('Tests/UnitTests/BoxTestWithAnimal.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('TargetInSightTest', Glob('Tests/UnitTests/TargetInSightTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('LabTest', Glob('Tests/GraphicalTests/LabTest.cpp'))
 

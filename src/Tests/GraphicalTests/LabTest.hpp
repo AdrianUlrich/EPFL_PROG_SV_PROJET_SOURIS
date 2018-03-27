@@ -14,17 +14,16 @@
  *
  * Generate one target on click
  */
-class Cheese;
 
 class LabTest : public Application
 {
 public:
 	LabTest(int argc, char const** argv)
-	:	Application(argc, argv)
-	{}
+		: Application(argc, argv)
+		{
+		}
 	virtual void onRun() override final;
+		
 	virtual void onEvent(sf::Event event, sf::RenderWindow& window) override final;
-private:
-	Cheese* mLastCreatedCheese; 
 };
 #endif // INFOSV_LAB_TEST_HPP
