@@ -6,17 +6,22 @@
 #include "Box.hpp"
 #include <Utility/Vec2d.hpp>
 
-class SimulatedEntity
+class SimulatedEntity /// ABSTRACT
 {
 	public:
 		/** constructor */
 		SimulatedEntity(Vec2d const& pos, double energy, sf::Texture* texture);
 
 		/** SFML draw function */
-		void drawOn(sf::RenderTarget&);
+		virtual void drawOn(sf::RenderTarget&);
 
 		/** aging function*/
 		void update(sf::Time dt);
+		
+		bool isDead() const;
+		/** pure virtual method => abstract class */
+		virtual bool specificDead() const = 0;
+	
 	protected:
 		Vec2d pos;
 		Angle angle;
@@ -30,6 +35,7 @@ class SimulatedEntity
 		/** SFML variables */
 		sf::Texture* texture;
 		sf::Sprite entitySprite;
+		
 	private:
 		sf::Text text;
 };

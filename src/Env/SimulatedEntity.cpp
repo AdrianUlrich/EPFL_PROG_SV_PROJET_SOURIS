@@ -34,3 +34,20 @@ void SimulatedEntity::update(sf::Time dt)
 {
 	age += dt;
 }
+
+bool SimulatedEntity::isDead() const
+{
+	return 
+	(
+		age > longevity or
+		energy <= 0
+		specificDead()
+	);
+}
+
+
+
+
+
+
+

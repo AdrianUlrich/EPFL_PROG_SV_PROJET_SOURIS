@@ -15,6 +15,10 @@ class Cheese : public SimulatedEntity
 		
 		/** get eaten you camembert */
 		Quantity provideEnergy(Quantity);
+		
+		/** masking isDead pure virtual method */
+		bool specificDead() const override;
+		
 	private:
 		double maxSide;
 };

@@ -30,3 +30,9 @@ Quantity Cheese::provideEnergy(Quantity qte)
 	energy=std::max(0.,energy-qte);
 	return oldEnergy-/*new*/energy;
 }
+
+bool Cheese::specificDead() const
+{
+	// Cheese may die from death
+	return false;
+}

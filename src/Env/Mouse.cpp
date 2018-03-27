@@ -22,3 +22,10 @@ void Mouse::drawOn(sf::RenderTarget& target)
 	entitySprite.setRotation(angle/ DEG_TO_RAD);
 	target.draw(entitySprite);
 }
+
+bool specificDead() const
+{
+	// Later mouse will be able to die from cancer :/
+	return false;	
+}
+

@@ -48,10 +48,24 @@ Lab::~Lab()
 
 void Lab::update(sf::Time dt)
 {
-	if (animal!= nullptr)
+	if (animal != nullptr)
+	{
 		animal->update(dt);
+		if (animal->isDead())
+		{
+			delete animal;
+			animal=nullptr;
+		}
+	}
 	if (cheese!=nullptr)
+	{
 		cheese->update(dt);
+		if (cheese->isDead())
+		{
+			delete cheese;
+			cheese = nullptr;
+		}
+	}
 }
 
 void Lab::drawOn(sf::RenderTarget& target)
