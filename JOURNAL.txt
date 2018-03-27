@@ -1,3 +1,5 @@
-13.03.18 Début et partie1.zip
+13.03.18 Début et commencement la partie 1
 14-16.03.18 découverte de git
-16-19.03.18 finition de partie1
+16-19.03.18 fin de la partie1
+20.03.18 Début de la partie 2 
+27.03.18 Fin de la partie 2 et commencement de la partie 3
