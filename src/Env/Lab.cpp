@@ -3,8 +3,7 @@
 #include <Application.hpp>
 
 Lab::Lab()
-:	animal(nullptr),
-	cheese(nullptr)
+:	NTTs(0)
 {
 	makeBoxes(getAppConfig().simulation_lab_nb_boxes);
 }
@@ -48,22 +47,19 @@ Lab::~Lab()
 
 void Lab::update(sf::Time dt)
 {
-	if (animal != nullptr)
+size_t nNTTs(NTTs.size());
+	for (size_t i(0); i<nNTTs; ++i)
 	{
-		animal->update(dt);
-		if (animal->isDead())
+		if (NTTs[i] != nullptr)
 		{
-			delete animal;
-			animal=nullptr;
-		}
-	}
-	if (cheese!=nullptr)
-	{
-		cheese->update(dt);
-		if (cheese->isDead())
-		{
-			delete cheese;
-			cheese = nullptr;
+			NTTs[i]->update(dt);
+			if (NTTs[i]->isDead())
+			{
+				delete NTTs[i];
+				NTTs[i]=nullptr;
+				NTTs.erase(NTTs.begin()+i);
+				--nNTTs;
+			}
 		}
 	}
 }
@@ -72,46 +68,40 @@ void Lab::drawOn(sf::RenderTarget& target)
 {
 	for (auto& vec : boites)
 	{
-		for (auto& val : vec)
+		for (auto val : vec)
 		{
 			if (val != nullptr)
 			val->drawOn(target);
 		}
 	}
-	if (animal != nullptr)
-		animal->drawOn(target);
-	if (cheese !=nullptr)
-		cheese->drawOn(target);
+	for (auto NTT : NTTs)
+	{
+		NTT->drawOn(target);
+	}
 }
 
 void Lab::reset()
 {
-	if (animal != nullptr)
+	for (auto& NTT : NTTs)
 	{
-		delete animal;
-		animal=nullptr;
+		delete NTT;
+		NTT = nullptr;
 	}
-	if (cheese !=nullptr)
-	{
-		delete cheese;
-		cheese=nullptr;
-	}
+	NTTs.clear();
 }
 
 bool Lab::addAnimal(Mouse* mickey)
 {
-	if (animal != nullptr)
+	if (NTTs.size()>100)
 		return false;
-	delete animal;
-	animal=mickey;
+	NTTs.push_back(mickey);
 	return true;
 }
 
 bool Lab::addCheese(Cheese* caprice_des_dieux)
 {
-	if (cheese != nullptr)
+	if (NTTs.size()>100)
 		return false;
-	delete cheese;
-	cheese=caprice_des_dieux;
+	NTTs.push_back(caprice_des_dieux);
 	return true;
 }

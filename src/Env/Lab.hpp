@@ -8,6 +8,7 @@
 #include "Cheese.hpp"
 #include "Box.hpp"
 #include "Mouse.hpp"
+using std::vector;
 
 class Lab : public sf::NonCopyable
 {
@@ -31,9 +32,8 @@ public :
 	bool addCheese(Cheese*);
 
 private:
-	std::vector<std::vector<Box*>> boites;
-	Animal* animal;
-	Cheese* cheese;
+	vector<vector<Box*>> boites;
+	vector<SimulatedEntity*> NTTs;
 };
 
 #endif //I_LAB_HPP
