@@ -26,7 +26,7 @@ SimulatedEntity::SimulatedEntity(Vec2d const& pos, double energy, sf::Texture* t
 void SimulatedEntity::drawOn(sf::RenderTarget& target)
 {
 text.setString("EntityNRJ:"+to_nice_string(energy));
-text.setRotation(angle / DEG_TO_RAD + 90);
+//text.setRotation(angle / DEG_TO_RAD + 90);
 target.draw(text);
 }
 
@@ -40,7 +40,7 @@ bool SimulatedEntity::isDead() const
 	return 
 	(
 		age > longevity or
-		energy <= 0
+		energy <= 0 or
 		specificDead()
 	);
 }

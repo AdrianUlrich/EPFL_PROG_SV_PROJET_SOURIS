@@ -13,7 +13,7 @@ class Mouse : public Animal
 		void drawOn(sf::RenderTarget&);
 		
 		/** masking isDead pure virtual method */
-		virtual bool isDead() const override;
+		virtual bool specificDead() const override;
 		
 	private:
 		double mouseSize;

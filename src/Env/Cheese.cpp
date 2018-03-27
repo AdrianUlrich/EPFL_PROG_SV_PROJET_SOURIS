@@ -17,11 +17,11 @@ Cheese::Cheese(Vec2d const& pos)
 
 void Cheese::drawOn(sf::RenderTarget& target)
 {
-	if (isDebugOn())
-		SimulatedEntity::drawOn(target);
 	entitySprite.setScale(Vec2d(energy,energy)/maxSide);
 	entitySprite.setRotation(angle/ DEG_TO_RAD);
 	target.draw(entitySprite);
+	if (isDebugOn())
+		SimulatedEntity::drawOn(target);
 }
 
 Quantity Cheese::provideEnergy(Quantity qte)

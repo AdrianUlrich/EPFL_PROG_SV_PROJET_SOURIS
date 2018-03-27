@@ -16,14 +16,14 @@ Mouse::Mouse(Vec2d const& pos)
 
 void Mouse::drawOn(sf::RenderTarget& target)
 {
-	if (isDebugOn())
-		SimulatedEntity::drawOn(target);
 	entitySprite.setPosition(pos);
 	entitySprite.setRotation(angle/ DEG_TO_RAD);
 	target.draw(entitySprite);
+	if (isDebugOn())
+		SimulatedEntity::drawOn(target);
 }
 
-bool specificDead() const
+bool Mouse::specificDead() const
 {
 	// Later mouse will be able to die from cancer :/
 	return false;	
