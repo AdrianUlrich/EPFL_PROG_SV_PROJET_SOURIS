@@ -15,12 +15,62 @@
 	       "delta": 100
 	   },
 	   "bromopyruvate":{
-	       "delta": 10
+	       "base" : 0,
+	       "delta": 200
 	   },
 	   "vgef":{
-	       "diffusion radius" : 5
+	       "diffusion radius" : 2,
+	       "delta" : 100
 	   }
-       }
+       },
+      "cheese":{
+         "texture":"cheese.png",
+         "energy":{
+            "initial":100,
+            "max":250
+         }
+      },
+      "animal":{
+         "random walk low energy":false,
+         "meal retention":0.7,
+         "feed time":0.4,
+         "base consumption" : 0.0,
+         "min energy" : 5,
+        "idle":{
+            "min":3,
+            "max":5,
+            "probability":0.001
+        },
+        "satiety":{
+            "min":50,
+            "max":70
+        },
+        "mouse":{
+            "mass":1,
+            "size":180,
+            "longevity":40000,
+            "max speed":100,
+            "view":{
+               "range":6.283185307,
+               "distance":250
+            },
+            "energy":{
+               "initial":30,
+               "loss factor":0,
+               "bite":2
+            },
+            "texture":{
+               "white":"mouse2.png"
+            }
+         }
+      },
+      "lab":{
+         "size":1800,
+	  "nb boxes" : 3,
+         "texture":"sand.png",
+          "debug texture":"lab1.png",
+	  "fence" : "wood.png"
+      }
    },
    "stats":{
       "refresh rate":1

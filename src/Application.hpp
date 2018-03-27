@@ -1,15 +1,17 @@
 /*
- * prjsv 2018
- * 2014-2018
- * Marco Antognini, Antoine Madrona
+ * prjsv 2016
+ * 2013, 2014, 2016
+ * Marco Antognini
  */
 
 #ifndef INFOSV_APPLICATION_HPP
 #define INFOSV_APPLICATION_HPP
 
+#include <Env/Lab.hpp>
 #include <JSON/JSON.hpp>
 #include "Config.hpp"
 #include "Types.hpp"
+//#include <Utility/AnimalTracker.hpp>
 #include <Utility/Vec2d.hpp>
 
 #include <SFML/Graphics.hpp>
@@ -27,6 +29,7 @@
  *
  * Subclass can optionally re-implement onEvent(), onUpdate() and onDraw().
  *
+ * The Lab class handles the drawing and update of the system.
  *
  * Note that `simulation` and `world` usually mean the same thing here.
  */
@@ -51,6 +54,26 @@ public:
     virtual ~Application();
 
     /*!
+     * @brief Run the application
+     *
+     * This function is the main loop.
+     *
+     * @note Don't forget to call init() before run() !
+     */
+    void run();
+
+    /*!
+     * @brief Get access to the execution environment of the application (the env)
+     *
+     * @note This breaks the encapsulation but simplifies everything (on purpose)!
+     *
+     * @return the app's env
+     */
+    Lab& getLab();
+    Lab const& getLab() const;
+	View getCurrentView() const;
+
+    /*!
      * @brief Get access to the application's configuration
      *
      * @return the app's config
@@ -59,9 +82,171 @@ public:
     Config const& getConfig() const;
 
     /*!
+     * @brief Get the app's font
+     *
+     * @return a font
+     */
+    sf::Font const& getFont() const;
+
+    /*!
+     * @brief Get a texture
+     *
+     * The texture is loaded on the fly from the 'res' folder and is owned
+     * by this application.
+     *
+     * The returned texture is read-write capable but in most case a read-only
+     * access should be enough.
+     *
+     * The application guarantees that the texture is not moved in memory and
+     * is not destroyed until the destruction of the application. This ensures
+     * that the returned reference will be valid until the end of the application
+     * and therefore can be given to a sprite.
+     *
+     * If the corresponding texture couldn't be loaded a default white texture is
+     * returned and an error message is displayed on sf::Err by SFML.
+     *
+     * @param name name of the texture
+     * @return a reference to the corresponding texture
+     */
+    sf::Texture& getTexture(std::string const& name);
+
+    /*!
      * @brief Get the path to the resource folder
      */
     std::string getResPath() const;
+
+    /**
+     *  @brief Read the lab size from the config manager
+     *
+     *  @return the lab size
+     */
+    Vec2d getLabSize() const;
+	
+    /**
+     *  @brief Compute the centre of the world area (in local coordinates)
+     *
+     *  @return the centre of the app
+     */
+    Vec2d getCentre() const;
+
+    /*!
+     * @brief Get the cursor position in the view coordinates (i.e. pixel coordinates)
+     *
+     * @return The cursor position converted in the view coordinates
+     */
+    Vec2d getCursorPositionInView() const;
+
+protected:
+    /*!
+     *  @brief Called once before starting the main loop
+     *
+     *  By default nothing is done.
+     */
+    virtual void onRun();
+
+    /**
+     *  @brief Called when the simulation is (re)started, but not when importing data
+     *
+     *  By default nothing is done.
+     */
+    virtual void onSimulationStart();
+
+    /*!
+     * @brief Subclass can override this method to handle events
+     *
+     * The default implementation does nothing.
+     *
+     * @param event an event
+     * @param window the window that emitted the event
+     */
+    virtual void onEvent(sf::Event event, sf::RenderWindow& window);
+
+    /*!
+     * @brief Subclass can override this method to update their data
+     *
+     * The default implementation does nothing. However, the env is always updated first.
+     *
+     * @param dt elapsed time
+     */
+    virtual void onUpdate(sf::Time dt);
+
+    /*!
+     * @brief Subclass can override this method to draw their data
+     *
+     * The default implementation does nothing. However, the env is always displayed first.
+     *
+     * @param target a render target
+     */
+    virtual void onDraw(sf::RenderTarget& target);
+/*!
+     * @brief Subclass can override this method to change the policy for
+	 * background handling
+	 */
+	void chooseBackground();
+
+
+protected:
+    /*!
+     * @brief Create the window
+     */
+    void createWindow(Vec2d const& size);
+
+    /*!
+     *  @brief Create the simulation and stats views
+     */
+    void createViews();
+
+    /*!
+     * @brief Do the logic for a given event
+     *
+     * @param event Event to handle
+     * @param window the window that emitted the event
+     */
+    void handleEvent(sf::Event event, sf::RenderWindow& window);
+
+    /*!
+     *  @brief Render the GUI, Simulation and Stats
+     *
+     *  @param simulationBackground Background of the simulation frame
+     *  @param statsBackground      Background of the stats frame
+     */
+    void render(sf::Drawable const& simulationBackground, sf::Drawable const& statsBackground);
+
+    /*!
+     * @brief Toggle pause
+     */
+    void togglePause();
+
+    /*!
+     * @brief Save the current configuration
+     */
+    void saveConfig() const;
+
+    /*!
+     * @brief Zoom the simulation view on the given pixel
+     *
+     * @note the view is centered on the selected entity if on is
+     * selected, or on the cursor if none is currently selected.
+     */
+    void zoomViewAt(sf::Vector2i const& /*pixel*/, float zoomFactor);
+
+    /*!
+     * @brief Drag the view by the given offset (i.e. src to dest)
+     */
+    void dragView(sf::Vector2i const& srcPixel, sf::Vector2i const& destPixel);
+
+    /*!
+     * @brief Center the simulation view on the tracked bee,
+     * if selection is active.
+     */
+    void updateSimulationView();
+
+   /*!
+     * @brief toggle debug mode
+     */
+	void switchDebug();
+
+
 	
 protected:
     // The order is important since some fields need other to be initialised
@@ -69,6 +254,35 @@ protected:
     std::string const mCfgFile;      ///< Relative path to the CFG
 //    j::Value          mJSONRead;       ///< Application configuration
     Config*          mConfig;       ///< Application configuration
+
+    Lab* mLab;                       ///< Simulated environment
+
+    sf::Font mFont;                  ///< A font
+
+    sf::RenderWindow mRenderWindow;  ///< SFML window / render target
+    sf::View mSimulationView;        ///< View for simulation area
+	sf::View mLabView;        ///< View for simulation area
+
+    using TexturePool = std::map<std::string, sf::Texture*>;
+    TexturePool mTextures;           ///< Pool of textures
+    sf::Texture mDefaultTexture;     ///< Default, white texture
+    // mDefaultTexture is used when a texture in the pool is not available
+
+    bool         mPaused;            ///< Tells if the application is in pause or not
+    bool         mIsResetting;       ///< Is true for one main loop iteration when resetting.
+                                     ///  This is useful to pause the clock while generating
+                                     ///  a new world. Without this, a huge dt would result from
+                                     ///  rebuilding the world.
+    bool         mIsDragging;        ///< Tells whether or not the user is dragging the view
+    sf::Vector2i mLastCursorPosition;///< For handling dragging logic
+//    AnimalTracker   mAnimalTracker;        ///< Helper to keep track of an animal (optional)
+
+	sf::RectangleShape mSimulationBackground;
+	sf::RectangleShape mLabBackground;
+
+	// Views
+
+	View mCurrentView;
 };
 
 /*!
@@ -79,6 +293,24 @@ protected:
 Application& getApp();
 
 /*!
+ * @brief Get the environment (the env) of the current application
+ *
+ * Shorthand for getApp().getLab()
+ *
+ * @see Application::getLab() comment about encapsulation
+ *
+ * @return the app's env.
+ */
+Lab& getAppEnv();
+
+/*!
+ * @brief Get the bee tracker helper for the current application
+ *
+ * @return the app's bee tracker
+ */
+//AnimalTracker& getAppAnimalTracker();
+
+/*!
  * @brief Get the config of the current application
  *
  * Shorthand for getApp().getConfig()
@@ -87,7 +319,38 @@ Application& getApp();
  */
 Config& getAppConfig();
 
+/*!
+ * @brief Get the app's font
+ *
+ * Shorthand for getApp().getFont()
+ *
+ * @return a font
+ */
+sf::Font const& getAppFont();
+
+/*!
+ * @brief Get a texture
+ *
+ * Shorthand for getApp().getTexture(name)
+ *
+ * @param name name of the texture
+ * @return a reference to the texture
+ *
+ * @see Application::getTexture
+ */
+sf::Texture& getAppTexture(std::string const& name);
+
+/*!
+ * @brief Determine if debug mode is active or not
+ *
+ * Shorthand for getAppConfig().getBool(DEBUG_MODE)
+ *
+ * @return true if cfg specify DEBUG=TRUE
+ */
+bool isDebugOn();
+
 /// Define a few macros
+
 
 /*!
  * @brief Implement the main() function with a given subclass of Application

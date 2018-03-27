@@ -52,12 +52,14 @@ env.Append(CPPPATH = '../src/') # pwd is the build directory
 # Source files:
 app_src         = Glob('Application.cpp')
 conf_src        = Glob('Config.cpp')
+gene_src        = Glob('Genetics/*.cpp')
 cfg_src         = Glob('JSON/*.cpp')
 env_src         = Glob('Env/*.cpp')
 rand_src        = Glob('Random/*.cpp')
+stats_src       = Glob('Stats/*.cpp')
 utility_src     = Glob('Utility/*.cpp')
 
-src_files = app_src + cfg_src + env_src + rand_src  + utility_src + conf_src 
+src_files = app_src + cfg_src + env_src + rand_src + stats_src + utility_src + conf_src + gene_src
 objects=env.Object(source=src_files)
 
 
@@ -85,10 +87,13 @@ def DefineProgram(name, additional_src):
 
 
 DefineProgram('application', Glob('FinalApplication.cpp'))
-DefineProgram('UnitTests', Glob('Tests/UnitTests/*.cpp'))
+DefineProgram('EatableTest', Glob('Tests/UnitTests/EatableTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('ColliderTest', Glob('Tests/UnitTests/ColliderTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
-DefineProgram('SubstanceTest', Glob('Tests/UnitTests/SubstanceTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('Vec2dTest', Glob('Tests/UnitTests/Vec2dTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
+DefineProgram('SubstanceTest', Glob('Tests/UnitTests/SubstanceTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
+DefineProgram('BoxTest', Glob('Tests/UnitTests/BoxTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
+DefineProgram('TargetInSightTest', Glob('Tests/UnitTests/TargetInSightTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
+DefineProgram('LabTest', Glob('Tests/GraphicalTests/LabTest.cpp'))
 
 
 if env['CXX'] == 'clang++':
