@@ -30,6 +30,7 @@ public :
 
 	bool addAnimal(Mouse*);
 	bool addCheese(Cheese*);
+	bool addEntity(SimulatedEntity*);
 
 private:
 	vector<vector<Box*>> boites;

@@ -90,18 +90,20 @@ void Lab::reset()
 	NTTs.clear();
 }
 
+bool Lab::addEntity(SimulatedEntity* ntt)
+{
+	if (ntt==nullptr || NTTs.size()>100)
+		return false;
+	NTTs.push_back(ntt);
+	return true;
+}
+
 bool Lab::addAnimal(Mouse* mickey)
 {
-	if (NTTs.size()>100)
-		return false;
-	NTTs.push_back(mickey);
-	return true;
+	return addEntity(mickey);
 }
 
 bool Lab::addCheese(Cheese* caprice_des_dieux)
 {
-	if (NTTs.size()>100)
-		return false;
-	NTTs.push_back(caprice_des_dieux);
-	return true;
+	return addEntity(caprice_des_dieux);
 }
