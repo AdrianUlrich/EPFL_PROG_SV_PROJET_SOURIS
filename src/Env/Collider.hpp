@@ -4,17 +4,19 @@
 #include <Utility/Vec2d.hpp>
 
 
-class Collider
+class Collider /// ABSTRACT
 {
 public:
-	Collider(Vec2d position, double rayon);
-	
+	Collider(Vec2d const& position, double rayon);
+
 	Vec2d getCenter() const;
 	double getRadius() const;
 
 	bool isColliding(Collider const& other) const;
 	bool isPointInside(Vec2d const&) const;
 
+//	/** pure virtual destructor */
+//	virtual ~Collider() = 0;
 private:
 	Vec2d position;
 	double rayon;

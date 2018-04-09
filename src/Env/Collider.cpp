@@ -1,11 +1,11 @@
 #include "Collider.hpp"
 
-Collider::Collider(Vec2d position, double rayon)
+Collider::Collider(Vec2d const&s position, double rayon)
 : position(position), rayon(rayon)
 {}
 
 bool Collider::isColliding(Collider const& other) const
-{	
+{
 	return(((other.position-position).lengthSquared()) <=((other.rayon+rayon)*(other.rayon+rayon)));
 }
 bool operator |(Collider const& body1, Collider const& body2)
