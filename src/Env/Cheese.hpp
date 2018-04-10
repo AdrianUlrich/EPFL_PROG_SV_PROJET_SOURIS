@@ -11,7 +11,7 @@ class Cheese : public SimulatedEntity
 		Cheese(Vec2d const&);
 
 		/** masking draw function */
-		void drawOn(sf::RenderTarget&);
+		void drawOn(sf::RenderTarget&) override;
 		
 		/** get eaten you camembert */
 		Quantity provideEnergy(Quantity);
@@ -19,8 +19,8 @@ class Cheese : public SimulatedEntity
 		/** masking isDead pure virtual method */
 		bool specificDead() const override;
 		
-	private:
-		double maxSide;
+	//private:
+		//double maxSide;
 };
 
 #endif // CHEESE_HPP

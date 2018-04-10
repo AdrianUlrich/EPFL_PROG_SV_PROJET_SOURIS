@@ -8,7 +8,7 @@ class Animal : public SimulatedEntity /// ABSTRACT
 {
 	public:
 		/** constructor */
-		Animal(Vec2d const& pos, double energy, sf::Texture* texture);
+		Animal(Vec2d const& pos, double energy, sf::Texture* texture, double rayon);
 		
 		/** pure virtual inherited specificDead() not yet redefined */
 };

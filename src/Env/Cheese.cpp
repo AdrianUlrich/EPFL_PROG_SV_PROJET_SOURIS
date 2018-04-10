@@ -7,27 +7,28 @@ Cheese::Cheese(Vec2d const& pos)
 	(
 		pos,
 		getAppConfig().cheese_initial_energy,
-		&getAppTexture(getAppConfig().cheese_texture)
-	),
-	maxSide(std::max(texture->getSize().x, texture->getSize().y))
+		&getAppTexture(getAppConfig().cheese_texture),
+		getAppConfig().cheese_initial_energy
+	)
+	//,maxSide(std::max(texture->getSize().x, texture->getSize().y))
 {
-	entitySprite = buildSprite(pos,energy/maxSide,*texture);
+	entitySprite = buildSprite(pos,energy/*/std::max(entity_size,1.)*/,*texture);
 	longevity = sf::seconds(1e+9);
 }
 
 void Cheese::drawOn(sf::RenderTarget& target)
 {
-	entitySprite.setScale(Vec2d(energy,energy) / maxSide);
 	entitySprite.setRotation(angle / DEG_TO_RAD);
-	target.draw(entitySprite);
-	if (isDebugOn())
-		SimulatedEntity::drawOn(target);
+	SimulatedEntity::drawOn(target);
 }
 
 Quantity Cheese::provideEnergy(Quantity qte)
 {
+	if (energy<=0) return 0;
 	double oldEnergy(energy);
 	energy=std::max(0.,energy-qte);
+	entitySprite.setScale(Vec2d(1,1)*(energy/oldEnergy));
+	entity_size=energy;
 	return oldEnergy-/*new*/energy;
 }
 
