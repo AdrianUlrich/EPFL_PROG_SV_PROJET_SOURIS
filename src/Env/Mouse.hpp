@@ -2,6 +2,7 @@
 #define MOUSE_HPP
 
 #include "Animal.hpp"
+#include <Application.hpp>
 
 class Mouse : public Animal
 {
@@ -11,7 +12,7 @@ class Mouse : public Animal
 
 		/**	masked draw function*/
 		void drawOn(sf::RenderTarget&) override;
-		
+
 		/** masking isDead pure virtual method */
 		virtual bool specificDead() const override;
 		
@@ -20,7 +21,9 @@ class Mouse : public Animal
 		bool eatableBy(Cheese const*);
 		bool eatableBy(Mouse const*);
 		
-		
+		/** masking getMaxSpeed pure virtual method */
+		virtual double getMaxSpeed() const override {return getAppConfig().mouse_max_speed;}
+    
 	//private:
 		//double mouseSize;
 };

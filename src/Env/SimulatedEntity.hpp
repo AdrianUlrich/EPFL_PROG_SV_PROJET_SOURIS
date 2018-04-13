@@ -20,12 +20,12 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		virtual void drawOn(sf::RenderTarget&);
 
 		/** aging function*/
-		void update(sf::Time dt);
-		
+		virtual void update(sf::Time);
+
 		bool isDead() const;
 		/** pure virtual method => abstract class */
 		virtual bool specificDead() const = 0;
-		
+
 		/** overriding virtual collider getters */
 		Vec2d getCenter() const override {return pos;}
 		double getRadius() const override {return entity_size/2;}
@@ -40,10 +40,11 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		
 		void setBox(Box* b) {if (box!=nullptr) box=b;}
 		
-	
+		virtual Vec2d getHeading() const;
+
 		/** polymorphic destructor */
 		virtual ~SimulatedEntity() = default;
-		
+
 	protected:
 		Vec2d pos;
 		double entity_size;
@@ -54,11 +55,11 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		double energy; //!< Current life force or nutritivity
 		sf::Time age; //!< age incremented by update()
 		sf::Time longevity; //!< Time of certain DEATH
-		
+
 		/** SFML variables */
 		sf::Texture* texture;
 		sf::Sprite entitySprite;
-		
+
 	private:
 		sf::Text text;
 		void confine();
