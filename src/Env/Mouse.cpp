@@ -28,3 +28,13 @@ bool Mouse::specificDead() const
 	return false;	
 }
 
+bool Mouse::eatable(SimulatedEntity const* entity)
+{
+return entity->eatableBy(this);
+}
+
+bool Mouse::eatableBy(Cheese const*)
+{return false;}
+
+bool Mouse::eatableBy(Mouse const*)
+{return false;}

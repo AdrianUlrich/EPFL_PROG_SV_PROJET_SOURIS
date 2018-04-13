@@ -1,4 +1,6 @@
 #include "SimulatedEntity.hpp"
+#include "Mouse.hpp"
+#include "Cheese.hpp"
 #include <Random/Random.hpp>
 #include <Utility/Utility.hpp>
 #include <Application.hpp>
@@ -55,9 +57,30 @@ bool SimulatedEntity::isDead() const
 	);
 }
 
+bool SimulatedEntity::canBeConfinedIn(Box* box)
+{
+	return box.isPositionInside(pos);
+}
 
+void SimulatedEntity::confine()
+{
+	if (box==nullptr) return;
 
+	auto topWall(box->getTopLimit(true));
+	  if (getPosition().y - getRadius() < topWall)
+		  position.y = topWall + radius * 1.25);
 
+	auto bottomWall(box->getBottomLimit(true));
+	  if (getPosition().y + getRadius() > bottomWall)
+		  position.y = bottomWall - radius * 1.25);  	  
 
+	auto rightWall(box->getRightLimit(true));
+	  if (getPosition().x + getRadius() > rightWall)
+		  position.x = rightWall - radius * 1.25);
+
+	auto leftWall(box->getLeftLimit(true));
+	  if (getPosition().x - getRadius() < leftWall)
+		  position.x = leftWall + radius * 1.25);
+}
 
 

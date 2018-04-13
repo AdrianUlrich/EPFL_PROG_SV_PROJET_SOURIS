@@ -15,6 +15,12 @@ class Mouse : public Animal
 		/** masking isDead pure virtual method */
 		virtual bool specificDead() const override;
 		
+		/** eatable */
+		bool eatable(SimulatedEntity const*);
+		bool eatableBy(Cheese const*);
+		bool eatableBy(Mouse const*);
+		
+		
 	//private:
 		//double mouseSize;
 };
