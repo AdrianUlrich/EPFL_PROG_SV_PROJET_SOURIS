@@ -40,6 +40,11 @@ void SimulatedEntity::drawOn(sf::RenderTarget& target)
 	}
 }
 
+Vec2d SimulatedEntity::getHeading() const
+{
+	return Vec2d::fromAngle(angle);
+}
+
 void SimulatedEntity::update(sf::Time dt)
 {
 	age += dt;
@@ -47,7 +52,7 @@ void SimulatedEntity::update(sf::Time dt)
 
 bool SimulatedEntity::isDead() const
 {
-	return 
+	return
 	(
 		age > longevity or
 		energy <= 0 or

@@ -13,6 +13,7 @@ Mouse::Mouse(Vec2d const& pos)
 {
 	entitySprite = buildSprite(pos,entity_size,*texture);
 	longevity = getAppConfig().mouse_longevity;
+	//maxSpeed = getAppConfig().mouse_max_speed;
 }
 
 void Mouse::drawOn(sf::RenderTarget& target)
@@ -25,6 +26,6 @@ void Mouse::drawOn(sf::RenderTarget& target)
 bool Mouse::specificDead() const
 {
 	// Later mouse will be able to die from cancer :/
-	return false;	
+	return false;
 }
 
