@@ -19,6 +19,11 @@ class Cheese : public SimulatedEntity
 		/** masking isDead pure virtual method */
 		bool specificDead() const override;
 		
+		/** eatable */
+		bool eatable(SimulatedEntity const*);
+		bool eatableBy(Cheese const*);
+		bool eatableBy(Mouse const*);
+		
 	//private:
 		//double maxSide;
 };

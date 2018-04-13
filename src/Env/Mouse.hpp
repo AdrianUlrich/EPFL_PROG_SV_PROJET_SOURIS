@@ -15,9 +15,15 @@ class Mouse : public Animal
 
 		/** masking isDead pure virtual method */
 		virtual bool specificDead() const override;
+		
+		/** eatable */
+		bool eatable(SimulatedEntity const*);
+		bool eatableBy(Cheese const*);
+		bool eatableBy(Mouse const*);
+		
 		/** masking getMaxSpeed pure virtual method */
 		virtual double getMaxSpeed() const override {return getAppConfig().mouse_max_speed;}
-
+    
 	//private:
 		//double mouseSize;
 };

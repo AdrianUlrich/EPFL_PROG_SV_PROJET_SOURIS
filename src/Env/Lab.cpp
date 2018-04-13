@@ -92,7 +92,7 @@ void Lab::reset()
 
 bool Lab::addEntity(SimulatedEntity* ntt)
 {
-	if (ntt==nullptr || NTTs.size()>100)
+	if (ntt==nullptr)// || NTTs.size()>100)
 		return false;
 	NTTs.push_back(ntt);
 	return true;
@@ -100,7 +100,23 @@ bool Lab::addEntity(SimulatedEntity* ntt)
 
 bool Lab::addAnimal(Mouse* mickey)
 {
-	return addEntity(mickey);
+	for (auto& vec : boites)
+	{
+		for (auto val : vec)
+		{
+			if (mickey->canBeConfinedIn(val))
+			{
+				if (val->isEmpty())
+				{
+					val->flipEmpty();
+					mickey->setBox(val);
+					mickey->confine();
+					return addEntity(mickey);
+				}
+			}
+		}
+	}
+	return false;
 }
 
 bool Lab::addCheese(Cheese* caprice_des_dieux)

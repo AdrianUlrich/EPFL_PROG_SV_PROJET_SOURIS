@@ -7,6 +7,9 @@
 #include "Collider.hpp"
 #include <Utility/Vec2d.hpp>
 
+class Mouse;
+class Cheese;
+
 class SimulatedEntity : public Collider /// ABSTRACT
 {
 	public:
@@ -26,7 +29,17 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		/** overriding virtual collider getters */
 		Vec2d getCenter() const override {return pos;}
 		double getRadius() const override {return entity_size/2;}
-
+		
+		/** confinement methode */
+		bool canBeConfinedIn(Box*);
+		
+		/** eatable */
+		virtual bool eatable(SimulatedEntity const*) const = 0;
+		virtual bool eatableBy(Mouse const*) const = 0;
+		virtual bool eatableBy(Cheese const*) const = 0;
+		
+		void setBox(Box* b) {if (box!=nullptr) box=b;}
+		
 		virtual Vec2d getHeading() const;
 
 		/** polymorphic destructor */
@@ -49,6 +62,9 @@ class SimulatedEntity : public Collider /// ABSTRACT
 
 	private:
 		sf::Text text;
+		void confine();
+		
+		
 };
 
 #endif // SIMULATEDENTITY_HPP

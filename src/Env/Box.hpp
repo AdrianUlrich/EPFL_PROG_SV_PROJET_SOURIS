@@ -25,6 +25,8 @@ public:
 	bool isPositionOnWall(const Vec2d&);
 
 	void drawOn(sf::RenderTarget&);
+	bool isEmpty() {return empty;}
+	void flipEmpty() {empty=!empty;}
 
 private:
 	Vec2d pos;
@@ -41,6 +43,7 @@ private:
 	/*! Graphic files that dont need to be created every time */
 	std::array<sf::RectangleShape,4> builtRecs;
 	sf::Texture* texture;
+	bool empty;
 };
 
 

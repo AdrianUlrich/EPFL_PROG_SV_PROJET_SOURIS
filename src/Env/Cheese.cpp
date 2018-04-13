@@ -37,3 +37,15 @@ bool Cheese::specificDead() const
 	// Cheese may die from death
 	return false;
 }
+
+
+bool Cheese::eatable(SimulatedEntity const* entity)
+{
+return entity->eatableBy(this);
+}
+
+bool Cheese::eatableBy(Cheese const*)
+{return false;}
+
+bool Cheese::eatableBy(Mouse const*)
+{return true;}
