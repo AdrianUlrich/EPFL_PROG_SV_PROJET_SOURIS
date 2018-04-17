@@ -20,9 +20,9 @@ class Cheese : public SimulatedEntity
 		bool specificDead() const override;
 		
 		/** eatable */
-		bool eatable(SimulatedEntity const*);
-		bool eatableBy(Cheese const*);
-		bool eatableBy(Mouse const*);
+		bool eatable(SimulatedEntity const*) const override;
+		bool eatableBy(Cheese const*) const override;
+		bool eatableBy(Mouse const*) const override;
 		
 	//private:
 		//double maxSide;

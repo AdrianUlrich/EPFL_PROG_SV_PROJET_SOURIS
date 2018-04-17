@@ -2,7 +2,6 @@
 #define MOUSE_HPP
 
 #include "Animal.hpp"
-#include <Application.hpp>
 
 class Mouse : public Animal
 {
@@ -17,12 +16,12 @@ class Mouse : public Animal
 		virtual bool specificDead() const override;
 		
 		/** eatable */
-		bool eatable(SimulatedEntity const*);
-		bool eatableBy(Cheese const*);
-		bool eatableBy(Mouse const*);
+		bool eatable(SimulatedEntity const*) const override;
+		bool eatableBy(Cheese const*) const override;
+		bool eatableBy(Mouse const*) const override;
 		
 		/** masking getMaxSpeed pure virtual method */
-		virtual double getMaxSpeed() const override {return getAppConfig().mouse_max_speed;}
+		virtual double getMaxSpeed() const override;
     
 	//private:
 		//double mouseSize;

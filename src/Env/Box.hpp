@@ -26,7 +26,7 @@ public:
 
 	void drawOn(sf::RenderTarget&);
 	bool isEmpty() {return empty;}
-	void adOccupant() {empty=false;}
+	void addOccupant() {empty=false;}
 	void reset() {empty=true;}
 
 private:

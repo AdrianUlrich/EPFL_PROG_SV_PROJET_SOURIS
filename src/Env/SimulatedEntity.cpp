@@ -64,28 +64,28 @@ bool SimulatedEntity::isDead() const
 
 bool SimulatedEntity::canBeConfinedIn(Box* box)
 {
-	return box.isPositionInside(pos);
+	return (box->isPositionInside(pos) and box->isEmpty());
 }
 
 void SimulatedEntity::confine()
 {
 	if (box==nullptr) return;
-
+	auto radius(getRadius());
 	auto topWall(box->getTopLimit(true));
-	  if (getPosition().y - getRadius() < topWall)
-		  position.y = topWall + radius * 1.25);
+	  if (pos.y - radius < topWall)
+		  pos.y = topWall + radius * 1.25;
 
 	auto bottomWall(box->getBottomLimit(true));
-	  if (getPosition().y + getRadius() > bottomWall)
-		  position.y = bottomWall - radius * 1.25);
+	  if (pos.y + radius > bottomWall)
+		  pos.y = bottomWall - radius * 1.25;
 
 	auto rightWall(box->getRightLimit(true));
-	  if (getPosition().x + getRadius() > rightWall)
-		  position.x = rightWall - radius * 1.25);
+	  if (pos.x + radius > rightWall)
+		  pos.x = rightWall - radius * 1.25;
 
 	auto leftWall(box->getLeftLimit(true));
-	  if (getPosition().x - getRadius() < leftWall)
-		  position.x = leftWall + radius * 1.25);
+	  if (pos.x - radius < leftWall)
+		  pos.x = leftWall + radius * 1.25;
 }
 
 

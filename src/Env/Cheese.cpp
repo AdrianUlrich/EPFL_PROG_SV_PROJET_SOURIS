@@ -39,13 +39,11 @@ bool Cheese::specificDead() const
 }
 
 
-bool Cheese::eatable(SimulatedEntity const* entity)
-{
-return entity->eatableBy(this);
-}
+bool Cheese::eatable(SimulatedEntity const* entity)  const
+{return entity->eatableBy(this);}
 
-bool Cheese::eatableBy(Cheese const*)
+bool Cheese::eatableBy(Cheese const*) const
 {return false;}
 
-bool Cheese::eatableBy(Mouse const*)
+bool Cheese::eatableBy(Mouse const*) const
 {return true;}

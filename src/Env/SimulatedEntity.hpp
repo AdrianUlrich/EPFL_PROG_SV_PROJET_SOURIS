@@ -38,12 +38,14 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		virtual bool eatableBy(Mouse const*) const = 0;
 		virtual bool eatableBy(Cheese const*) const = 0;
 		
-		void setBox(Box* b) {if (box!=nullptr) box=b;}
+		void confineInBox(Box* b) {if (box!=nullptr) box=b; confine();}
 		
 		virtual Vec2d getHeading() const;
 
 		/** polymorphic destructor */
 		virtual ~SimulatedEntity() = default;
+		
+		void resetBox() {box->reset();}
 
 	protected:
 		Vec2d pos;

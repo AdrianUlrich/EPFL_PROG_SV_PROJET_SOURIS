@@ -29,13 +29,17 @@ bool Mouse::specificDead() const
 	return false;
 }
 
-bool Mouse::eatable(SimulatedEntity const* entity)
+bool Mouse::eatable(SimulatedEntity const* entity)  const
 {
 return entity->eatableBy(this);
 }
 
-bool Mouse::eatableBy(Cheese const*)
+bool Mouse::eatableBy(Cheese const*) const
 {return false;}
 
-bool Mouse::eatableBy(Mouse const*)
+bool Mouse::eatableBy(Mouse const*) const
 {return false;}
+
+double Mouse::getMaxSpeed() const
+{return getAppConfig().mouse_max_speed;}
+

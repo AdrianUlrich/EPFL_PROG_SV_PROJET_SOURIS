@@ -23,7 +23,7 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		void move(sf::Time);
 		Vec2d getSpeedVector() {return getHeading()*velocite;}
 		virtual double getMaxSpeed() const = 0;
-		Angle getNewR
+		//Angle getNewR
 
 		/** pure virtual inherited specificDead not yet redefined */
 	private:
