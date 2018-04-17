@@ -13,16 +13,16 @@ class Mouse : public Animal
 		void drawOn(sf::RenderTarget&) override;
 
 		/** masking isDead pure virtual method */
-		virtual bool specificDead() const override;
-		
+		virtual bool isDead() const override;
+
 		/** eatable */
 		bool eatable(SimulatedEntity const*) const override;
 		bool eatableBy(Cheese const*) const override;
 		bool eatableBy(Mouse const*) const override;
-		
+
 		/** masking getMaxSpeed pure virtual method */
 		virtual double getMaxSpeed() const override;
-    
+
 	//private:
 		//double mouseSize;
 };

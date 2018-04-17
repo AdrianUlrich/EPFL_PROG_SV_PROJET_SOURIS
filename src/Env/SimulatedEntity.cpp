@@ -43,9 +43,7 @@ void SimulatedEntity::drawOn(sf::RenderTarget& target)
 }
 
 Vec2d SimulatedEntity::getHeading() const
-{
-	return Vec2d::fromAngle(angle);
-}
+{return Vec2d::fromAngle(angle);}
 
 void SimulatedEntity::update(sf::Time dt)
 {

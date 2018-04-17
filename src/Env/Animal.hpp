@@ -25,7 +25,7 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		virtual double getMaxSpeed() const = 0;
 		//Angle getNewR
 
-		/** pure virtual inherited specificDead not yet redefined */
+		/** pure virtual inherited isDead not yet redefined */
 	private:
 		State etat;
 		double velocite;

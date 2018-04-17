@@ -23,16 +23,17 @@ void Mouse::drawOn(sf::RenderTarget& target)
 	SimulatedEntity::drawOn(target);
 }
 
-bool Mouse::specificDead() const
+bool Mouse::isDead() const
 {
-	// Later mouse will be able to die from cancer :/
-	return false;
+	return
+	(
+		SimulatedEntity::isDead()
+	||false //!other conditions like CANCER
+	)
 }
 
 bool Mouse::eatable(SimulatedEntity const* entity)  const
-{
-return entity->eatableBy(this);
-}
+{return entity->eatableBy(this);}
 
 bool Mouse::eatableBy(Cheese const*) const
 {return false;}
