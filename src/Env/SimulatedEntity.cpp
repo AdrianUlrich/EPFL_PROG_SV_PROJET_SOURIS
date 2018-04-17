@@ -77,7 +77,7 @@ void SimulatedEntity::confine()
 
 	auto bottomWall(box->getBottomLimit(true));
 	  if (getPosition().y + getRadius() > bottomWall)
-		  position.y = bottomWall - radius * 1.25);  	  
+		  position.y = bottomWall - radius * 1.25);
 
 	auto rightWall(box->getRightLimit(true));
 	  if (getPosition().x + getRadius() > rightWall)

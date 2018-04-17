@@ -55,6 +55,7 @@ size_t nNTTs(NTTs.size());
 			NTTs[i]->update(dt);
 			if (NTTs[i]->isDead())
 			{
+				(NTTs[i]->box)->reset(); //! La boite est liberee
 				delete NTTs[i];
 				NTTs[i]=nullptr;
 				NTTs.erase(NTTs.begin()+i);
@@ -108,14 +109,18 @@ bool Lab::addAnimal(Mouse* mickey)
 			{
 				if (val->isEmpty())
 				{
-					val->flipEmpty();
-					mickey->setBox(val);
+					mickey->setBox(val); //! La souris est déja créée mais maintenant elle est dans une boite
 					mickey->confine();
-					return addEntity(mickey);
+					bool succ(addEntity(mickey));
+					if (succ)
+						val->addOccupant(); //! La boite est occuppée
+					return succ;
 				}
 			}
 		}
 	}
+	if (mickey!=nullptr)
+		delete mickey;
 	return false;
 }
 

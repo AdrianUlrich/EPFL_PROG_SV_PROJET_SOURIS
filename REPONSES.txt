@@ -10,10 +10,11 @@
 [Q2.02]
 [Q2.03] Il faut inclure la fonction drawOn dans les classes : lab, box.
 
-[Q3.01] Pour pouvoir modifier les entités.
+[Q3.01] Pour pouvoir modifier les entités
 [Q3.02]
-[Q3.08] Méthodes : canBeConfinedIn, isEqual, reset.
-[Q3.09] Dans SimulatedEntity.
+[Q3.08] Peut-être voudrait-on pouvoir poser un gros fromage entre deux boites, auquel cas canBeConfinedIn(Box*) mériterait d'être polymorphique.
+Par ailleurs, la fonction privée de confinement pourrait devoir être masquée. Pour ce faire on la rendrait protégée et virtuelle dans SimulatedEntity.
+[Q3.09] Dans SimulatedEntity
 
 [Q3.10] Lors du passage à l'état WANDERING, on affecte getMaxSpeed() à velocite.
 [Q3.11] On appelle SimulatedEntity::update(dt) au début de Animal::update(sf::Time dt).
