@@ -6,6 +6,10 @@
 #include <Application.hpp>
 #include <SFML/Graphics.hpp>
 #include <string>
+
+//debug only :
+#include <iostream>
+#include <assert.h>
 using namespace std;
 
 SimulatedEntity::SimulatedEntity(Vec2d const& pos, double energy, sf::Texture* texture, double rayon)
@@ -67,25 +71,33 @@ bool SimulatedEntity::canBeConfinedIn(Box* box)
 	return (box->isPositionInside(pos) and box->isEmpty());
 }
 
+void SimulatedEntity::confineInBox(Box* b)
+{
+	if (b!=nullptr)
+		box=b;
+	confine();
+}
+
+
 void SimulatedEntity::confine()
 {
 	if (box==nullptr) return;
 	auto radius(getRadius());
 	auto topWall(box->getTopLimit(true));
-	  if (pos.y - radius < topWall)
+	  if (getCenter().y - radius < topWall)
 		  pos.y = topWall + radius * 1.25;
 
 	auto bottomWall(box->getBottomLimit(true));
-	  if (pos.y + radius > bottomWall)
-		  pos.y = bottomWall - radius * 1.25;
-
+	if (getCenter().y + radius > bottomWall)
+		pos.y = bottomWall - radius * 1.25;
+	
 	auto rightWall(box->getRightLimit(true));
-	  if (pos.x + radius > rightWall)
-		  pos.x = rightWall - radius * 1.25;
+	if (getCenter().x + radius > rightWall)
+		pos.x = rightWall - radius * 1.25;
 
 	auto leftWall(box->getLeftLimit(true));
-	  if (pos.x - radius < leftWall)
-		  pos.x = leftWall + radius * 1.25;
+	if (getCenter().x - radius < leftWall)
+		pos.x = leftWall + radius * 1.25;
 }
 
 

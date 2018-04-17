@@ -1,12 +1,18 @@
 #include "Animal.hpp"
+#include <Utility/Arc.hpp>
 #include <Random/Random.hpp>
+#include <Application.hpp>
+#include <Config.hpp>
+
 
 Intervals Animal::intervals = { -180, -100, -55, -25, -10, 0, 10, 25, 55, 100, 180};
 Probs Animal::probs = {0.0000,0.0000,0.0005,0.0010,0.0050,0.9870,0.0050,0.0010,0.0005,0.0000,0.0000};
 
 Animal::Animal(Vec2d const& pos, double energy, sf::Texture* texture, double rayon)
 :	SimulatedEntity(pos,energy,texture,rayon),
-	etat(IDLE)
+	etat(IDLE),
+	AngleVision(getAppConfig().mouse_view_range),
+	DistanceVision(getAppConfig().mouse_view_distance)
 {}
 
 void Animal::update(sf::Time dt)
@@ -40,3 +46,14 @@ void Animal::move(sf::Time dt)
 	}
 	pos = new_p;
 }
+
+void Animal::drawOn(sf::RenderTarget& targetWindow)
+{
+	sf::Color color = sf::Color::Black;
+	color.a = 16; // light, transparent grey
+	Arc arcgraphics(45, 135, DistanceVision, color, DistanceVision);
+	arcgraphics.setOrigin(DistanceVision, DistanceVision);
+	arcgraphics.setPosition(pos);
+	arcgraphics.rotate(angle/DEG_TO_RAD-90);
+	targetWindow.draw(arcgraphics);
+}  

@@ -21,6 +21,10 @@ void Mouse::drawOn(sf::RenderTarget& target)
 	entitySprite.setPosition(pos);
 	entitySprite.setRotation(angle/ DEG_TO_RAD);
 	SimulatedEntity::drawOn(target);
+	if (isDebugOn())
+	{
+		Animal::drawOn(target);
+	}
 }
 
 bool Mouse::specificDead() const

@@ -18,3 +18,4 @@ Par ailleurs, la fonction privée de confinement pourrait devoir être masquée.
 
 [Q3.10] Lors du passage à l'état WANDERING, on affecte getMaxSpeed() à velocite.
 [Q3.11] On appelle SimulatedEntity::update(dt) au début de Animal::update(sf::Time dt).
+[Q3.15] Cela permet de modifier les constantes de vision dans leurs propres fonctions au lieu de devoir les modifier a chaque usage (ex: getViewX() au lieu de vision*facteur_maladie*facteur_environnement*etc...).

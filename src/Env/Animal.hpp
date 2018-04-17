@@ -25,13 +25,23 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		virtual double getMaxSpeed() const = 0;
 		//Angle getNewR
 
+		/** champs de vision */ 
+		double getViewRange() const {return AngleVision;} 
+		double getViewDistance() const {return DistanceVision;} 
+     
 		/** pure virtual inherited specificDead not yet redefined */
+		
+		void drawOn(sf::RenderTarget&) override;
+		
 	private:
 		State etat;
 		double velocite;
 		//double maxSpeed;
 		static Intervals intervals;
 		static Probs probs;
+
+		double AngleVision; 
+		double DistanceVision; 
 };
 
 #endif // ANIMAL_HPP
