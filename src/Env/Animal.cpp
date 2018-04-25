@@ -1,5 +1,7 @@
 #include "Animal.hpp"
 #include <Utility/Arc.hpp>
+#include <Utility/Vec2d.hpp>
+#include <Utility/Utility.hpp>
 #include <Random/Random.hpp>
 #include <Application.hpp>
 #include <Config.hpp>
@@ -57,3 +59,14 @@ void Animal::drawOn(sf::RenderTarget& targetWindow)
 	arcgraphics.rotate(angle/DEG_TO_RAD-90);
 	targetWindow.draw(arcgraphics);
 }  
+
+bool isTargetInsight(const Vec2d& position)
+{
+	if ((position.lengthSquared()) <= (DistanceVision*DistanceVision) and 
+		((position.x*x + position.y*y) >= cos((AngleVision+0.001)/2))
+		{return true};
+	if (isEqual(position.lenth, 0) {return true};
+	
+}
+
+

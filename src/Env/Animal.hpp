@@ -33,6 +33,11 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		
 		void drawOn(sf::RenderTarget&) override;
 		
+		/** detection d'une cible */
+		bool isTargetInsight(const Vec2d& position);
+		
+		
+		
 	private:
 		State etat;
 		double velocite;

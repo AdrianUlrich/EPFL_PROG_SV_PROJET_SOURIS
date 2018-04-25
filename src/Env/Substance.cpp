@@ -193,8 +193,3 @@ void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 			throw std::invalid_argument("Valid arguments are [0,1,2]");
 	}
 }
-
-
-
-
-
