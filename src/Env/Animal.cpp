@@ -1,5 +1,7 @@
 #include "Animal.hpp"
-#include <Random/Random.hpp>
+#include <Application.hpp>
+#include <iostream>
+using namespace std;
 
 Intervals Animal::intervals = { -180, -100, -55, -25, -10, 0, 10, 25, 55, 100, 180};
 Probs Animal::probs = {0.0000,0.0000,0.0005,0.0010,0.0050,0.9870,0.0050,0.0010,0.0005,0.0000,0.0000};
@@ -7,6 +9,7 @@ Probs Animal::probs = {0.0000,0.0000,0.0005,0.0010,0.0050,0.9870,0.0050,0.0010,0
 Animal::Animal(Vec2d const& pos, double energy, sf::Texture* texture, double rayon)
 :	SimulatedEntity(pos,energy,texture,rayon),
 	etat(IDLE),
+	velocite(0.),
 	compteur(sf::Time::Zero)
 {}
 
@@ -23,11 +26,11 @@ void Animal::update(sf::Time dt)
 	default:
 		break;
 	}
-	updateState()
+	updateState();
 
 }
 
-void Animal::updateState()
+void Animal::updateState()	
 {
 	if (etat!=WANDERING)
 	{
@@ -44,21 +47,25 @@ void Animal::move(sf::Time dt)
 	{
 		compteur = sf::Time::Zero;
 		angle += getNewRotation();
-		if (angle*angle>TAU*TAU)
-			angle = angle % TAU;
+		while (angle>TAU)
+			angle -= TAU;
+		while (angle<-TAU)
+			angle += TAU;
 	}
-	auto new_p(pos + getSpeedVector()*(dt.asSeconds()));
-	if (new_p.y - getRadius() <= 	box->getTopLimit(true) // mur du haut de la boîte contenant p
-		||new_p.y + getRadius() >= 	box->getBottomLimit(true)) // mur du bas de la boîte contenant p
-	{
-		angle=-angle;
-		new_p = pos + getSpeedVector()*(dt.asSeconds());
+	auto new_p(pos + Vec2d(1,1));//getSpeedVector()*(dt.asSeconds()));
+	if (box!=nullptr) {
+		if (new_p.y - getRadius() <= 	box->getTopLimit(true) // mur du haut de la boîte contenant p
+			||new_p.y + getRadius() >= 	box->getBottomLimit(true)) // mur du bas de la boîte contenant p
+		{
+			angle = -angle;
+			new_p = pos + getSpeedVector()*(dt.asSeconds());
+		}
+		if (new_p.x - getRadius() <= 	box->getLeftLimit(true) // mur de gauche de la boîte contenant p
+			||new_p.x + getRadius() >= 	box->getRightLimit(true)) // mur de droite de la boîte contenant p
+		{
+			angle = PI-angle;
+			new_p = pos + getSpeedVector()*(dt.asSeconds());
+		}
 	}
-	if (new_p.x - getRadius() <= 	box->getLeftLimit(true) // mur de gauche de la boîte contenant p
-		||new_p.x + getRadius() >= 	box->getRightLimit(true)) // mur de droite de la boîte contenant p
-	{
-		angle = PI-angle;
-		new_p = pos + getSpeedVector()*(dt.asSeconds());
-	}
-	pos = new_p;
+	pos += new_p;
 }

@@ -28,8 +28,8 @@ bool Mouse::isDead() const
 	return
 	(
 		SimulatedEntity::isDead()
-	||false //!other conditions like CANCER
-	)
+	or	false //! Mouse can die of other conditions like CANCER
+	);
 }
 
 bool Mouse::eatable(SimulatedEntity const* entity)  const

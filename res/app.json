@@ -50,7 +50,7 @@
             "mass":1,
             "size":180,
             "longevity":40000,
-            "max speed":100,
+            "max speed":1,
             "view":{
                "range":6.283185307,
                "distance":250

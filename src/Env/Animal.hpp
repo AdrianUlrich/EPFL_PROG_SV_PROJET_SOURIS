@@ -3,6 +3,8 @@
 
 #include "SimulatedEntity.hpp"
 #include <Utility/Utility.hpp>
+#include <Random/Random.hpp>
+
 
 enum State
 {

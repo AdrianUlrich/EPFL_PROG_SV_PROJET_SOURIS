@@ -36,7 +36,8 @@ void SimulatedEntity::drawOn(sf::RenderTarget& target)
 	target.draw(entitySprite);
 	if (isDebugOn())
 	{
-		text.setString("EntityNRJ:"+to_nice_string(energy));
+		text.setPosition(pos+Vec2d(0,-100));
+		text.setString("EntityNRJ: "+to_nice_string(energy));
 		//text.setRotation(angle / DEG_TO_RAD + 90);
 		target.draw(text);
 	}
@@ -55,13 +56,13 @@ bool SimulatedEntity::isDead() const
 	return
 	(
 		age > longevity or
-		energy <= 0 or
-		specificDead()
+		energy <= 0
 	);
 }
 
 bool SimulatedEntity::canBeConfinedIn(Box* box)
 {
+	if (box==nullptr) return false;
 	return (box->isPositionInside(pos) and box->isEmpty());
 }
 

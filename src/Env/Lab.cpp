@@ -101,6 +101,7 @@ bool Lab::addEntity(SimulatedEntity* ntt)
 
 bool Lab::addAnimal(Mouse* mickey)
 {
+	if (mickey==nullptr) return false;
 	for (auto& vec : boites)
 	{
 		for (auto val : vec)
