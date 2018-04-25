@@ -1,4 +1,4 @@
-
+﻿
 [Q1.01] En utilisant les fonctions codées précédemment
 [Q1.02] Externe, car je n'accède qu'à des methodes publiques
 [Q1.03] Il faut passer en const& les instances de classes (Collider et Vec2d)
@@ -6,16 +6,30 @@
 [Q1.05] Il faut passer en const& toutes les structures de données volumineuses que l'on ne souhaite pas modifier
 [Q1.06] Toutes les methodes internes qui ne modifient pas l'instance
 
-[Q2.01]
-[Q2.02]
-[Q2.03] Il faut inclure la fonction drawOn dans les classes : lab, box.
 
-[Q3.01] Pour pouvoir modifier les entités
-[Q3.02]
-[Q3.08] Peut-être voudrait-on pouvoir poser un gros fromage entre deux boites, auquel cas canBeConfinedIn(Box*) mériterait d'être polymorphique.
-Par ailleurs, la fonction privée de confinement pourrait devoir être masquée. Pour ce faire on la rendrait protégée et virtuelle dans SimulatedEntity.
-[Q3.09] Dans SimulatedEntity
+[Q2.01] il faut delete les pointeurs alloués dynamiquement
+[Q2.02] delete le constructeur de copie et l'operateur d'affectation
+[Q2.03] l'acces a notre projet se fait a travers lab donc il faut un drawOn dans lab et evidemment dans box qui doit lui meme etre appelé par lab
+[Q2.04] car (bizarrement) si l'on appuie sur m (ou f) la memoire sera de toute facon allouee par LabTest, donc si l'entité n'est pas viable il faut la désallouer. on pourrait remedier facilement à ce défaut de conception en laissant à la classe Lab elle-meme d'allouer ses propres membre, conservant aisni l'encapsulation
+[Q2.05] delete
+[Q2.06] delete les trucs dans ~Lab()
+[Q2.07] appeler SimulatedEntity::drawOn dans ses sous classes
+[Q2.08] à chaque update on ajoute un sf::Time à age et Lab verifie à chaque frame si les entités sont dead
 
-[Q3.10] Lors du passage à l'état WANDERING, on affecte getMaxSpeed() à velocite.
-[Q3.11] On appelle SimulatedEntity::update(dt) au début de Animal::update(sf::Time dt).
-[Q3.15] Cela permet de modifier les constantes de vision dans leurs propres fonctions au lieu de devoir les modifier a chaque usage (ex: getViewX() au lieu de vision*facteur_maladie*facteur_environnement*etc...).
+
+[Q3.01] Pour pouvoir modifier les entités et parce que on veut pas les copier parce que entité c'est gros
+[Q3.02] polymorphisme
+[Q3.03] chaque sous-classe d'entité devra afficher son sprite et etre capable d'un affichage de type debug
+[Q3.04] vector<T*>::erase(vector<T*>::begin()+index_à_enlever)
+[Q3.05] return position;
+[Q3.06] Le pricipal inconvénient de cette conception est que Collider devrait TOUJOURS contenir sa position et son rayon puisque c'est ce qui le définit. d'ailleurs dans SFML par exemple l'implémentation de la superclasse sf::Transformable fait la meme chose. aucune modification du code aurait été nécessaire puisqu'il suffisait d'enlever la position de SimulatedEntity. Et surtout c'était clairement pas plus facile à coder comme vous le demandiez comparé à ca tout en etant beaucoup plus realiste comme design
+[Q3.07] le dessin du sprite peut se faire dans SimulatedEntity::drawOn
+[Q3.08] canBeConfinedIn(Box*) pourrait changer selon la classe (par exemple on pourrait vouloir poser quelque chose sur un mur)
+[Q3.09] Dans SimulatedEntity, en virtuel protégé (selon si l'on veut pouvoir le masquer plus tard)
+
+[Q3.10] Lors du passage à l'état WANDERING, on affecte getMaxSpeed() à velocité
+[Q3.11] On appelle SimulatedEntity::update(dt) au début de Animal::update(sf::Time dt)
+[Q3.12] L'algorithme de déplacement est super sophistiqué mais quand la souris atteint un mur tout à coup elle fait demi tour (180°) systématiquement, ce choix de conception du mouvement est assez inégal en termes de complexité.
+[Q3.13] getMaxSpeed retournera quelque-chose qui sera fonction du niveau d'énergie (par ex: max_speed*sigmoid(energie))
+[Q3.14] cela consomme des ressources ("Always avoid runtime type identification if possible" ~Einstein)
+[Q3.15] Cela permet de modifier les constantes de vision dans leurs propres fonctions au lieu de devoir les modifier a chaque usage (ex: getViewX() au lieu de vision*facteur_maladie*facteur_environnement*etc...) par ailleurs cela permet de prendre potentiellement en compte un grand nombre de variables-->modularité++
