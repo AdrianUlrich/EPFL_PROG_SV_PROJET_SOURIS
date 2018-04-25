@@ -6,12 +6,14 @@ Probs Animal::probs = {0.0000,0.0000,0.0005,0.0010,0.0050,0.9870,0.0050,0.0010,0
 
 Animal::Animal(Vec2d const& pos, double energy, sf::Texture* texture, double rayon)
 :	SimulatedEntity(pos,energy,texture,rayon),
-	etat(IDLE)
+	etat(IDLE),
+	compteur(sf::Time::Zero)
 {}
 
 void Animal::update(sf::Time dt)
 {
 	SimulatedEntity::update(dt);
+	compteur += dt;
 	switch (etat)
 	{
 	case WANDERING:
@@ -38,6 +40,13 @@ void Animal::updateState()
 
 void Animal::move(sf::Time dt)
 {
+	if (compteur>getAppConfig().time_between_rotations)
+	{
+		compteur = sf::Time::Zero;
+		angle += getNewRotation();
+		if (angle*angle>TAU*TAU)
+			angle = angle % TAU;
+	}
 	auto new_p(pos + getSpeedVector()*(dt.asSeconds()));
 	if (new_p.y - getRadius() <= 	box->getTopLimit(true) // mur du haut de la boîte contenant p
 		||new_p.y + getRadius() >= 	box->getBottomLimit(true)) // mur du bas de la boîte contenant p

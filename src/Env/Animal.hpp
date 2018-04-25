@@ -23,15 +23,17 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		void move(sf::Time);
 		Vec2d getSpeedVector() {return getHeading()*velocite;}
 		virtual double getMaxSpeed() const = 0;
-		//Angle getNewR
+		Angle getNewRotation() const {return DEG_TO_RAD * piecewise_linear(intervals,probs);}
 
 		/** pure virtual inherited isDead not yet redefined */
 	private:
 		State etat;
-		double velocite;
 		//double maxSpeed;
+
+		double velocite;
 		static Intervals intervals;
 		static Probs probs;
+		sf::Time compteur;
 };
 
 #endif // ANIMAL_HPP

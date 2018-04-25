@@ -29,8 +29,8 @@ Config::Config(std::string path) : mConfig(j::readFromFile(path))
 , cheese_max_energy(mConfig["simulation"]["cheese"]["energy"]["max"].toDouble())
 
 // animal
+, time_between_rotations(sf::seconds(mConfig["simulation"]["animal"]["time between rotations"].toDouble()))
 , animal_random_walk_low_energy(mConfig["simulation"]["animal"]["random walk low energy"].toBool())
-
 , animal_meal_retention(mConfig["simulation"]["animal"]["meal retention"].toDouble())
 , animal_feed_time(mConfig["simulation"]["animal"]["feed time"].toDouble())
 , animal_satiety_min(mConfig["simulation"]["animal"]["satiety"]["min"].toDouble())
