@@ -72,3 +72,11 @@
 		 3.4 debut
 > 3.2: les souris rebondissent sur les murs par rappor
 > à leur angle d'incidence au lieu de simplement faire demi-tour
+
+*************************************************
+## 26.04 (jeudi)
+
+- Merge des parties incomplètes de A et I pour rendu intermédiaire
+- Compile et fonctionne, mais les souris sortent instantanément du cadre
+> On peut quand même les voir avec pause(espace)
+

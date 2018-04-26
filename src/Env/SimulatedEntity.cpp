@@ -72,8 +72,8 @@ bool SimulatedEntity::canBeConfinedIn(Box* box)
 
 void SimulatedEntity::confineInBox(Box* b)
 {
-	if (b!=nullptr)
-		box=b;
+	if (b==nullptr) return;
+	box=b;
 	confine();
 }
 
