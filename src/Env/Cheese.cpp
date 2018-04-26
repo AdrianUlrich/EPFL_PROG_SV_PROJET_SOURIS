@@ -32,11 +32,8 @@ Quantity Cheese::provideEnergy(Quantity qte)
 	return oldEnergy-/*new*/energy;
 }
 
-bool Cheese::specificDead() const
-{
-	// Cheese may die from death
-	return false;
-}
+bool Cheese::isDead() const
+{return SimulatedEntity::isDead();}
 
 
 bool Cheese::eatable(SimulatedEntity const* entity)  const

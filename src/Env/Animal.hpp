@@ -3,12 +3,14 @@
 
 #include "SimulatedEntity.hpp"
 #include <Utility/Utility.hpp>
+#include <Random/Random.hpp>
+
 
 enum State
 {
-	FOOD_IN_SIGHT, // nourriture en vue (il sera attiré par la nourriture)
-	FEEDING,       // en train de manger (là en principe il arrête de se déplacer)
-	WANDERING,     // déambule
+	FOOD_IN_SIGHT, // nourriture en vue (il sera attirÃ© par la nourriture)
+	FEEDING,       // en train de manger (lÃ  en principe il arrÃªte de se dÃ©placer)
+	WANDERING,     // dÃ©ambule
 	IDLE           // au repos
 };
 
@@ -23,7 +25,8 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		void move(sf::Time);
 		Vec2d getSpeedVector() {return getHeading()*velocite;}
 		virtual double getMaxSpeed() const = 0;
-		//Angle getNewR
+		Angle getNewRotation() const {return DEG_TO_RAD * piecewise_linear(intervals,probs);}
+
 
 		/** champs de vision */ 
 		double getViewRange() const {return AngleVision;} 
@@ -38,15 +41,20 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		
 		
 		
+
+		/** pure virtual inherited isDead not yet redefined */
+
 	private:
 		State etat;
-		double velocite;
 		//double maxSpeed;
+
 		static Intervals intervals;
 		static Probs probs;
 
 		double AngleVision; 
 		double DistanceVision; 
+		double velocite;
+		sf::Time compteur;
 };
 
 #endif // ANIMAL_HPP

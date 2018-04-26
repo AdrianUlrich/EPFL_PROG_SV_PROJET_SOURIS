@@ -22,29 +22,28 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		/** aging function*/
 		virtual void update(sf::Time);
 
-		bool isDead() const;
 		/** pure virtual method => abstract class */
-		virtual bool specificDead() const = 0;
+		virtual bool isDead() const = 0;
 
 		/** overriding virtual collider getters */
 		Vec2d getCenter() const override {return pos;}
 		double getRadius() const override {return entity_size/2;}
-		
+
 		/** confinement methode */
 		bool canBeConfinedIn(Box*);
-		
+
 		/** eatable */
 		virtual bool eatable(SimulatedEntity const*) const = 0;
 		virtual bool eatableBy(Mouse const*) const = 0;
 		virtual bool eatableBy(Cheese const*) const = 0;
 		
-		void confineInBox(Box* b);
-		
+		void confineInBox(Box* b) {if (box!=nullptr) box=b; confine();}
+
 		virtual Vec2d getHeading() const;
 
 		/** polymorphic destructor */
 		virtual ~SimulatedEntity() = default;
-		
+
 		void resetBox() {box->reset();}
 
 	protected:
@@ -65,8 +64,7 @@ class SimulatedEntity : public Collider /// ABSTRACT
 	private:
 		sf::Text text;
 		void confine();
-		
-		
+
 };
 
 #endif // SIMULATEDENTITY_HPP

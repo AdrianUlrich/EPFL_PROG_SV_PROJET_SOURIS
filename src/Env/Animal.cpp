@@ -1,4 +1,5 @@
 #include "Animal.hpp"
+
 #include <Utility/Arc.hpp>
 #include <Utility/Vec2d.hpp>
 #include <Utility/Utility.hpp>
@@ -14,39 +15,66 @@ Animal::Animal(Vec2d const& pos, double energy, sf::Texture* texture, double ray
 :	SimulatedEntity(pos,energy,texture,rayon),
 	etat(IDLE),
 	AngleVision(getAppConfig().mouse_view_range),
-	DistanceVision(getAppConfig().mouse_view_distance)
+	DistanceVision(getAppConfig().mouse_view_distance),
+	velocite(0.),
+	compteur(sf::Time::Zero)
 {}
 
 void Animal::update(sf::Time dt)
 {
 	SimulatedEntity::update(dt);
-	//if (energy<wdouch && isFoodNear())
-	//	etat = FOOD_IN_SIGHT;
-	if (etat == WANDERING)
-		move(dt); //
+	compteur += dt;
+	switch (etat)
+	{
+	case WANDERING:
+		move(dt);
+		break;
+
+	default:
+		break;
+	}
+	updateState();
+
 }
 
-void Animal::updateState()
+void Animal::updateState()	
 {
 	if (etat!=WANDERING)
+	{
 		etat=WANDERING;
+		velocite=getMaxSpeed();
+	}
+	//if (energy<minimum_de_faim && isFoodNear())
+	//	etat = FOOD_IN_SIGHT;
 }
 
 void Animal::move(sf::Time dt)
 {
-	auto new_p(pos + getSpeedVector()*(dt.asSeconds()));
-	if
-	(
-		new_p.y - getRadius() <= 	box->getTopLimit(true) // mur du haut de la boÓte contenant p
-	||new_p.y + getRadius() >= 	box->getBottomLimit(true) // mur du bas de la boÓte contenant p
-	||new_p.x - getRadius() <= 	box->getLeftLimit(true) // mur de gauche de la boÓte contenant p
-	||new_p.x + getRadius() >= 	box->getRightLimit(true) // mur de droite de la boÓte contenant p
-	)
+	if (compteur>getAppConfig().time_between_rotations)
 	{
-		angle = -getHeading().angle();
-		new_p = pos + getSpeedVector()*(dt.asSeconds());
+		compteur = sf::Time::Zero;
+		angle += getNewRotation();
+		while (angle>TAU)
+			angle -= TAU;
+		while (angle<-TAU)
+			angle += TAU;
 	}
-	pos = new_p;
+	auto new_p(pos + Vec2d(1,1));//getSpeedVector()*(dt.asSeconds()));
+	if (box!=nullptr) {
+		if (new_p.y - getRadius() <= 	box->getTopLimit(true) // mur du haut de la bo√Æte contenant p
+			||new_p.y + getRadius() >= 	box->getBottomLimit(true)) // mur du bas de la bo√Æte contenant p
+		{
+			angle = -angle;
+			new_p = pos + getSpeedVector()*(dt.asSeconds());
+		}
+		if (new_p.x - getRadius() <= 	box->getLeftLimit(true) // mur de gauche de la bo√Æte contenant p
+			||new_p.x + getRadius() >= 	box->getRightLimit(true)) // mur de droite de la bo√Æte contenant p
+		{
+			angle = PI-angle;
+			new_p = pos + getSpeedVector()*(dt.asSeconds());
+		}
+	}
+	pos += new_p;
 }
 
 void Animal::drawOn(sf::RenderTarget& targetWindow)
