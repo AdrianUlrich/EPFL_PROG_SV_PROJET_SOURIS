@@ -36,7 +36,7 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		virtual bool eatable(SimulatedEntity const*) const = 0;
 		virtual bool eatableBy(Mouse const*) const = 0;
 		virtual bool eatableBy(Cheese const*) const = 0;
-
+		
 		void confineInBox(Box* b) {if (box!=nullptr) box=b; confine();}
 
 		virtual Vec2d getHeading() const;

@@ -8,9 +8,9 @@
 
 enum State
 {
-	FOOD_IN_SIGHT, // nourriture en vue (il sera attiré par la nourriture)
-	FEEDING,       // en train de manger (là en principe il arrête de se déplacer)
-	WANDERING,     // déambule
+	FOOD_IN_SIGHT, // nourriture en vue (il sera attirÃ© par la nourriture)
+	FEEDING,       // en train de manger (lÃ  en principe il arrÃªte de se dÃ©placer)
+	WANDERING,     // dÃ©ambule
 	IDLE           // au repos
 };
 
@@ -27,14 +27,33 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		virtual double getMaxSpeed() const = 0;
 		Angle getNewRotation() const {return DEG_TO_RAD * piecewise_linear(intervals,probs);}
 
+
+		/** champs de vision */ 
+		double getViewRange() const {return AngleVision;} 
+		double getViewDistance() const {return DistanceVision;} 
+     
+		/** pure virtual inherited specificDead not yet redefined */
+		
+		void drawOn(sf::RenderTarget&) override;
+		
+		/** detection d'une cible */
+		bool isTargetInsight(const Vec2d& position);
+		
+		
+		
+
 		/** pure virtual inherited isDead not yet redefined */
+
 	private:
 		State etat;
 		//double maxSpeed;
 
-		double velocite;
 		static Intervals intervals;
 		static Probs probs;
+
+		double AngleVision; 
+		double DistanceVision; 
+		double velocite;
 		sf::Time compteur;
 };
 

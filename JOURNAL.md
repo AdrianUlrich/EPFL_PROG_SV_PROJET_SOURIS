@@ -40,6 +40,7 @@
  - AI: début de Lab.[hpp][cpp]
 > Modification de Box pour stocker les `sf::RectangleShape`s dans les `Box`
 > puisqu'on ne souhaite pas les modifier apès leur création dans `Box::Box()`
+
 ***SIGSEV lors de l'exectution du programme***
 
 *************************************************
@@ -56,3 +57,18 @@
 - Partie 3
  - Implémentation du polymorphisme et possibilité de créer jusqu'à n entités
 >  n choisi comme 100, faute d'indication dans l'énoncé d'une quelconque autre limite
+
+*************************************************
+## 10.04 (mardi)
+
+- Partie 3.1 debut et fin
+		 3.2 debut
+
+*************************************************
+## 17.04 (mardi)
+
+- Partie 3.2 continuation
+		 3.3 debut et fin
+		 3.4 debut
+> 3.2: les souris rebondissent sur les murs par rappor
+> à leur angle d'incidence au lieu de simplement faire demi-tour
