@@ -1,5 +1,6 @@
 #include "Mouse.hpp"
 #include <Application.hpp>
+#include <cmath>
 
 Mouse::Mouse(Vec2d const& pos)
 :	Animal
@@ -32,7 +33,7 @@ bool Mouse::isDead() const
 	return
 	(
 		SimulatedEntity::isDead()
-	or	false //! Mouse can die of other conditions like CANCER
+	//or other conditions like CANCER
 	);
 }
 
@@ -46,5 +47,9 @@ bool Mouse::eatableBy(Mouse const*) const
 {return false;}
 
 double Mouse::getMaxSpeed() const
-{return getAppConfig().mouse_max_speed;}
+{return getAppConfig().mouse_max_speed * 1/(1+exp(-energy/4));}
+
+double Mouse::getLossFactor() const
+{return getAppConfig().mouse_energy_loss_factor;}
+
 

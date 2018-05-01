@@ -35,7 +35,7 @@
          "random walk low energy":false,
          "meal retention":0.7,
          "feed time":0.4,
-         "base consumption" : 0.0,
+         "base consumption" : 0.0001,
          "min energy" : 5,
         "idle":{
             "min":3,
@@ -57,7 +57,7 @@
             },
             "energy":{
                "initial":30,
-               "loss factor":0,
+               "loss factor":0.001,
                "bite":2
             },
             "texture":{

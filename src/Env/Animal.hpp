@@ -19,27 +19,27 @@ class Animal : public SimulatedEntity /// ABSTRACT
 	public:
 		/** constructor */
 		Animal(Vec2d const& pos, double energy, sf::Texture* texture, double rayon);
-
+     		
+		void drawOn(sf::RenderTarget&) override;
+		
 		void update(sf::Time) override;
 		void updateState();
 		void move(sf::Time);
 		Vec2d getSpeedVector() {return getHeading()*velocite;}
 		virtual double getMaxSpeed() const = 0;
+		virtual double getLossFactor() const = 0;
 		Angle getNewRotation() const {return DEG_TO_RAD * piecewise_linear(intervals,probs);}
 
 
 		/** champs de vision */ 
 		double getViewRange() const {return AngleVision;} 
 		double getViewDistance() const {return DistanceVision;} 
-     
-		/** pure virtual inherited specificDead not yet redefined */
-		
-		void drawOn(sf::RenderTarget&) override;
+
 		
 		/** detection d'une cible */
 		bool isTargetInsight(const Vec2d& position);
 		
-		
+		~Animal() {if (box!=nullptr) box->reset();};
 		
 
 		/** pure virtual inherited isDead not yet redefined */

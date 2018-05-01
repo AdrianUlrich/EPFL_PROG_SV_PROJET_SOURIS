@@ -2,6 +2,9 @@
 #include <exception>
 #include <Application.hpp>
 
+#include <iostream>
+using namespace std;
+
 Lab::Lab()
 :	NTTs(0)
 {
@@ -55,10 +58,12 @@ size_t nNTTs(NTTs.size());
 			NTTs[i]->update(dt);
 			if (NTTs[i]->isDead())
 			{
-				NTTs[i]->resetBox(); //! La boite est liberee
+				// NTTs[i]->resetBox(); //! La boite est liberee dans le destructeur de animal
 				delete NTTs[i];
-				NTTs[i]=nullptr;
-				NTTs.erase(NTTs.begin()+i);
+				NTTs[i]=NTTs[NTTs.size()-1];
+				NTTs.pop_back();
+				//NTTs[i]=nullptr;
+				//NTTs.erase(NTTs.begin()+i);
 				--nNTTs;
 			}
 		}

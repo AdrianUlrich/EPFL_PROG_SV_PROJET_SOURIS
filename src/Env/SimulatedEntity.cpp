@@ -22,7 +22,7 @@ SimulatedEntity::SimulatedEntity(Vec2d const& pos, double energy, sf::Texture* t
 	texture(texture),
 	text(buildText
 	(
-		"EntityNRJ:"+to_nice_string(energy),
+		"NRJ:"+to_nice_string(energy),
 		pos,
 		getAppFont(),
 		getAppConfig().default_debug_text_size,
@@ -41,7 +41,7 @@ void SimulatedEntity::drawOn(sf::RenderTarget& target)
 	if (isDebugOn())
 	{
 		text.setPosition(pos+Vec2d(0,-100));
-		text.setString("EntityNRJ: "+to_nice_string(energy));
+		text.setString("NRJ: "+to_nice_string(energy));
 		//text.setRotation(angle / DEG_TO_RAD + 90);
 		target.draw(text);
 	}

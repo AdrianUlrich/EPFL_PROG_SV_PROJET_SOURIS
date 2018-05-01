@@ -44,8 +44,6 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		/** polymorphic destructor */
 		virtual ~SimulatedEntity() = default;
 
-		void resetBox() {box->reset();}
-
 	protected:
 		Vec2d pos;
 		double entity_size;

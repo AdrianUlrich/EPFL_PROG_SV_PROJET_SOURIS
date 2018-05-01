@@ -58,7 +58,7 @@ public:
 
 	// debug
 	const sf::Color debug_text_color = sf::Color::White;
-	const size_t default_debug_text_size = 20;
+	const size_t default_debug_text_size = 30;
 
 
 	//simulation

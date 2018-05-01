@@ -8,6 +8,9 @@
 #include <Config.hpp>
 #include <cmath>
 
+#include <iostream>
+using namespace std;
+
 
 Intervals Animal::intervals = { -180, -100, -55, -25, -10, 0, 10, 25, 55, 100, 180};
 Probs Animal::probs = {0.0000,0.0000,0.0005,0.0010,0.0050,0.9870,0.0050,0.0010,0.0005,0.0000,0.0000};
@@ -35,12 +38,12 @@ void Animal::update(sf::Time dt)
 		break;
 	}
 	updateState();
-
+	energy -= getAppConfig().animal_base_energy_consumption + getLossFactor()*velocite;
 }
 
 void Animal::updateState()	
 {
-	if (etat!=WANDERING)
+	//if (etat!=WANDERING)
 	{
 		etat=WANDERING;
 		velocite=getMaxSpeed();
@@ -60,22 +63,22 @@ void Animal::move(sf::Time dt)
 		while (angle<-TAU)
 			angle += TAU;
 	}
-	auto new_p(pos + Vec2d(1,1));//getSpeedVector()*(dt.asSeconds()));
+    auto new_p(pos + getSpeedVector()*(dt.asMilliseconds()));
 	if (box!=nullptr) {
 		if (new_p.y - getRadius() <= 	box->getTopLimit(true) // mur du haut de la boîte contenant p
 			||new_p.y + getRadius() >= 	box->getBottomLimit(true)) // mur du bas de la boîte contenant p
 		{
 			angle = -angle;
-			new_p = pos + getSpeedVector()*(dt.asSeconds());
+			new_p = pos + getSpeedVector()*(dt.asMilliseconds());
 		}
 		if (new_p.x - getRadius() <= 	box->getLeftLimit(true) // mur de gauche de la boîte contenant p
 			||new_p.x + getRadius() >= 	box->getRightLimit(true)) // mur de droite de la boîte contenant p
 		{
 			angle = PI-angle;
-			new_p = pos + getSpeedVector()*(dt.asSeconds());
+			new_p = pos + getSpeedVector()*(dt.asMilliseconds());
 		}
 	}
-	pos += new_p;
+	pos = new_p;
 }
 
 void Animal::drawOn(sf::RenderTarget& targetWindow)
