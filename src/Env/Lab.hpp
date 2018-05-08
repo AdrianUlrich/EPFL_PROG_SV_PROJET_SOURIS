@@ -31,6 +31,8 @@ public :
 	bool addAnimal(Mouse*);
 	bool addCheese(Cheese*);
 	bool addEntity(SimulatedEntity*);
+	
+	SimulatedEntity* findTargetInSightOf(Animal*);
 
 private:
 	vector<vector<Box*>> boites;

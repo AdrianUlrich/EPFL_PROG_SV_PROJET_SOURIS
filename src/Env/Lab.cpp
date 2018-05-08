@@ -70,6 +70,18 @@ size_t nNTTs(NTTs.size());
 	}
 }
 
+SimulatedEntity* Lab::findTargetInSightOf(Animal* a)
+{
+	SimulatedEntity* ans(nullptr);
+	for (auto val : NTTs)
+	{
+		if (a->eatable(val) and a->isTargetInSight(val->getCenter()) and ((ans==nullptr) or (distance(a->getCenter(),val->getCenter()))<(distance(a->getCenter(),ans->getCenter()))))
+			ans=val;
+	}
+	return ans;
+}
+
+
 void Lab::drawOn(sf::RenderTarget& target)
 {
 	for (auto& vec : boites)

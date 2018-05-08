@@ -50,14 +50,14 @@
             "mass":1,
             "size":180,
             "longevity":40000,
-            "max speed":1,
+            "max speed":250,
             "view":{
                "range":2.0943951023,
                "distance":250
             },
             "energy":{
                "initial":30,
-               "loss factor":0.001,
+               "loss factor":0.00001,
                "bite":2
             },
             "texture":{

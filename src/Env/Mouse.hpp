@@ -23,6 +23,7 @@ class Mouse : public Animal
 		/** masking getMaxSpeed pure virtual method */
 		virtual double getMaxSpeed() const override;
 		virtual double getLossFactor() const override;
+		virtual double getMass() const override;
 
 	//private:
 		//double mouseSize;

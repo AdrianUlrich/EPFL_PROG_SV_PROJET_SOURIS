@@ -7,9 +7,7 @@
 #include <Application.hpp>
 #include <Config.hpp>
 #include <cmath>
-
-#include <iostream>
-using namespace std;
+#include <algorithm>
 
 
 Intervals Animal::intervals = { -180, -100, -55, -25, -10, 0, 10, 25, 55, 100, 180};
@@ -33,6 +31,14 @@ void Animal::update(sf::Time dt)
 	case WANDERING:
 		move(dt);
 		break;
+		
+	case FOOD_IN_SIGHT:
+		move(getFoodLust(),dt);
+		break;
+		
+	case FEEDING:
+		//eat(cible_actuelle);
+		break;
 
 	default:
 		break;
@@ -43,13 +49,21 @@ void Animal::update(sf::Time dt)
 
 void Animal::updateState()	
 {
-	//if (etat!=WANDERING)
+	SimulatedEntity* food_near(nullptr);
+	if (isSatiated())
 	{
-		etat=WANDERING;
-		velocite=getMaxSpeed();
+		etat = WANDERING;
+		velocite = getMaxSpeed();
 	}
-	//if (energy<minimum_de_faim && isFoodNear())
-	//	etat = FOOD_IN_SIGHT;
+	else if (etat == FOOD_IN_SIGHT and isColliding(*cible_actuelle))
+	{
+		etat = FEEDING;
+	}
+	else if	((food_near=getAppEnv().findTargetInSightOf(this))!=nullptr)
+	{
+		etat = FOOD_IN_SIGHT;
+		cible_actuelle = food_near;
+	}
 }
 
 void Animal::move(sf::Time dt)
@@ -63,22 +77,51 @@ void Animal::move(sf::Time dt)
 		while (angle<-TAU)
 			angle += TAU;
 	}
-    auto new_p(pos + getSpeedVector()*(dt.asMilliseconds()));
+    auto new_p(pos + getSpeedVector()*(dt.asSeconds()));
 	if (box!=nullptr) {
 		if (new_p.y - getRadius() <= 	box->getTopLimit(true) // mur du haut de la boîte contenant p
 			||new_p.y + getRadius() >= 	box->getBottomLimit(true)) // mur du bas de la boîte contenant p
 		{
 			angle = -angle;
-			new_p = pos + getSpeedVector()*(dt.asMilliseconds());
+			new_p = pos + getSpeedVector()*(dt.asSeconds());
 		}
 		if (new_p.x - getRadius() <= 	box->getLeftLimit(true) // mur de gauche de la boîte contenant p
 			||new_p.x + getRadius() >= 	box->getRightLimit(true)) // mur de droite de la boîte contenant p
 		{
 			angle = PI-angle;
-			new_p = pos + getSpeedVector()*(dt.asMilliseconds());
+			new_p = pos + getSpeedVector()*(dt.asSeconds());
 		}
 	}
 	pos = new_p;
+}
+
+void Animal::move(Vec2d const& force,sf::Time t)
+{
+	double dt(t.asSeconds());
+	auto accel(force/getMass());
+	auto new_vel(getSpeedVector()+accel*dt);
+	auto new_dir(new_vel.normalised());
+	angle = new_dir.angle();
+	velocite = std::max(new_vel.length(),getMaxSpeed());
+	pos+=getHeading()*velocite*dt;
+}
+
+bool Animal::isSatiated() const
+{
+	return (
+	(etat!=FEEDING and
+	energy<getAppConfig().animal_satiety_min) or
+	(etat==FEEDING and
+	energy<getAppConfig().animal_satiety_max));
+}
+
+Vec2d Animal::getFoodLust() const
+{
+	auto distV(getCenter()-cible_actuelle->getCenter());
+	auto dist(distV.length());
+	auto speed(std::min(getMaxSpeed(),dist*0.3));
+	auto Vtarget(distV/dist * speed);
+	return Vtarget-getSpeedVector();
 }
 
 void Animal::drawOn(sf::RenderTarget& targetWindow)

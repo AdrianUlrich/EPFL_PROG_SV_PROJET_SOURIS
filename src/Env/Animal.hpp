@@ -24,11 +24,16 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		
 		void update(sf::Time) override;
 		void updateState();
+		
 		void move(sf::Time);
-		Vec2d getSpeedVector() {return getHeading()*velocite;}
+		void move(Vec2d const&,sf::Time);
+		Vec2d getSpeedVector() const {return getHeading()*velocite;}
 		virtual double getMaxSpeed() const = 0;
 		virtual double getLossFactor() const = 0;
+		virtual double getMass() const = 0;
 		Angle getNewRotation() const {return DEG_TO_RAD * piecewise_linear(intervals,probs);}
+		bool isSatiated() const;
+		Vec2d getFoodLust() const;
 
 
 		/** champs de vision */ 
@@ -38,6 +43,7 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		
 		/** detection d'une cible */
 		bool isTargetInSight(const Vec2d& position);
+		void setTarget(SimulatedEntity* a) {cible_actuelle=a;}
 		
 		~Animal() {if (box!=nullptr) box->reset();}
 
@@ -58,6 +64,8 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		double DistanceVision; 
 		double velocite;
 		sf::Time compteur;
+		
+		SimulatedEntity* cible_actuelle;
 };
 
 #endif // ANIMAL_HPP

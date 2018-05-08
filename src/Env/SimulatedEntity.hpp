@@ -6,6 +6,7 @@
 #include "Box.hpp"
 #include "Collider.hpp"
 #include <Utility/Vec2d.hpp>
+#include <vector>
 
 class Mouse;
 class Cheese;
@@ -21,6 +22,7 @@ class SimulatedEntity : public Collider /// ABSTRACT
 
 		/** aging function*/
 		virtual void update(sf::Time);
+		virtual void interact(std::vector<SimulatedEntity*>) {}
 
 		/** pure virtual method => abstract class */
 		virtual bool isDead() const = 0;
