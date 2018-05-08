@@ -37,7 +37,7 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		virtual bool eatableBy(Mouse const*) const = 0;
 		virtual bool eatableBy(Cheese const*) const = 0;
 
-		void confineInBox(Box*);
+		void confineInBox(Box* b);
 
 		virtual Vec2d getHeading() const;
 
@@ -45,6 +45,7 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		virtual ~SimulatedEntity() = default;
 
 		void resetBox() {box->reset();}
+		void confine(Box*);
 
 	protected:
 		Vec2d pos;
@@ -63,7 +64,6 @@ class SimulatedEntity : public Collider /// ABSTRACT
 
 	private:
 		sf::Text text;
-		void confine();
 
 };
 

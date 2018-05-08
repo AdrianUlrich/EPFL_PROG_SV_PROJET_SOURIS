@@ -103,7 +103,7 @@ SCENARIO("Testing the isTargetInSight method", "[Mouse]")
 
   GIVEN("The target in the field of view of the mouse (same box)")
   {
-    target = winnie.getPosition() +
+    target = winnie.getCenter() +
  						  initialOrientation * viewDistance / 2;
     THEN("the target is seen by the animal")
     {
@@ -113,7 +113,7 @@ SCENARIO("Testing the isTargetInSight method", "[Mouse]")
 
   GIVEN("A target close to the mouse, on the borders of its view range")
   {
-    target = winnie.getPosition() + Polar2Cartesian(viewRange / 2 - 0.002, 1);
+    target = winnie.getCenter() + Polar2Cartesian(viewRange / 2 - 0.002, 1);
 
     THEN("the target is seen by the animal")
     {
@@ -123,7 +123,7 @@ SCENARIO("Testing the isTargetInSight method", "[Mouse]")
 
   GIVEN("A target close to the mouse but outside its view range")
   {
-    target = winnie.getPosition() + Polar2Cartesian((viewRange / 2) + 0.2, 1);
+    target = winnie.getCenter() + Polar2Cartesian((viewRange / 2) + 0.2, 1);
 
     THEN("the target is not seen by the animal")
     {
@@ -133,7 +133,7 @@ SCENARIO("Testing the isTargetInSight method", "[Mouse]")
 
   GIVEN("A target in the view range of the mouse, at the upper limits of its view distance")
   {
-    target = mickey.getPosition() - diagonalHeading * (viewDistance - 0.2);
+    target = mickey.getCenter() - diagonalHeading * (viewDistance - 0.2);
     mickey.setHeading(-diagonalHeading);
 
     THEN("the target is seen by the mouse")
@@ -144,7 +144,7 @@ SCENARIO("Testing the isTargetInSight method", "[Mouse]")
    
   GIVEN("A target in the view range of the mouse but too distant")
   { 
-    target = mickey.getPosition() - diagonalHeading * (viewDistance + 1);
+    target = mickey.getCenter() - diagonalHeading * (viewDistance + 1);
     mickey.setHeading(-diagonalHeading);	   
     THEN("the target is not seen by the mouse")
     {

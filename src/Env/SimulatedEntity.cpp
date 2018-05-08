@@ -71,16 +71,13 @@ bool SimulatedEntity::canBeConfinedIn(Box* box)
 
 void SimulatedEntity::confineInBox(Box* b)
 {
-	if (b!=nullptr)
-	{
-		box=b;
-		confine();
-	}
+	box=b;
 }
 
 
-void SimulatedEntity::confine()
+void SimulatedEntity::confine(Box* b)
 {
+	confineInBox(b);
 	if (box!=nullptr)
 	{
 		auto radius(getRadius());

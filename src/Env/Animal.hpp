@@ -32,17 +32,20 @@ class Animal : public SimulatedEntity /// ABSTRACT
 
 
 		/** champs de vision */ 
-		double getViewRange() const {return AngleVision;} 
-		double getViewDistance() const {return DistanceVision;} 
+		virtual double getViewRange() const {return AngleVision;} 
+		virtual double getViewDistance() const {return DistanceVision;} 
 
 		
 		/** detection d'une cible */
-		bool isTargetInsight(const Vec2d& position);
+		bool isTargetInSight(const Vec2d& position);
 		
-		~Animal() {if (box!=nullptr) box->reset();};
-		
+		~Animal() {if (box!=nullptr) box->reset();}
 
 		/** pure virtual inherited isDead not yet redefined */
+		
+	protected:
+	
+		void setRotation(Angle a) {angle=a;}
 
 	private:
 		State etat;

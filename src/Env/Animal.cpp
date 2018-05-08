@@ -92,13 +92,18 @@ void Animal::drawOn(sf::RenderTarget& targetWindow)
 	targetWindow.draw(arcgraphics);
 }  
 
-bool Animal::isTargetInsight(const Vec2d& position)
+bool Animal::isTargetInSight(const Vec2d& position)
 {
+	auto dist(position-pos);
+	auto normdist(dist.normalised());
 	return 
 	(
-		(position.lengthSquared() <= DistanceVision*DistanceVision) and 
-		(position.x*pos.x + position.y*pos.y >= cos((AngleVision+0.001)/2))
-		or (isEqual(position.length(), 0))
+		box->isPositionInside(position) and
+		dist.lengthSquared() <= DistanceVision*DistanceVision and 
+		(
+			normdist.dot(getHeading()) >= cos((AngleVision+0.001)/2) or
+			isEqual(dist.length(), 0.0)
+		)
 	);
 }
 

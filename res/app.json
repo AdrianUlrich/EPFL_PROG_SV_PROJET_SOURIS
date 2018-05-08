@@ -52,7 +52,7 @@
             "longevity":40000,
             "max speed":1,
             "view":{
-               "range":6.283185307,
+               "range":2.0943951023,
                "distance":250
             },
             "energy":{

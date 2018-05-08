@@ -115,7 +115,7 @@ bool Lab::addAnimal(Mouse* mickey)
 			{
 				if (val->isEmpty())
 				{
-					mickey->confineInBox(val); //! La souris est déja créée mais maintenant elle est dans une boite
+					mickey->confine(val); //! La souris est déja créée mais maintenant elle est dans une boite
 					bool succ(addEntity(mickey));
 					if (succ)
 						val->addOccupant(); //! La boite est occuppée
