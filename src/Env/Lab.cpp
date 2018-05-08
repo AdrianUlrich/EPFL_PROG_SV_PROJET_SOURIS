@@ -2,6 +2,9 @@
 #include <exception>
 #include <Application.hpp>
 
+#include <iostream>
+using namespace std;
+
 Lab::Lab()
 :	NTTs(0)
 {
@@ -55,9 +58,12 @@ size_t nNTTs(NTTs.size());
 			NTTs[i]->update(dt);
 			if (NTTs[i]->isDead())
 			{
+				// NTTs[i]->resetBox(); //! La boite est liberee dans le destructeur de animal
 				delete NTTs[i];
-				NTTs[i]=nullptr;
-				NTTs.erase(NTTs.begin()+i);
+				NTTs[i]=NTTs[NTTs.size()-1];
+				NTTs.pop_back();
+				//NTTs[i]=nullptr;
+				//NTTs.erase(NTTs.begin()+i);
 				--nNTTs;
 			}
 		}
@@ -92,7 +98,7 @@ void Lab::reset()
 
 bool Lab::addEntity(SimulatedEntity* ntt)
 {
-	if (ntt==nullptr || NTTs.size()>100)
+	if (ntt==nullptr)// || NTTs.size()>100)
 		return false;
 	NTTs.push_back(ntt);
 	return true;
@@ -100,7 +106,27 @@ bool Lab::addEntity(SimulatedEntity* ntt)
 
 bool Lab::addAnimal(Mouse* mickey)
 {
-	return addEntity(mickey);
+	if (mickey==nullptr) return false;
+	for (auto& vec : boites)
+	{
+		for (auto val : vec)
+		{
+			if (mickey->canBeConfinedIn(val))
+			{
+				if (val->isEmpty())
+				{
+					mickey->confine(val); //! La souris est déja créée mais maintenant elle est dans une boite
+					bool succ(addEntity(mickey));
+					if (succ)
+						val->addOccupant(); //! La boite est occuppée
+					return succ;
+				}
+			}
+		}
+	}
+	if (mickey!=nullptr)
+		delete mickey;
+	return false;
 }
 
 bool Lab::addCheese(Cheese* caprice_des_dieux)

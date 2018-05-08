@@ -10,13 +10,22 @@ class Mouse : public Animal
 		Mouse(Vec2d const&);
 
 		/**	masked draw function*/
-		void drawOn(sf::RenderTarget&);
-		
+		void drawOn(sf::RenderTarget&) override;
+
 		/** masking isDead pure virtual method */
-		virtual bool specificDead() const override;
-		
-	private:
-		double mouseSize;
+		virtual bool isDead() const override;
+
+		/** eatable */
+		bool eatable(SimulatedEntity const*) const override;
+		bool eatableBy(Cheese const*) const override;
+		bool eatableBy(Mouse const*) const override;
+
+		/** masking getMaxSpeed pure virtual method */
+		virtual double getMaxSpeed() const override;
+		virtual double getLossFactor() const override;
+
+	//private:
+		//double mouseSize;
 };
 
 #endif // MOUSE_HPP

@@ -58,7 +58,7 @@ public:
 
 	// debug
 	const sf::Color debug_text_color = sf::Color::White;
-	const size_t default_debug_text_size = 20;
+	const size_t default_debug_text_size = 30;
 
 
 	//simulation
@@ -70,7 +70,7 @@ public:
 	const double  simulation_time_factor;
 	const sf::Time  simulation_time_max_dt;
 
-	
+
 	// living entity
 	const std::string entity_texture_tracked = "target.png";
 	const double entity_energy_critical = 5;
@@ -81,6 +81,7 @@ public:
 	const double cheese_max_energy = 300;
 
 	// animal
+	const sf::Time time_between_rotations;
 	const bool animal_random_walk_low_energy;
 	const double animal_meal_retention ;
 	const float animal_feed_time;

@@ -25,22 +25,26 @@ public:
 	bool isPositionOnWall(const Vec2d&);
 
 	void drawOn(sf::RenderTarget&);
+	bool isEmpty() {return empty;}
+	void addOccupant() {empty=false;}
+	void reset() {empty=true;}
 
 private:
 	Vec2d pos;
 	double l; //!< Largeur de la boite
 	double h; //!< Hauteur de la boite
 	double e; //!< Epaisseur de la boite
-	
+
 	/**mur gauche : [0]
 	 * mur bas : [1]
 	 * mur droit : [2]
 	 * mur haut : [3]	*/
 	std::array<Wall,4> murs;
-	
+
 	/*! Graphic files that dont need to be created every time */
 	std::array<sf::RectangleShape,4> builtRecs;
 	sf::Texture* texture;
+	bool empty;
 };
 
 

@@ -34,3 +34,5 @@
 *.geany
 
 build/
+
+\.sconsign\.dblite
