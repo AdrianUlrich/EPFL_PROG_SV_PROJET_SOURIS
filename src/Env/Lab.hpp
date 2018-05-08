@@ -31,10 +31,17 @@ public :
 	bool addAnimal(Mouse*);
 	bool addCheese(Cheese*);
 	bool addEntity(SimulatedEntity*);
-
+	
+	/**Focus sur un animal*/
+	void trackAnimal(Animal* n) {tracked = n;}
+	void trackAnimal(const Vec2d&);
+	void switchToView(View view);
+	void stopTrackingAnyEntity();
+	
 private:
 	vector<vector<Box*>> boites;
 	vector<SimulatedEntity*> NTTs;
+	Animal* tracked;
 };
 
 #endif //I_LAB_HPP

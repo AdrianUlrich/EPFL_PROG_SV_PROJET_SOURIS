@@ -133,3 +133,25 @@ bool Lab::addCheese(Cheese* caprice_des_dieux)
 {
 	return addEntity(caprice_des_dieux);
 }
+
+
+void Lab::trackAnimal(const Vec2d& p)
+{
+	for (auto val : NTTs)
+	{
+		if ((p-val->getCenter()).lengthSquared() < val->getRadius()*val->getRadius())
+		{
+			trackAnimal(val);
+		}
+	}
+}
+
+void Lab::switchToView(View view)
+{
+	getApp().switchToView(view);	
+}
+
+void Lab::stopTrackingAnyEntity()
+{
+	tracked=nullptr;
+}
