@@ -19,7 +19,8 @@ Animal::Animal(Vec2d const& pos, double energy, sf::Texture* texture, double ray
 	AngleVision(getAppConfig().mouse_view_range),
 	DistanceVision(getAppConfig().mouse_view_distance),
 	velocite(0.),
-	compteur(sf::Time::Zero)
+	compteur(sf::Time::Zero),
+	cible_actuelle(nullptr)
 {}
 
 void Animal::update(sf::Time dt)
@@ -133,6 +134,8 @@ void Animal::drawOn(sf::RenderTarget& targetWindow)
 	arcgraphics.setPosition(pos);
 	arcgraphics.rotate(angle/DEG_TO_RAD-90);
 	targetWindow.draw(arcgraphics);
+	if (cible_actuelle!=nullptr)
+		text.setString(text.getString()+"\nTARGETLOCK");
 }  
 
 bool Animal::isTargetInSight(const Vec2d& position)

@@ -63,8 +63,6 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		/** SFML variables */
 		sf::Texture* texture;
 		sf::Sprite entitySprite;
-
-	private:
 		sf::Text text;
 
 };
