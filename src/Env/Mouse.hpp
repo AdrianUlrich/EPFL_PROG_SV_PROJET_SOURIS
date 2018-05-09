@@ -10,7 +10,7 @@ class Mouse : public Animal
 		Mouse(Vec2d const&);
 
 		/**	masked draw function*/
-		void drawOn(sf::RenderTarget&) override;
+		void drawOn(sf::RenderTarget&);
 
 		/** masking isDead pure virtual method */
 		virtual bool isDead() const override;

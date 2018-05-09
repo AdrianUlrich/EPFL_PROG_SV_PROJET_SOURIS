@@ -110,6 +110,7 @@ public:
 	const double cheese_max_energy = 300;
 
 	// animal
+	const sf::Time time_between_rotations;
 	const bool animal_random_walk_low_energy;
 	const double animal_meal_retention ;
 	const float animal_feed_time;

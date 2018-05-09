@@ -2,14 +2,20 @@
 
 #include <Application.hpp>
 
-Organ::Organ (bool generation
-: generation (true), 
+Organ::Organ (bool generation)
+: generation (true)
+{
+	if (generation==true) genrate();	
+}
+
+
+
 void Organ::update()
 {
 	//updateRepresentation()
 }
 	
-void Organ::drawOn(sf::RenderTarget target)
+void Organ::drawOn(sf::RenderTarget& target)
 {
 	sf::Sprite image(renderingCache_.getTexture()); // transforme l'image en texture
 	target.draw(image); // affiche la texture	
@@ -18,7 +24,11 @@ void Organ::drawOn(sf::RenderTarget target)
 
 void Organ::generate()
 {
-	
+reloadConfig();
+reloadCacheStructure();	
+createLiver();
+createBloodSystem();
+updateRepresentation();
 }
 
 
@@ -58,3 +68,14 @@ void Organ::updateRepresentationAt()
 	renderingCache.display();	
 }
 */
+
+double Organ::getWidth() 
+{
+	return getAppConfig().simulation_organ_size;
+}
+
+	
+double Organ::getHeight() 
+{
+	return getAppConfig().simulation_organ_size;
+}

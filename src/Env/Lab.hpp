@@ -4,10 +4,10 @@
 #include <vector>
 #include <Utility/Vec2d.hpp>
 #include <SFML/Graphics.hpp>
-#include "Animal.hpp"
 #include "Cheese.hpp"
 #include "Box.hpp"
 #include "Mouse.hpp"
+#include "Animal.hpp"
 using std::vector;
 
 class Lab : public sf::NonCopyable
@@ -33,15 +33,15 @@ public :
 	bool addEntity(SimulatedEntity*);
 	
 	/**Focus sur un animal*/
-	void trackAnimal(Animal* n) {tracked = n;}
+	void trackAnimal(Animal* n);
 	void trackAnimal(const Vec2d&);
-	void switchToView(View view);
+	void switchToView(sf::View view);
 	void stopTrackingAnyEntity();
 	
 	/** lien entre animal et organ */
 	
 	void updateTrackedAnimal();
-	void drawCurrentOrgan((sf::RenderTarget& target);
+	void drawCurrentOrgan(sf::RenderTarget& target);
 	
 private:
 	vector<vector<Box*>> boites;

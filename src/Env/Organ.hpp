@@ -1,14 +1,17 @@
 #ifndef ORGAN_HPP
 #define ORGAN_HPP
 
+#include <SFML/Graphics.hpp>
+#include <Application.hpp>
+
 class Organ 
 {
 public:
 	void update();
-	void drawOn(sf::RenderTarget target);
+	void drawOn(sf::RenderTarget& target);
 	void updateRepresentation();
-	double getWidth() {return getAppConfig().simulation_organ_size;}
-	double getHeight() {return getAppConfig().simulation_organ_size;}
+	double getWidth();
+	double getHeight();
 	
 protected:
 	 void generate();
@@ -22,7 +25,7 @@ private:
 	int nbCells;
 	float cellSize;
 	sf::RenderTexture renderingCache;
-	
+	bool generation;
 	
 };
 

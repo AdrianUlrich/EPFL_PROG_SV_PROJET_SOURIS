@@ -1,7 +1,7 @@
 #include "Lab.hpp"
 #include <exception>
 #include <Application.hpp>
-
+#include "Types.hpp"
 #include <iostream>
 using namespace std;
 
@@ -146,7 +146,7 @@ void Lab::trackAnimal(const Vec2d& p)
 	}
 }
 
-void Lab::switchToView(View view)
+void Lab::switchToView(sf::View view)
 {
 	getApp().switchToView(view);	
 }
@@ -159,10 +159,21 @@ void Lab::stopTrackingAnyEntity()
 
 void Lab::updateTrackedAnimal() 
 {
-	
+	if (foie != nullprt)
+	{
+		Organ::update();
+	}
 }
 
-void Lab::drawCurrentOrgan((sf::RenderTarget& target)
+void Lab::drawCurrentOrgan(sf::RenderTarget& target)
 {
-	
+	if(foie =! nullprt)
+	{
+		tracked -> Animal::drawCurrentOrgan(target);
+	}
+}
+
+void Lab::trackAnimal(Animal* n) 
+{
+	tracked = n;
 }
