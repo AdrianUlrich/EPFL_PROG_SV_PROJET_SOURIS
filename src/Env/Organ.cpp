@@ -2,10 +2,11 @@
 
 #include <Application.hpp>
 
-
+Organ::Organ (bool generation
+: generation (true), 
 void Organ::update()
 {
-	
+	//updateRepresentation()
 }
 	
 void Organ::drawOn(sf::RenderTarget target)
@@ -23,13 +24,13 @@ void Organ::generate()
 
 void Organ::reloadConfig()
 {
-	nbCells_ = getAppConfig().simulation_organ_nbCells;
-	cellSize_ = getWidth();
+	nbCells = getAppConfig().simulation_organ_nbCells;
+	cellSize = getWidth();
 }
 
 void Organ::reloadCacheStructure()
 {
-	renderingCache_.create(horizontalSize, verticalSize);	
+	renderingCache.create(horizontalSize, verticalSize);	
 }
 
 
@@ -44,8 +45,16 @@ void Organ::createBloodSystem()
 	
 }
 
-void updateRepresentation()
+void Organ::updateRepresentation()
 {
-	renderingCache_.clear(sf::Color(223,196,176));
-	renderingCache_.display();	
+	renderingCache.clear(sf::Color(223,196,176));
+	renderingCache.display();	
 }
+
+/*
+void Organ::updateRepresentationAt()
+{
+	renderingCache.clear(sf::Color(223,196,176));
+	renderingCache.display();	
+}
+*/

@@ -38,6 +38,11 @@ public :
 	void switchToView(View view);
 	void stopTrackingAnyEntity();
 	
+	/** lien entre animal et organ */
+	
+	void updateTrackedAnimal();
+	void drawCurrentOrgan((sf::RenderTarget& target);
+	
 private:
 	vector<vector<Box*>> boites;
 	vector<SimulatedEntity*> NTTs;

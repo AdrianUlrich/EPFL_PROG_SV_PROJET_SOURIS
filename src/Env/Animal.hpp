@@ -58,6 +58,7 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		double DistanceVision; 
 		double velocite;
 		sf::Time compteur;
+		Organ* foie;
 };
 
 #endif // ANIMAL_HPP

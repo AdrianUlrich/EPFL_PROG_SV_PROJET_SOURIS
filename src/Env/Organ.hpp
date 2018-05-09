@@ -19,9 +19,9 @@ protected:
 	 
 	 
 private:
-	int nbCells_;
-	float cellSize_;
-	sf::RenderTexture renderingCache_;
+	int nbCells;
+	float cellSize;
+	sf::RenderTexture renderingCache;
 	
 	
 };

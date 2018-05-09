@@ -6,7 +6,7 @@
 using namespace std;
 
 Lab::Lab()
-:	NTTs(0)
+:	tracked(nullptr)
 {
 	makeBoxes(getAppConfig().simulation_lab_nb_boxes);
 }
@@ -154,4 +154,15 @@ void Lab::switchToView(View view)
 void Lab::stopTrackingAnyEntity()
 {
 	tracked=nullptr;
+}
+
+
+void Lab::updateTrackedAnimal() 
+{
+	
+}
+
+void Lab::drawCurrentOrgan((sf::RenderTarget& target)
+{
+	
 }
