@@ -73,8 +73,8 @@
 	  "fence" : "wood.png"
       },
       "organ":{
-         "size": 120,
-         "cells": 120,
+         "size": 60,
+         "cells": 60,
          "texture":"lab3.png",
 	  "textures": {
 	      "ecm": "ecm2.png",

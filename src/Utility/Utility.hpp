@@ -179,6 +179,16 @@ double angleDelta(double a, double b);
 std::vector<std::string> split(std::string const& str, char delim);
 
 /*!
+ * @brief converts a Vec2d to a CellCoord
+ *
+ * @param substrateWidth  : width of the substrate to which belongs position
+ * @param substrateHeight : height of the substrate to which belongs position
+ * @param cellSize : size of the cell used to  discretize the substrate
+ *
+ */
+CellCoord vec2dToCellCoord(const Vec2d& position, double substrateWidth,
+					  double substrateHeight, float cellSize);
+/*!
  * @brief Copy src at the end of dest.
  *
  * @param src the data that should be copied
