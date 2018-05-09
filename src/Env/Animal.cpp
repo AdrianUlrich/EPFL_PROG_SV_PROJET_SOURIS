@@ -8,6 +8,7 @@
 #include <Config.hpp>
 #include <cmath>
 #include <algorithm>
+//#include <vector>
 
 
 Intervals Animal::intervals = { -180, -100, -55, -25, -10, 0, 10, 25, 55, 100, 180};
@@ -50,21 +51,42 @@ void Animal::update(sf::Time dt)
 
 void Animal::updateState()	
 {
-	SimulatedEntity* food_near(nullptr);
+	vector<SimulatedEntity*>* food_near(nullptr);
 	if (isSatiated())
 	{
 		etat = WANDERING;
 		velocite = getMaxSpeed();
 	}
-	else if (etat == FOOD_IN_SIGHT and isColliding(*cible_actuelle))
+	else
 	{
-		etat = FEEDING;
+		if (etat == FOOD_IN_SIGHT /*and cible_actuelle!=nullptr*/ and this->isColliding(*cible_actuelle)) // when etat==FOOD_IN_SIGHT , cible_actuelle is defined
+		{
+			etat = FEEDING;
+		}
+		else if	((food_near=getAppEnv().findTargetInSightOf(this))!=nullptr)
+		{
+			/// finding the nearest target
+			double mindist2(-1.);
+			for (auto val : *food_near)
+			{
+				if (val!=this)
+				{
+					if (eatable(val))
+					{
+						double thisdist2((pos-(val->getCenter())).lengthSquared());
+						if (thisdist2 < mindist2 or mindist2 <= 0)
+						{
+							mindist2=thisdist2;
+							cible_actuelle = val;
+						}
+					}
+				}
+			}
+		}
+		if (cible_actuelle!=nullptr)
+			etat = FOOD_IN_SIGHT;
 	}
-	else if	((food_near=getAppEnv().findTargetInSightOf(this))!=nullptr)
-	{
-		etat = FOOD_IN_SIGHT;
-		cible_actuelle = food_near;
-	}
+	delete food_near;
 }
 
 void Animal::move(sf::Time dt)
@@ -109,7 +131,7 @@ void Animal::move(Vec2d const& force,sf::Time t)
 
 bool Animal::isSatiated() const
 {
-	return (
+	return !(
 	(etat!=FEEDING and
 	energy<getAppConfig().animal_satiety_min) or
 	(etat==FEEDING and

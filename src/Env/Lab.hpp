@@ -4,7 +4,6 @@
 #include <vector>
 #include <Utility/Vec2d.hpp>
 #include <SFML/Graphics.hpp>
-#include "Animal.hpp"
 #include "Cheese.hpp"
 #include "Box.hpp"
 #include "Mouse.hpp"
@@ -28,13 +27,14 @@ public :
 	void drawOn(sf::RenderTarget&);
 	void reset();
 
-	bool addAnimal(Mouse*);
 	bool addCheese(Cheese*);
-	bool addEntity(SimulatedEntity*);
+	bool addAnimal(Animal*);
 	
-	SimulatedEntity* findTargetInSightOf(Animal*);
+	vector<SimulatedEntity*>* findTargetInSightOf(Animal*);
 
 private:
+	bool addEntity(SimulatedEntity*);
+
 	vector<vector<Box*>> boites;
 	vector<SimulatedEntity*> NTTs;
 };
