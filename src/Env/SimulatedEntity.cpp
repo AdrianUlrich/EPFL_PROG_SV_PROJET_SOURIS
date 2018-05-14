@@ -60,7 +60,7 @@ bool SimulatedEntity::isDead() const
 	return
 	(
 		age > longevity or
-		energy <= 0
+		energy <= 0.
 	);
 }
 

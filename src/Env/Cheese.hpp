@@ -14,7 +14,7 @@ class Cheese : public SimulatedEntity
 		void drawOn(sf::RenderTarget&) override;
 
 		/** get eaten you camembert */
-		Quantity provideEnergy(Quantity);
+		virtual Quantity provideEnergy(Quantity) override;
 
 		/** masking isDead pure virtual method */
 		bool isDead() const override;

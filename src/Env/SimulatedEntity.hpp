@@ -39,6 +39,7 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		virtual bool eatable(SimulatedEntity const*) const = 0;
 		virtual bool eatableBy(Mouse const*) const = 0;
 		virtual bool eatableBy(Cheese const*) const = 0;
+		virtual Quantity provideEnergy(Quantity){return 0.;}
 
 		void confineInBox(Box* b);
 

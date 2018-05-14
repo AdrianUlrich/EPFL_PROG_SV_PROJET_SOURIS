@@ -33,13 +33,13 @@ void Animal::update(sf::Time dt)
 	case WANDERING:
 		move(dt);
 		break;
-		
+
 	case FOOD_IN_SIGHT:
 		move(getFoodLust(),dt);
 		break;
-		
+
 	case FEEDING:
-		//eat(cible_actuelle);
+		feed();
 		break;
 
 	default:
@@ -49,9 +49,15 @@ void Animal::update(sf::Time dt)
 	energy -= getAppConfig().animal_base_energy_consumption + getLossFactor()*velocite;
 }
 
-void Animal::updateState()	
+void Animal::updateState()
 {
 	vector<SimulatedEntity*>* food_near(nullptr);
+	if (cible_actuelle->isDead())
+	{
+		cible_actuelle=nullptr;
+		etat=WANDERING;
+		velocite=getMaxSpeed();
+	}
 	if (isSatiated())
 	{
 		etat = WANDERING;
@@ -121,11 +127,11 @@ void Animal::move(sf::Time dt)
 void Animal::move(Vec2d const& force,sf::Time t)
 {
 	double dt(t.asSeconds());
-	auto accel(force/getMass());
-	auto new_vel(getSpeedVector()+accel*dt);
-	auto new_dir(new_vel.normalised());
+	Vec2d accel(force/getMass());
+	Vec2d new_vel(getSpeedVector()+accel*dt);
+	Vec2d new_dir(new_vel.normalised());
 	angle = new_dir.angle();
-	velocite = std::max(new_vel.length(),getMaxSpeed());
+	velocite = std::min(new_vel.length(),getMaxSpeed());
 	pos+=getHeading()*velocite*dt;
 }
 
@@ -140,11 +146,16 @@ bool Animal::isSatiated() const
 
 Vec2d Animal::getFoodLust() const
 {
-	auto distV(getCenter()-cible_actuelle->getCenter());
-	auto dist(distV.length());
-	auto speed(std::min(getMaxSpeed(),dist*0.3));
-	auto Vtarget(distV/dist * speed);
+	Vec2d distV(cible_actuelle->getCenter()-getCenter());
+	double dist(distV.length());
+	double speed(std::min(getMaxSpeed(),dist*0.3));
+	Vec2d Vtarget(distV/dist * speed);
 	return Vtarget-getSpeedVector();
+}
+
+void Animal::feed()
+{
+	energy+=cible_actuelle->provideEnergy(getBite());
 }
 
 void Animal::drawOn(sf::RenderTarget& targetWindow)
@@ -158,16 +169,16 @@ void Animal::drawOn(sf::RenderTarget& targetWindow)
 	targetWindow.draw(arcgraphics);
 	if (cible_actuelle!=nullptr)
 		text.setString(text.getString()+"\nTARGETLOCK");
-}  
+}
 
 bool Animal::isTargetInSight(const Vec2d& position)
 {
 	auto dist(position-pos);
 	auto normdist(dist.normalised());
-	return 
+	return
 	(
 		box->isPositionInside(position) and
-		dist.lengthSquared() <= DistanceVision*DistanceVision and 
+		dist.lengthSquared() <= DistanceVision*DistanceVision and
 		(
 			normdist.dot(getHeading()) >= cos((AngleVision+0.001)/2) or
 			isEqual(dist.length(), 0.0)
