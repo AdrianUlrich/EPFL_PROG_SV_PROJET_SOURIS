@@ -49,7 +49,7 @@ public :
 	vector<SimulatedEntity*>* findTargetsInSightOf(Animal*);
 
 private:
-	bool addEntity(SimulatedEntity*,unsigned char);
+	bool addEntity(SimulatedEntity*);
 
 	vector<vector<Box*>> boites;
 

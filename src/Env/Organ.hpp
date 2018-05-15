@@ -6,27 +6,27 @@
 
 class Organ 
 {
-public:
-	void update();
-	void drawOn(sf::RenderTarget& target);
-	void updateRepresentation();
-	double getWidth();
-	double getHeight();
-	
-protected:
-	 void generate();
-	 void reloadConfig();
-	 void reloadCacheStructure();
-	 void createLiver();
-	 void createBloodSystem();
-	 
-	 
-private:
-	int nbCells;
-	float cellSize;
-	sf::RenderTexture renderingCache;
-	bool generation;
-	
+	public:
+		Organ(bool generation);
+		void update();
+		void drawOn(sf::RenderTarget& target);
+		void updateRepresentation();
+		double getWidth();
+		double getHeight();
+
+	protected:
+		void generate();
+		void reloadConfig();
+		void reloadCacheStructure();
+		void createLiver();
+		void createBloodSystem();
+
+	private:
+		int nbCells;
+		float cellSize;
+		sf::RenderTexture renderingCache;
+		bool generation;
+
 };
 
 

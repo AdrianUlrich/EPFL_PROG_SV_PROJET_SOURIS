@@ -3,7 +3,7 @@
 #include <Application.hpp>
 
 Organ::Organ (bool generation)
-: generation (true)
+:	generation (true)
 {
 	if (generation==true) genrate();	
 }
@@ -24,11 +24,11 @@ void Organ::drawOn(sf::RenderTarget& target)
 
 void Organ::generate()
 {
-reloadConfig();
-reloadCacheStructure();	
-createLiver();
-createBloodSystem();
-updateRepresentation();
+	reloadConfig();
+	reloadCacheStructure();	
+	createLiver();
+	createBloodSystem();
+	updateRepresentation();
 }
 
 
