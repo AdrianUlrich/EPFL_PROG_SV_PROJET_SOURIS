@@ -23,10 +23,12 @@ class SimulatedEntity : public Collider /// ABSTRACT
 
 		/** aging function*/
 		virtual void update(sf::Time);
-		virtual void interact(vector<SimulatedEntity*>) {}
+		//virtual void interact(vector<SimulatedEntity*>) {}
 
 		/** pure virtual method => abstract class */
 		virtual bool isDead() const = 0;
+		/** ACK of the end of another SimulatedEntity */
+		virtual void isDead(SimulatedEntity*);
 
 		/** overriding virtual collider getters */
 		Vec2d getCenter() const override {return pos;}

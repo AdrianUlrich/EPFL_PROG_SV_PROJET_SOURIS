@@ -17,7 +17,9 @@ public :
 		*/
 	Lab();
 
-	/** destructor deletes pointers etc */
+	/** destructor deletes pointers etc
+		* uses reset() and destroyBoxes()
+		*/
 	~Lab();
 
 	void makeBoxes(unsigned int nbCagesPerRow);
@@ -29,8 +31,8 @@ public :
 
 	bool addCheese(Cheese*);
 	bool addAnimal(Animal*);
-	
-	vector<SimulatedEntity*>* findTargetInSightOf(Animal*);
+
+	vector<SimulatedEntity*>* findTargetsInSightOf(Animal*);
 
 private:
 	bool addEntity(SimulatedEntity*);

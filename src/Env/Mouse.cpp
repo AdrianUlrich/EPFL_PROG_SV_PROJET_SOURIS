@@ -57,7 +57,7 @@ double Mouse::getLossFactor() const
 double Mouse::getMass() const
 {return getAppConfig().mouse_mass;}
 
-Quantity Mouse::getBite() cons
+Quantity Mouse::getBite() const
 {return getAppConfig().mouse_energy_bite;}
 
 

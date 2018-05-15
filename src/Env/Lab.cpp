@@ -53,18 +53,22 @@ size_t nNTTs(NTTs.size());
 		NTTs[i]->update(dt);
 		if (NTTs[i]->isDead())
 		{
+			/// letting other entities know of the death
+			for (SimulatedEntity* val : NTTs)
+			{isDead(NTTs[i]);}
+
 			// NTTs[i]->resetBox();
 			/// La boite est liberee par le destructeur de animal
 			delete NTTs[i];
-			
+
 			/// comme les NTTs sont des pointeurs on peut les assigner
 			NTTs[i]=NTTs[NTTs.size()-1];
 			NTTs.pop_back();
-			
+
 			/// rendant ce code inutile
 			//NTTs[i]=nullptr;
 			//NTTs.erase(NTTs.begin()+i);
-			
+
 			--nNTTs;
 		}
 	}
@@ -78,11 +82,11 @@ vector<SimulatedEntity*>* Lab::findTargetInSightOf(Animal* a)
 		if
 		(
 			/// animal may want to see himself sometimes
-			//val != a and 
+			//val != a and
 			/// animal may want to interact with fellow animals
 			//a->eatable(val) and
 			a->isTargetInSight(val->getCenter()) //and
-			/// checks for closest target but animal may decide what to do with all its sights 
+			/// checks for closest target but animal may decide what to do with all its sights
 			//((ans==nullptr) or (distance(a->getCenter(),val->getCenter()))<(distance(a->getCenter(),ans->getCenter())))
 		)
 			ans->push_back(val);

@@ -35,7 +35,7 @@ void Animal::update(sf::Time dt)
 		break;
 
 	case FOOD_IN_SIGHT:
-		move(getFoodLust(),dt);
+		move(getFoodPull(),dt);
 		break;
 
 	case FEEDING:
@@ -52,39 +52,37 @@ void Animal::update(sf::Time dt)
 void Animal::updateState()
 {
 	vector<SimulatedEntity*>* food_near(nullptr);
-	if (cible_actuelle->isDead())
-	{
-		cible_actuelle=nullptr;
-		etat=WANDERING;
-		velocite=getMaxSpeed();
-	}
-	if (isSatiated())
+//	if (cible_actuelle->isDead())
+//	{
+//		cible_actuelle=nullptr;
+//		etat=WANDERING;
+//		velocite=getMaxSpeed();
+//	}
+	if ((isSatiated() or
+			((food_near=getAppEnv().findTargetInSightOf(this)).empty())) and
+			(etat!=WANDERING))
 	{
 		etat = WANDERING;
 		velocite = getMaxSpeed();
+		cible_actuelle = nullptr;
 	}
 	else
 	{
-		if (etat == FOOD_IN_SIGHT /*and cible_actuelle!=nullptr*/ and this->isColliding(*cible_actuelle)) // when etat==FOOD_IN_SIGHT , cible_actuelle is defined
-		{
-			etat = FEEDING;
-		}
-		else if	((food_near=getAppEnv().findTargetInSightOf(this))!=nullptr)
+		if (etat == FOOD_IN_SIGHT /*and cible_actuelle!=nullptr*/ and this->isColliding(*cible_actuelle)) // when etat==FOOD_IN_SIGHT , cible_actuelle must be defined
+		{etat = FEEDING;}
+		else
 		{
 			/// finding the nearest target
-			double mindist2(-1.);
+			double mindist2(0.);
 			for (auto val : *food_near)
 			{
-				if (val!=this)
+				if (val!=this and eatable(val))
 				{
-					if (eatable(val))
+					double thisdist2((pos-(val->getCenter())).lengthSquared());
+					if (thisdist2 < mindist2 or mindist2 <= 0)
 					{
-						double thisdist2((pos-(val->getCenter())).lengthSquared());
-						if (thisdist2 < mindist2 or mindist2 <= 0)
-						{
-							mindist2=thisdist2;
-							cible_actuelle = val;
-						}
+						mindist2=thisdist2;
+						cible_actuelle = val;
 					}
 				}
 			}
@@ -130,9 +128,9 @@ void Animal::move(Vec2d const& force,sf::Time t)
 	Vec2d accel(force/getMass());
 	Vec2d new_vel(getSpeedVector()+accel*dt);
 	Vec2d new_dir(new_vel.normalised());
-	angle = new_dir.angle();
-	velocite = std::min(new_vel.length(),getMaxSpeed());
-	pos+=getHeading()*velocite*dt;
+		angle = new_dir.angle();
+		velocite = std::min(new_vel.length(),getMaxSpeed());
+		pos+=getHeading()*velocite*dt;
 }
 
 bool Animal::isSatiated() const
@@ -144,7 +142,7 @@ bool Animal::isSatiated() const
 	energy<getAppConfig().animal_satiety_max));
 }
 
-Vec2d Animal::getFoodLust() const
+Vec2d Animal::getFoodPull() const
 {
 	Vec2d distV(cible_actuelle->getCenter()-getCenter());
 	double dist(distV.length());
@@ -156,6 +154,16 @@ Vec2d Animal::getFoodLust() const
 void Animal::feed()
 {
 	energy+=cible_actuelle->provideEnergy(getBite());
+}
+
+void Animal::isDead(SimulatedEntity* NTT)
+{
+	if (cible_actuelle==NTT)
+	{
+		cible_actuelle=nullptr;
+		etat==IDLE;
+	}
+	//std::cout<<"#PrayFor"<<static_cast<void*>(NTT)<<" who died due to police brutality :'("<<std::endl;
 }
 
 void Animal::drawOn(sf::RenderTarget& targetWindow)
