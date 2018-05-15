@@ -1,6 +1,12 @@
 #include "Lab.hpp"
 #include <exception>
 #include <Application.hpp>
+#include "Organ.hpp"
+#include "Types.hpp"
+
+//DEBUG:
+//#include <iostream>
+//using namespace std;
 
 Lab::Lab()
 :	NTTs(0)
@@ -47,29 +53,21 @@ Lab::~Lab()
 
 void Lab::update(sf::Time dt)
 {
-size_t nNTTs(NTTs.size());
-	for (size_t i(0); i<nNTTs; ++i)
-	{//if (NTTs[i] != nullptr) // NTTs contains no nullptr
+
+	size_t n(NTTs.size());
+	for (size_t i(0); i<n; ++i)
+	{//if (NTTs[i] != nullptr) // NTTs ne contient jamais de nullptr ou dangling
 		NTTs[i]->update(dt);
 		if (NTTs[i]->isDead())
 		{
-			/// letting other entities know of the death
-			for (SimulatedEntity* val : NTTs)
+      /// letting other animals know of the death
+			for (SimulatedEntities* val : NTTs)
 			{val->isDead(NTTs[i]);}
-
-			// NTTs[i]->resetBox();
-			/// La boite est liberee par le destructeur de animal
-			delete NTTs[i];
-
-			/// comme les NTTs sont des pointeurs on peut les assigner
-			NTTs[i]=NTTs[NTTs.size()-1];
+    
+			//! La boite est liberee dans le destructeur de animal
+			delete NTTs[i]; //NTTs[i]=nullptr;
+			NTTs[i]=NTTs[--n]; //NTTs.erase(NTTs.begin()+i);
 			NTTs.pop_back();
-
-			/// rendant ce code inutile
-			//NTTs[i]=nullptr;
-			//NTTs.erase(NTTs.begin()+i);
-
-			--nNTTs;
 		}
 	}
 }
@@ -77,19 +75,22 @@ size_t nNTTs(NTTs.size());
 vector<SimulatedEntity*>* Lab::findTargetsInSightOf(Animal* a)
 {
 	vector<SimulatedEntity*>* ans(new vector<SimulatedEntity*>);
-	for (auto val : NTTs)
-	{//note: NTTs NEVER contains nullptrs or deleted pointers
-		if
-		(
-			/// animal may want to see himself sometimes
-			//val != a and
-			/// animal may want to interact with fellow animals
-			//a->eatable(val) and
-			a->isTargetInSight(val->getCenter()) //and
-			/// checks for closest target but animal may decide what to do with all its sights
-			//((ans==nullptr) or (distance(a->getCenter(),val->getCenter()))<(distance(a->getCenter(),ans->getCenter())))
-		)
-			ans->push_back(val);
+	for(unsigned char i(0);i<NTTs.nbTypes;++i)
+	{	for (auto val : *(NTTs[i]))
+		{//note: NTTs NEVER contain nullptrs or deleted pointers
+			if
+			(
+				/// animal may want to see himself sometimes
+				//val != a and
+				/// animal may want to interact with fellow animals
+				//a->eatable(val) and
+				///here we give vision to the animal of everything it should see and let it deal with it
+				a->isTargetInSight(val->getCenter()) //and
+				/// checks for closest target but animal may decide what to do with all its sights
+				//((ans==nullptr) or (distance(a->getCenter(),val->getCenter()))<(distance(a->getCenter(),ans->getCenter())))
+			)
+				ans->push_back(val);
+		}
 	}
 	return ans;
 }
@@ -105,55 +106,117 @@ void Lab::drawOn(sf::RenderTarget& target)
 				val->drawOn(target);
 		}
 	}
-	for (auto NTT : NTTs)
-	{
-		NTT->drawOn(target);
+	for(unsigned char i(0);i<NTTs.nbTypes;++i)
+	{	for (auto NTT : *(NTTs[i]))
+		{
+			NTT->drawOn(target);
+		}
 	}
 }
 
 void Lab::reset()
 {
-	for (auto NTT : NTTs)
-	{
-		delete NTT;
-		//NTT = nullptr;
+	for(unsigned char i(0);i<NTTs.nbTypes;++i)
+	{	for (auto NTT : *(NTTs[i]))
+		{
+			delete NTT;
+			//NTT = nullptr;
+		}
 	}
 	NTTs.clear();
 }
 
-bool Lab::addEntity(SimulatedEntity* ntt)
+bool Lab::addEntity(SimulatedEntity* ntt, unsigned char i)
 {
-	if (ntt==nullptr)// || NTTs.size()>100)
-		return false;
-	NTTs.push_back(ntt);
+	NTTs[i]->push_back(ntt);
 	return true;
 }
 
-bool Lab::addAnimal(Animal* manimal)
+bool Lab::addAnimal(Animal* mickey)
 {
-	if (manimal==nullptr) return false;
+	if (mickey==nullptr) return false;
 	for (auto& vec : boites)
 	{
 		for (auto val : vec)
 		{
-			if (manimal->canBeConfinedIn(val))
+			if (mickey->canBeConfinedIn(val))
 			{
 				if (val->isEmpty())
 				{
-					manimal->confine(val); //! La souris est déja créée mais maintenant elle est dans une boite
-					bool succ(addEntity(manimal));
+					mickey->confine(val); //! La souris est deja creee mais maintenant elle est dans une boite
+					bool succ(addEntity(mickey,1));
 					if (succ)
-						val->addOccupant(); //! La boite est occuppée
+						val->addOccupant(); //! La boite est occuppee
 					return succ;
 				}
 			}
 		}
 	}
-	delete manimal;
+	delete mickey;
 	return false;
 }
 
-bool Lab::addCheese(Cheese* caprice_des_dieux)
+bool Lab::addCheese(Cheese* c)
 {
-	return addEntity(caprice_des_dieux);
+if (c==nullptr) return false;
+	for (auto& vec : boites)
+	{
+		for (auto val : vec)
+		{
+			if (c->canBeConfinedIn(val))
+			{
+				//if (val->isEmpty())
+				{
+					c->confine(val); //! Le fromton est dï¿½ja crï¿½ï¿½e mais maintenant elle est dans une boite
+					return addEntity(c,0);
+				}
+			}
+		}
+	}
+	delete c;
+	return false;
+}
+
+void Lab::trackAnimal(const Vec2d& p)
+{
+	for (auto val : *(NTTs[1]))
+	{
+		if (val->isPointInside(p))
+		{
+			trackAnimal(val);
+			break;
+		}
+	}
+}
+
+void Lab::switchToView(View view)
+{
+	getApp().switchToView(view);	
+}
+
+void Lab::stopTrackingAnyEntity()
+{
+	tracked=nullptr;
+}
+
+
+void Lab::updateTrackedAnimal() 
+{
+	if (tracked != nullptr)
+	{
+		tracked->updateOrgan();
+	}
+}
+
+void Lab::drawCurrentOrgan(sf::RenderTarget& target)
+{
+	if(tracked != nullptr)
+	{
+		tracked->drawCurrentOrgan(target);
+	}
+}
+
+void Lab::trackAnimal(Animal* n) 
+{
+	tracked = n;
 }
