@@ -3,12 +3,11 @@
    "simulation":{
       "time":{
          "factor":0.5,
-         "max dt":0.05,
-	  "fixed step" : 0.001
+         "max dt":0.05
       },
        "substance":{
 	   "max" : 20000,
-	   "diffusion radius" : 3,
+	   "diffusion radius" : 2,
 	   "diffusion constant" : 60,
 	   "glucose": {
 	       "base": 6000,
@@ -32,11 +31,11 @@
          }
       },
       "animal":{
-		 "time between rotations":0.08,
+         "time between rotations":0.08,
          "random walk low energy":false,
          "meal retention":0.7,
          "feed time":0.4,
-         "base consumption" : 0.0,
+         "base consumption" : 0.0001,
          "min energy" : 5,
         "idle":{
             "min":3,
@@ -53,12 +52,12 @@
             "longevity":40000,
             "max speed":250,
             "view":{
-               "range":6.283185307,
+               "range":2.0943951023,
                "distance":250
             },
             "energy":{
                "initial":30,
-               "loss factor":0.00005,
+               "loss factor":0.00001,
                "bite":0.1
             },
             "texture":{
@@ -72,49 +71,6 @@
          "texture":"sand.png",
           "debug texture":"lab1.png",
 	  "fence" : "wood.png"
-      },
-      "organ":{
-         "size": 120,
-         "cells": 120,
-         "texture":"lab3.png",
-	  "textures": {
-	      "ecm": "ecm2.png",
-	      "blood": "blood.png",
-	      "liver": "liver2.png",
-	      "cancer": "cancer3.png",
-	      "concentration": "concentration.png",
-	      "glucose": "glucose.png",
-	      "bromopyruvate": "bromopyruvate.png",
-	      "vgef": "vgef.png"
-	  },
-	  "atp":{
-	      "base usage": 0.05,
-	      "range" : 0.02
-	  },
-	  "blood": {
-	      "capillary min dist" : 2,
-	      "creation start" : 2
-	  },
-	  "liver": {
-	      "fract uptake" : 0.5,
-	      "time next division" : 10,
-	      "range next division" : 5,
-	      "km glycolysis" : 240,
-	      "km max glycolysis" : 300,
-	      "km krebs" : 100,
-	      "km max krebs" : 450,
-	      "decay atp" : 3000,
-	      "division cost" : 0.5
-	  },
-	  "cancer": {
-	      "fract uptake" : 0.2,
-	      "time next division" : 50,
-	      "range next division" : 4,
-	      "km glycolysis" : 22,
-	      "km max glycolysis" : 370
-	  },
-
-          "debug texture":"lab.png"
       }
    },
    "stats":{
@@ -128,7 +84,7 @@
          "height":800
       },
       "stats":{
-         "width":200
+         "height":100
       }
    }
 }

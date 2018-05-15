@@ -49,8 +49,8 @@ std::string configFileRelativePath(int argc, char const** argv)
 
 Vec2d getWindowSize()
 {
-    auto width = getAppConfig().window_simulation_width + getAppConfig().window_stats_width;
-    auto height = getAppConfig().window_simulation_height;
+    auto width = getAppConfig().window_simulation_width;
+    auto height = getAppConfig().window_simulation_height + getAppConfig().window_stats_height;
     return { width, height };
 }
 
@@ -66,29 +66,6 @@ Vec2d getSimulationPosition()
     return { 0, 0 };
 }
 
-Vec2d getStatsSize()
-{
-    auto width = getAppConfig().window_stats_width;
-	auto height = getAppConfig().window_simulation_height/2;
-    return { width, height };
-}
-
-Vec2d getStatsPosition()
-{
-    return { getAppConfig().window_simulation_width, 0 };
-}
-
-Vec2d getHelpSize()
-{
-    auto width = getAppConfig().window_stats_width;
-    auto height = getAppConfig().window_simulation_height/2;
-    return { width, height };
-}
-
-Vec2d getHelpPosition()
-{
-    return { getAppConfig().window_simulation_width, getAppConfig().window_simulation_height/2 };
-}
 /*!
  * @brief Create a view with the given properties
  *
@@ -121,7 +98,6 @@ Application::Application(int argc, char const** argv)
 , mLab(nullptr)
 , mPaused(false)
 , mIsResetting(false)
-, mIsSwitchingView(false)
 , mIsDragging(false)
 , mCurrentView(LAB)
 {
@@ -142,15 +118,6 @@ Application::Application(int argc, char const** argv)
 	mLabBackground.setOutlineColor(sf::Color::Black);
     mLabBackground.setOutlineThickness(5);
     mLabBackground.setTexture(&getAppTexture(getAppConfig().simulation_lab_texture));
-
-
-	mOrganBackground = sf::RectangleShape();
-    mOrganBackground.setSize(getOrganSize());
-    //simulationBackground.setFillColor(sf::Color::Black);
-	//mOrganBackground.setOutlineColor(sf::Color::Black);
-    mOrganBackground.setOutlineThickness(5);
-    mOrganBackground.setTexture(&getAppTexture(getAppConfig().simulation_lab_texture));
-	mOrganBackground.setFillColor(sf::Color::Black);
 	
 	mSimulationBackground = mLabBackground;
 }
@@ -189,7 +156,7 @@ void Application::run()
 
     // Create the Stats background (grey board)
     auto statsBackground = sf::RectangleShape();
-    statsBackground.setSize(getStatsSize());
+    statsBackground.setSize({0,0});
     statsBackground.setFillColor(sf::Color(128, 128, 128));
 
     // Use a clock to track time
@@ -198,7 +165,7 @@ void Application::run()
     // FPS counter
     sf::Clock fpsClk;
     int frameCount = 0;
-	int nbCycles = 10;
+
     // Main loop
     while (mRenderWindow.isOpen()) {
         // Handle events
@@ -212,7 +179,6 @@ void Application::run()
 //        getStats().setActive(activeIndex);
 
         // Update logics
-		
         float timeFactor = getAppConfig().simulation_time_factor;
         auto elapsedTime = clk.restart() * timeFactor; // Always reset the clock!
 
@@ -229,37 +195,17 @@ void Application::run()
                 elapsedTime -= dt;
 				getLab().update(dt);
                 onUpdate(dt);
-				--nbCycles;
-
             }
         }
 
-		// fixed step simulation for the organ
-		// no need to refresh the view after each update
-		if (isOrganViewOn()){
-			if (nbCycles < 0 || mIsSwitchingView){
-				getLab().updateTrackedAnimal();
-				render(mSimulationBackground, statsBackground);
-				nbCycles=10;
-				mIsSwitchingView = false;
-				 ++frameCount;
-			}
-		}
-		
-		
-		else
-		{
-			
-				// Render everything
-			render(mSimulationBackground, statsBackground);
-			 ++frameCount;
-		}
-		
+        // Render everything
+        render(mSimulationBackground, statsBackground);
+
         // In case we were resetting the simulation
         mIsResetting = false;
 
         // FPS computation
-        //++frameCount;
+        ++frameCount;
         if (fpsClk.getElapsedTime() > sf::seconds(2)) {
             auto dt = fpsClk.restart().asSeconds();
 
@@ -316,7 +262,6 @@ sf::Texture& Application::getTexture(std::string const& name)
         sf::Texture* newTexture = new sf::Texture;
         if (newTexture->loadFromFile(getResPath() + name)) {
             // The texture was correctly loaded so we save it
-			newTexture->setRepeated(true); 
             mTextures[name] = newTexture;
             // And return the texture
             return *newTexture;
@@ -344,14 +289,6 @@ Vec2d Application::getLabSize() const
 	return { size, size };
 }
 
-Vec2d Application::getOrganSize() const
-{
-    // Not the same as getSimulationSize!
-	// TODO: improve
-	double size(getAppConfig().simulation_organ_size);
-	return { size, size };
-}
-
 Vec2d Application::getCentre() const
 {
 	// TODO : add organ
@@ -374,9 +311,6 @@ void Application::chooseBackground()
 														getAppConfig().simulation_lab_texture)
 										 , true);
 	}
-	
-	else
-		mSimulationBackground = mOrganBackground;
 }
 
 void Application::onEvent(sf::Event, sf::RenderWindow&)
@@ -405,8 +339,6 @@ Vec2d Application::getCursorPositionInView() const
     return mRenderWindow.mapPixelToCoords(sf::Mouse::getPosition(mRenderWindow), mSimulationView);
 }
 
-
-
 void Application::createWindow(Vec2d const& size)
 {
     sf::VideoMode vm(size.x, size.y);
@@ -426,15 +358,17 @@ void Application::createViews()
 {
     //   WINDOW STRUCTURE
     //
-    //   ----------------------------
-    //   |                      |   | <- mStatsFrame
-    //   |                      |   |
-    //   |   mSimulationFrame   |   |
-    //   |                      |   |
-    //   |                      |---|
-    //   |                      |   | <- mCommandsHelpFrame
-    //   |                      |   |
-    //   ----------------------------
+    //   ------------------------
+    //   |                      |
+    //   |                      |
+    //   |   mSimulationFrame   |
+    //   |                      |
+    //   |                      |
+    //   |                      |
+    //   |                      |
+    //   ------------------------
+    //   |    mStatsFrame       |
+    //   ------------------------
 
 	/*
     mSimulationView = setupView(getWorldSize(),
@@ -442,20 +376,8 @@ void Application::createViews()
                                 mRenderWindow.getSize());
 	*/
 	mLabView = setupView(getLabSize(),
-                                getSimulationPosition(), getSimulationSize(),
-                                mRenderWindow.getSize());
-	mOrganView = setupView(getOrganSize(),
-						   getSimulationPosition(), getSimulationSize(),
-						   mRenderWindow.getSize());
-	
-    mStatsView = setupView(getStatsSize(),
-                           getStatsPosition(), getStatsSize(),
-                           mRenderWindow.getSize());
-
-    mHelpView = setupView(getHelpSize(),
-                        getHelpPosition(), getHelpSize(),
-                        mRenderWindow.getSize());
-
+						 getSimulationPosition(), getSimulationSize(),
+						 mRenderWindow.getSize());
 	mSimulationView = mLabView;
 }
 
@@ -490,29 +412,31 @@ void Application::handleEvent(sf::Event event, sf::RenderWindow& window)
             break;
 
         case sf::Keyboard::C:
-			delete mConfig;
-            mConfig = new Config(mAppDirectory + mCfgFile); // reconstruct
+			if (isDebugOn()){
+				resetConfig();
+				mConfig->switchDebug();
+			}
+			else {
+				resetConfig();
+			}
+			
             break;
 
-        // Toggle pause for simulation
+               // Toggle pause for simulation
         case sf::Keyboard::Space:
             mPaused = !mPaused;
             break;
 
         // Reset the simulation
         case sf::Keyboard::R:
-			if (mCurrentView == LAB){
-				
-				mIsResetting = true;
-				getLab().reset();
-				onSimulationStart();
-				createViews();
-				mCurrentView = LAB;
-				mSimulationBackground= mLabBackground;
-				mSimulationView = mLabView;
-				chooseBackground();
-			}
-			
+            mIsResetting = true;
+            getLab().reset();
+            onSimulationStart();
+            createViews();
+			mCurrentView = LAB;
+			mSimulationBackground= mLabBackground;
+			mSimulationView = mLabView;
+			chooseBackground();
             break;
 
         case sf::Keyboard::Tab:
@@ -521,19 +445,15 @@ void Application::handleEvent(sf::Event event, sf::RenderWindow& window)
 
         // Reset the simulation
         case sf::Keyboard::Right:
-            if (mCurrentView == LAB)
             mSimulationView.move(100, 0);
             break;
         case sf::Keyboard::Left:
-        if (mCurrentView == LAB)
             mSimulationView.move(-100, 0);
             break;
         case sf::Keyboard::Up:
-        if (mCurrentView == LAB)
             mSimulationView.move(0, -100);
             break;
         case sf::Keyboard::Down:
-        if (mCurrentView == LAB)
             mSimulationView.move(0, 100);
             break;
 
@@ -624,29 +544,13 @@ void Application::render(sf::Drawable const& simulationBackground, sf::Drawable 
     updateSimulationView();
     mRenderWindow.setView(mSimulationView);
     mRenderWindow.draw(simulationBackground);
-
 	if (mCurrentView == LAB){
 		getLab().drawOn(mRenderWindow);
-
-        // Render the command help for MACRO
-        mRenderWindow.setView(mHelpView);
-        mRenderWindow.draw(statsBackground);
-        drawOnHelp(mRenderWindow, false);
 	}
-	
-	else
-	{
-		getLab().drawCurrentOrgan(mRenderWindow);
 
-        // Render the stats
-        mRenderWindow.setView(mStatsView);
-        mRenderWindow.draw(statsBackground);
 
-        // Render the command help for MICRO
-        mRenderWindow.setView(mHelpView);
-        mRenderWindow.draw(statsBackground);
-        drawOnHelp(mRenderWindow, true);
-	}
+	// Render the stats
+    mRenderWindow.draw(statsBackground);
 
     // Finally, publish everything onto the screen
     mRenderWindow.display();
@@ -655,7 +559,6 @@ void Application::render(sf::Drawable const& simulationBackground, sf::Drawable 
     // so that handling event (zoom + move) is easier
     mRenderWindow.setView(mSimulationView);
 }
-
 
 void Application::togglePause()
 {
@@ -678,7 +581,7 @@ void Application::zoomViewAt(sf::Vector2i const& /*pixel*/, float zoomFactor)
     mRenderWindow.setView(view);
 
     // if (!getAnimalTracker().isTrackingAnimal()) {
-    //     // If no animal  is selected, center on the cursor position
+    //     // If no bee is selected, center on the cursor position
     //     auto afterCoord = mRenderWindow.mapPixelToCoords(pixel);
     //     auto offsetCoords = beforeCoord - afterCoord;
 
@@ -702,8 +605,8 @@ void Application::dragView(sf::Vector2i const& srcPixel, sf::Vector2i const& des
 
 void Application::updateSimulationView()
 {
-    // if (getAnimalTracker().isTrackingAnimal()) {
-    //     auto pos = getAnimalTracker().getTrackedAnimalPosition();
+    // if (getBeeTracker().isTrackingAnimal()) {
+    //     auto pos = getBeeTracker().getTrackedBeePosition();
     //     mSimulationView.setCenter(pos);
     // }
 /*
@@ -730,54 +633,11 @@ void Application::switchDebug()
 	chooseBackground();
 }
 
-void Application::switchToView( View view)
+void Application::resetConfig()
 {
-	mCurrentView=view;
-	mSimulationView = mOrganView;
-	mIsSwitchingView = true;
-	chooseBackground();
+		delete mConfig;
+		mConfig = new Config(mAppDirectory + mCfgFile); // reconstruct
 }
-
-void Application::drawOnHelp(sf::RenderWindow& window, bool micro) const
-{
-    auto const LEGEND_MARGIN = 10;
-    auto const FONT_SIZE = 13;
-    auto lastLegendY = LEGEND_MARGIN;
-    std::vector<std::string> text (9);
-    if(micro)
-    {
-        text = {    "---------------------",
-
-                    "L: Switch to Lab View",
-                    };
-    } else {
-        text = {    "---------------------",
-                    "CP: cursor position",
-                    "M: add mouse at CP",
-                    "F: add a cheese at CP",
-                    "T: track the entity at CP",
-                    "O: switch to OrganView",
-                    "Z: stop to track any entity",
-                    "R: reset the lab",
-					"ESC: close the window",
-					"Space bar : pause"
-                    };
-    }
-    for (auto& command : text)
-    {
-        auto legend = sf::Text(command, getAppFont(), FONT_SIZE);        
-        legend.setPosition(LEGEND_MARGIN, lastLegendY);
-#if SFML_VERSION_MAJOR >= 2 && SFML_VERSION_MINOR >= 4
-        legend.setFillColor(sf::Color::Black);
-#else
-        legend.setColor(sf::Color::Black);
-#endif
-        window.draw(legend);
-
-        lastLegendY += FONT_SIZE + 4;
-    }
-}
-
 
 Application& getApp()
 {
@@ -791,10 +651,9 @@ Lab& getAppEnv()
     return getApp().getLab();
 }
 
-// if needed
 // AnimalTracker& getAppAnimalTracker()
 // {
-//     return getApp().getAnimalTracker();
+//     return getApp().getBeeTracker();
 // }
 
 Config& getAppConfig()
@@ -820,9 +679,4 @@ View Application::getCurrentView() const
 bool isDebugOn()
 {
     return getAppConfig().getDebug();
-}
-
-bool isOrganViewOn()
-{
-	return getApp().getCurrentView() != LAB;
 }
