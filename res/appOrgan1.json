@@ -32,7 +32,6 @@
          }
       },
       "animal":{
-		 "time between rotations":0.08,
          "random walk low energy":false,
          "meal retention":0.7,
          "feed time":0.4,
@@ -51,15 +50,15 @@
             "mass":1,
             "size":180,
             "longevity":40000,
-            "max speed":250,
+            "max speed":100,
             "view":{
                "range":6.283185307,
                "distance":250
             },
             "energy":{
                "initial":30,
-               "loss factor":0.00005,
-               "bite":0.1
+               "loss factor":0,
+               "bite":2
             },
             "texture":{
                "white":"mouse2.png"
@@ -74,8 +73,8 @@
 	  "fence" : "wood.png"
       },
       "organ":{
-         "size": 120,
-         "cells": 120,
+         "size": 60,
+         "cells": 60,
          "texture":"lab3.png",
 	  "textures": {
 	      "ecm": "ecm2.png",

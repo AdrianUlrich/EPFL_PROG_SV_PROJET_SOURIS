@@ -2,6 +2,8 @@
 #define ANIMAL_HPP
 
 #include "SimulatedEntity.hpp"
+//#include "Organ.hpp"
+class Organ;
 #include <Utility/Utility.hpp>
 #include <Random/Random.hpp>
 
@@ -51,6 +53,9 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		void setTarget(SimulatedEntity* a) {cible_actuelle=a;}
 
 		~Animal() {if (box!=nullptr) box->reset();}
+  
+    /** SFML draw (Organ* Animal::foie) on window */
+		void drawCurrentOrgan(sf::RenderTarget&);
 
 		/** pure virtual inherited isDead() not yet redefined */
 
@@ -72,8 +77,10 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		double DistanceVision;
 		double velocite;
 		sf::Time compteur;
-
+  
 		SimulatedEntity* cible_actuelle;
+  
+		Organ* foie;
 };
 
 #endif // ANIMAL_HPP

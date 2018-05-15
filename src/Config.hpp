@@ -46,20 +46,13 @@ public:
 	//window
 	const double window_simulation_width;
 	const double window_simulation_height;
-	const double window_stats_height;
+	const double window_stats_width;
 	const std::string  window_title;
 	const int window_antialiasing_level;
 
-	// stats
-	const double stats_refresh_rate;
-	const std::string stats_log_folder = "logs/";
-	const std::string stats_log_prefix = "log_";
-	const std::string stats_log_header = "# Plot with GNUPLOT : gnuplot -e \"plot for [i=1:6] 'log_0.txt' u i w l title columnheader(i)\"";
-
 	// debug
 	const sf::Color debug_text_color = sf::Color::White;
-	const size_t default_debug_text_size = 30;
-
+	const size_t default_debug_text_size = 20;
 
 	//simulation
 	const std::string simulation_lab_texture;
@@ -68,9 +61,45 @@ public:
 	const int  simulation_lab_size;
 	const int  simulation_lab_nb_boxes;
 	const double  simulation_time_factor;
+	const double  simulation_fixed_step;
 	const sf::Time  simulation_time_max_dt;
 
+	// organ
+	const j::Value simulation_organ;
+	const int  simulation_organ_size;
+	const int  simulation_organ_nbCells;
+	const std::string ecm_texture;
+	const std::string blood_texture;
+	const std::string liver_texture;
+	const std::string concentration_texture;
+	const std::string liver_cancer_texture;
 
+	const double base_atp_usage;
+	const double range_atp_usage;
+	// blood system
+
+	const int blood_capillary_min_dist;
+	const int blood_creation_start;
+
+
+	// liver
+	const double liver_fract_uptake;
+	const double liver_km_glycolysis;
+	const double liver_km_max_glycolysis;
+	const int liver_time_next_division;
+	const int liver_range_next_division;
+	const double liver_km_krebs;
+	const double liver_km_max_krebs;
+	const int liver_decay_atp;
+	const double liver_division_cost;
+	
+	// cancer
+	const double cancer_fract_uptake;
+	const double cancer_km_glycolysis;
+	const double cancer_km_max_glycolysis;
+	const int cancer_time_next_division;
+	const int cancer_range_next_division;
+	
 	// living entity
 	const std::string entity_texture_tracked = "target.png";
 	const double entity_energy_critical = 5;

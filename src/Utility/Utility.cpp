@@ -48,9 +48,7 @@ sf::Text buildText(std::string const& msg, Vec2d const& position, sf::Font const
 {
     sf::Text txt(msg, font, size);
     txt.setPosition(position);
-#if SFML_VERSION_MAJOR >= 2 && (SFML_VERSION_MINOR >= 4)	
-/*#if SFML_VERSION_MAJOR >= 2 && (SFML_VERSION_MINOR > 3 || (SFML_VERSION_MINOR == 3 && SFML_VERSION_PATCH >= 2))
- */
+#if SFML_VERSION_MAJOR >= 2 && (SFML_VERSION_MINOR > 3 || (SFML_VERSION_MINOR == 3 && SFML_VERSION_PATCH >= 2))
     txt.setFillColor(color);
 #else
     txt.setColor(color);
@@ -167,4 +165,24 @@ std::vector<std::string> split(std::string const& str, char delim)
     }
 
     return tokens;
+}
+
+CellCoord vec2dToCellCoord(const Vec2d& pos, double width,
+					  double height,  float cellSize)
+{
+	// Clamp the position inside the substrate
+
+	auto position = pos;
+
+    while (position.x < 0)       position.x += width;
+    while (position.x >= width)  position.x -= width;
+    while (position.y < 0)       position.y += height;
+    while (position.y >= height) position.y -= height;
+	// Find the cell to which belong position
+	CellCoord coord = {
+        static_cast<int>(position.x / cellSize),
+        static_cast<int>(position.y / cellSize)
+    };
+	
+	return coord;
 }
