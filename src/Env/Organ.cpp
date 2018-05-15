@@ -5,7 +5,7 @@
 Organ::Organ (bool generation)
 :	generation (true)
 {
-	if (generation==true) genrate();	
+	if (generation==true) generate();	
 }
 
 
@@ -17,7 +17,7 @@ void Organ::update()
 	
 void Organ::drawOn(sf::RenderTarget& target)
 {
-	sf::Sprite image(renderingCache_.getTexture()); // transforme l'image en texture
+	sf::Sprite image(renderingCache.getTexture()); // transforme l'image en texture
 	target.draw(image); // affiche la texture	
 }
 
@@ -40,7 +40,7 @@ void Organ::reloadConfig()
 
 void Organ::reloadCacheStructure()
 {
-	renderingCache.create(horizontalSize, verticalSize);	
+	renderingCache.create(getWidth(), getHeight());	
 }
 
 

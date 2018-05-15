@@ -30,6 +30,7 @@ void Animal::update(sf::Time dt)
 {
 	SimulatedEntity::update(dt);
 	compteur += dt;
+	updateState();
 	switch (etat)
 	{
 	case WANDERING:
@@ -47,7 +48,6 @@ void Animal::update(sf::Time dt)
 	default:
 		break;
 	}
-	updateState();
 	energy -= getAppConfig().animal_base_energy_consumption + getLossFactor()*velocite;
 }
 

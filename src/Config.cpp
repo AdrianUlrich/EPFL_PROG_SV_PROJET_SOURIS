@@ -43,10 +43,10 @@ Config::Config(std::string path) : mConfig(j::readFromFile(path))
 	,liver_fract_uptake(mConfig["simulation"]["organ"]["liver"]["fract uptake"].toDouble())
 	,liver_km_glycolysis(mConfig["simulation"]["organ"]["liver"]["km glycolysis"].toDouble())
 	,liver_km_max_glycolysis(mConfig["simulation"]["organ"]["liver"]["km max glycolysis"].toDouble())
-	,liver_km_krebs(mConfig["simulation"]["organ"]["liver"]["km krebs"].toDouble())
-	,liver_km_max_krebs(mConfig["simulation"]["organ"]["liver"]["km max krebs"].toDouble())
 	,liver_time_next_division(mConfig["simulation"]["organ"]["liver"]["time next division"].toInt())
 	,liver_range_next_division(mConfig["simulation"]["organ"]["liver"]["range next division"].toInt())
+	,liver_km_krebs(mConfig["simulation"]["organ"]["liver"]["km krebs"].toDouble())
+	,liver_km_max_krebs(mConfig["simulation"]["organ"]["liver"]["km max krebs"].toDouble())
 	,liver_decay_atp(mConfig["simulation"]["organ"]["liver"]["decay atp"].toInt())
 	,liver_division_cost(mConfig["simulation"]["organ"]["liver"]["division cost"].toDouble())
 	// cancer
@@ -73,8 +73,8 @@ Config::Config(std::string path) : mConfig(j::readFromFile(path))
 , animal_idle_probability(mConfig["simulation"]["animal"]["idle"]["probability"].toDouble())
 , animal_idle_time_min(mConfig["simulation"]["animal"]["idle"]["min"].toDouble())
 , animal_idle_time_max(mConfig["simulation"]["animal"]["idle"]["max"].toDouble())
-, animal_min_energy(mConfig["simulation"]["animal"]["min energy"].toDouble())
 , animal_base_energy_consumption(mConfig["simulation"]["animal"]["base consumption"].toDouble())
+, animal_min_energy(mConfig["simulation"]["animal"]["min energy"].toDouble())
 
 // mouse
 , mouse_max_speed(mConfig["simulation"]["animal"]["mouse"]["max speed"].toDouble())
@@ -90,13 +90,13 @@ Config::Config(std::string path) : mConfig(j::readFromFile(path))
 		// substance
 	,substance_max_value(mConfig["simulation"]["substance"]["max"].toDouble())
 	,substance_diffusion_radius(mConfig["simulation"]["substance"]["diffusion radius"].toInt())
+	,vgef_diffusion_radius(mConfig["simulation"]["substance"]["vgef"]["diffusion radius"].toInt())
 	,substance_diffusion_constant(mConfig["simulation"]["substance"]["diffusion constant"].toDouble())
 	,base_glucose(mConfig["simulation"]["substance"]["glucose"]["base"].toDouble())
 	,base_bromo(mConfig["simulation"]["substance"]["bromopyruvate"]["base"].toDouble())
 	,delta_glucose(mConfig["simulation"]["substance"]["glucose"]["delta"].toDouble())
 	,delta_bromo(mConfig["simulation"]["substance"]["bromopyruvate"]["delta"].toDouble())
 	,delta_vgef(mConfig["simulation"]["substance"]["vgef"]["delta"].toDouble())
-	,vgef_diffusion_radius(mConfig["simulation"]["substance"]["vgef"]["diffusion radius"].toInt())
 
 {
 }

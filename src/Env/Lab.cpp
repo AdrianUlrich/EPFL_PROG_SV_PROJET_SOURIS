@@ -63,7 +63,7 @@ void Lab::update(sf::Time dt)
 			/// letting other entities know
 			for (SimulatedEntity* val : NTTs)
 			{val->isDead(NTTs[i]);}
-			
+						
 			size_t a(animals.size());
 			for (size_t j(0); j<a; ++a)
 			{if (animals[j]==NTTs[i])

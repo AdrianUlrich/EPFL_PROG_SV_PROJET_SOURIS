@@ -11,6 +11,7 @@ class Organ
 		void update();
 		void drawOn(sf::RenderTarget& target);
 		void updateRepresentation();
+		//void updateRepresentationAt();	
 		double getWidth();
 		double getHeight();
 
