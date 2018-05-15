@@ -21,34 +21,49 @@ class Animal : public SimulatedEntity /// ABSTRACT
 	public:
 		/** constructor */
 		Animal(Vec2d const& pos, double energy, sf::Texture* texture, double rayon);
-     		
+
 		void drawOn(sf::RenderTarget&) override;
-		
+
 		void update(sf::Time) override;
 		void updateState();
+
+		/** movement-related methods (called by Animal::update) */
 		void move(sf::Time);
-		Vec2d getSpeedVector() {return getHeading()*velocite;}
+		void move(Vec2d const&,sf::Time);
+		Vec2d getSpeedVector() const {return getHeading()*velocite;}
 		virtual double getMaxSpeed() const = 0;
 		virtual double getLossFactor() const = 0;
+		virtual double getMass() const = 0;
 		Angle getNewRotation() const {return DEG_TO_RAD * piecewise_linear(intervals,probs);}
 
+		/** nutrition-related methods (called by Animal::update) */
+		bool isSatiated() const;
+		Vec2d getFoodPull() const;
+		virtual Quantity getBite() const = 0; //! each different animal has different biteSize
+		void feed();
 
-		/** champs de vision */ 
-		virtual double getViewRange() const {return AngleVision;} 
-		virtual double getViewDistance() const {return DistanceVision;} 
 
-		
+		/** champs de vision */
+		virtual double getViewRange() const {return AngleVision;}
+		virtual double getViewDistance() const {return DistanceVision;}
+
+
 		/** detection d'une cible */
 		bool isTargetInSight(const Vec2d& position);
-		
-		~Animal() {if (box!=nullptr) box->reset();}
+		void setTarget(SimulatedEntity* a) {cible_actuelle=a;}
 
-		/** pure virtual inherited isDead not yet redefined */
-		
+		~Animal() {if (box!=nullptr) box->reset();}
+  
+    /** SFML draw (Organ* Animal::foie) on window */
 		void drawCurrentOrgan(sf::RenderTarget&);
-		
+
+		/** pure virtual inherited isDead() not yet redefined */
+
+		/** method to ACK that another entity died */
+		virtual void isDead(SimulatedEntity*) override;
+
 	protected:
-	
+
 		void setRotation(Angle a) {angle=a;}
 
 	private:
@@ -58,10 +73,13 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		static Intervals intervals;
 		static Probs probs;
 
-		double AngleVision; 
-		double DistanceVision; 
+		double AngleVision;
+		double DistanceVision;
 		double velocite;
 		sf::Time compteur;
+  
+		SimulatedEntity* cible_actuelle;
+  
 		Organ* foie;
 };
 

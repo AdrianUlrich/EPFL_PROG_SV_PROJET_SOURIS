@@ -16,7 +16,9 @@ public:
 	/** utility collider methods */
 	bool isColliding(Collider const& other) const;
 	bool isPointInside(Vec2d const&) const;
-
+	
+	virtual ~Collider() = default;
+	
 private:
 	//Vec2d position;
 	//double rayon;

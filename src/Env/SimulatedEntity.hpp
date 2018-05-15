@@ -6,6 +6,8 @@
 #include "Box.hpp"
 #include "Collider.hpp"
 #include <Utility/Vec2d.hpp>
+#include <vector>
+using std::vector;
 
 class Mouse;
 class Cheese;
@@ -21,9 +23,12 @@ class SimulatedEntity : public Collider /// ABSTRACT
 
 		/** aging function*/
 		virtual void update(sf::Time);
+		//virtual void interact(vector<SimulatedEntity*>) {}
 
 		/** pure virtual method => abstract class */
 		virtual bool isDead() const = 0;
+		/** ACK of the end of another SimulatedEntity */
+		virtual void isDead(SimulatedEntity*);
 
 		/** overriding virtual collider getters */
 		Vec2d getCenter() const override {return pos;}
@@ -36,6 +41,7 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		virtual bool eatable(SimulatedEntity const*) const = 0;
 		virtual bool eatableBy(Mouse const*) const = 0;
 		virtual bool eatableBy(Cheese const*) const = 0;
+		virtual Quantity provideEnergy(Quantity){return 0.;}
 
 		void confineInBox(Box* b);
 
@@ -61,8 +67,6 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		/** SFML variables */
 		sf::Texture* texture;
 		sf::Sprite entitySprite;
-
-	private:
 		sf::Text text;
 
 };

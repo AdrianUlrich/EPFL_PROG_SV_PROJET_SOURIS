@@ -51,15 +51,15 @@
             "mass":1,
             "size":180,
             "longevity":40000,
-            "max speed":100,
+            "max speed":250,
             "view":{
                "range":6.283185307,
                "distance":250
             },
             "energy":{
                "initial":30,
-               "loss factor":0,
-               "bite":2
+               "loss factor":0.00005,
+               "bite":0.1
             },
             "texture":{
                "white":"mouse2.png"

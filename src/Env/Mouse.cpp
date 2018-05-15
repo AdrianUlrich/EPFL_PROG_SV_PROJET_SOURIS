@@ -37,6 +37,7 @@ bool Mouse::isDead() const
 	);
 }
 
+/*
 bool Mouse::eatable(SimulatedEntity const* entity)  const
 {return entity->eatableBy(this);}
 
@@ -45,11 +46,18 @@ bool Mouse::eatableBy(Cheese const*) const
 
 bool Mouse::eatableBy(Mouse const*) const
 {return false;}
+*/
 
 double Mouse::getMaxSpeed() const
-{return getAppConfig().mouse_max_speed * 1/(1+exp(-energy/4));}
+{return getAppConfig().mouse_max_speed * 1/(1+exp(-3*(energy/getAppConfig().mouse_energy_initial+1)));}
 
 double Mouse::getLossFactor() const
 {return getAppConfig().mouse_energy_loss_factor;}
+
+double Mouse::getMass() const
+{return getAppConfig().mouse_mass;}
+
+Quantity Mouse::getBite() const
+{return getAppConfig().mouse_energy_bite;}
 
 
