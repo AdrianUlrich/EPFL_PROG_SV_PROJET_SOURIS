@@ -20,7 +20,9 @@ public :
 		*/
 	Lab();
 
-	/** destructor deletes pointers etc */
+	/** destructor deletes pointers etc
+		* uses reset() and destroyBoxes()
+		*/
 	~Lab();
 
 	void makeBoxes(unsigned int nbCagesPerRow);
@@ -30,7 +32,6 @@ public :
 	void drawOn(sf::RenderTarget&);
 	void reset();
 
-	bool addAnimal(Mouse*);
 	bool addCheese(Cheese*);
 	bool addEntity(SimulatedEntity*,size_t);
 	
@@ -41,11 +42,15 @@ public :
 	void stopTrackingAnyEntity();
 	
 	/** lien entre animal et organ */
-	
 	void updateTrackedAnimal();
 	void drawCurrentOrgan(sf::RenderTarget& target);
-	
+  
+  /** providing vision to animals */
+	vector<SimulatedEntity*>* findTargetsInSightOf(Animal*);
+
 private:
+	bool addEntity(SimulatedEntity*);
+
 	vector<vector<Box*>> boites;
 	
 	/** index:

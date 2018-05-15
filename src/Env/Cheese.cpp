@@ -24,10 +24,10 @@ void Cheese::drawOn(sf::RenderTarget& target)
 
 Quantity Cheese::provideEnergy(Quantity qte)
 {
-	if (energy<=0) return 0;
+	if (energy<=0.) return 0.;
 	double oldEnergy(energy);
 	energy=std::max(0.,energy-qte);
-	entitySprite.setScale(Vec2d(1,1)*(energy/oldEnergy));
+	entitySprite.scale(Vec2d(1,1)*(energy/oldEnergy));
 	entity_size=energy;
 	return oldEnergy-/*new*/energy;
 }
@@ -35,7 +35,7 @@ Quantity Cheese::provideEnergy(Quantity qte)
 bool Cheese::isDead() const
 {return SimulatedEntity::isDead();}
 
-
+/*
 bool Cheese::eatable(SimulatedEntity const* entity)  const
 {return entity->eatableBy(this);}
 
@@ -44,3 +44,4 @@ bool Cheese::eatableBy(Cheese const*) const
 
 bool Cheese::eatableBy(Mouse const*) const
 {return true;}
+*/

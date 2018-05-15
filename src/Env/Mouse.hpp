@@ -16,13 +16,15 @@ class Mouse : public Animal
 		virtual bool isDead() const override;
 
 		/** eatable */
-		bool eatable(SimulatedEntity const*) const override;
-		bool eatableBy(Cheese const*) const override;
-		bool eatableBy(Mouse const*) const override;
+		bool eatable(SimulatedEntity const* ntt) const override {return ntt->eatableBy(this);}
+		bool eatableBy(Cheese const*) const override {return false;}
+		bool eatableBy(Mouse const*) const override {return false;}
 
-		/** masking getMaxSpeed pure virtual method */
+		/** masking getter pure virtual methods */
 		virtual double getMaxSpeed() const override;
 		virtual double getLossFactor() const override;
+		virtual double getMass() const override;
+		virtual Quantity getBite() const override;
 
 	//private:
 		//double mouseSize;

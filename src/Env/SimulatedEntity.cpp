@@ -8,9 +8,11 @@
 #include <string>
 
 //debug only :
+/*
 #include <iostream>
 #include <assert.h>
 using namespace std;
+*/
 
 SimulatedEntity::SimulatedEntity(Vec2d const& pos, double energy, sf::Texture* texture, double rayon)
 :	pos(pos),
@@ -60,9 +62,12 @@ bool SimulatedEntity::isDead() const
 	return
 	(
 		age > longevity or
-		energy <= 0
+		energy <= 0.
 	);
 }
+
+void SimulatedEntity::isDead(SimulatedEntity*)
+{}
 
 bool SimulatedEntity::canBeConfinedIn(Box* box)
 {
