@@ -9,7 +9,7 @@
 //using namespace std;
 
 Lab::Lab()
-:	NTTs(0)
+:	tracked(nullptr)
 {
 	makeBoxes(getAppConfig().simulation_lab_nb_boxes);
 }
@@ -53,21 +53,17 @@ Lab::~Lab()
 
 void Lab::update(sf::Time dt)
 {
-
 	size_t n(NTTs.size());
 	for (size_t i(0); i<n; ++i)
-	{//if (NTTs[i] != nullptr) // NTTs ne contient jamais de nullptr ou dangling
-		NTTs[i]->update(dt);
-		if (NTTs[i]->isDead())
-		{
-      /// letting other animals know of the death
-			for (SimulatedEntities* val : NTTs)
-			{val->isDead(NTTs[i]);}
-    
+	{	
+		val[i]->update(dt);
+		if (val[i]->isDead())
+		{	
 			//! La boite est liberee dans le destructeur de animal
-			delete NTTs[i]; //NTTs[i]=nullptr;
-			NTTs[i]=NTTs[--n]; //NTTs.erase(NTTs.begin()+i);
-			NTTs.pop_back();
+			
+			delete val[i]; //NTTs[i]=nullptr;
+			val[i]=val[--n]; //NTTs.erase(NTTs.begin()+i);
+			val.pop_back();
 		}
 	}
 }
@@ -143,10 +139,10 @@ bool Lab::addAnimal(Animal* mickey)
 			{
 				if (val->isEmpty())
 				{
-					mickey->confine(val); //! La souris est deja creee mais maintenant elle est dans une boite
+					mickey->confine(val); //! La souris est d�ja cr��e mais maintenant elle est dans une boite
 					bool succ(addEntity(mickey,1));
 					if (succ)
-						val->addOccupant(); //! La boite est occuppee
+						val->addOccupant(); //! La boite est occuppée
 					return succ;
 				}
 			}
@@ -176,6 +172,7 @@ if (c==nullptr) return false;
 	delete c;
 	return false;
 }
+
 
 void Lab::trackAnimal(const Vec2d& p)
 {
