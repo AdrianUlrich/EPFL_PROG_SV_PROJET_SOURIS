@@ -87,14 +87,14 @@ def DefineProgram(name, additional_src):
 
 
 DefineProgram('application', Glob('FinalApplication.cpp'))
+DefineProgram('LabTest', Glob('Tests/GraphicalTests/LabTest.cpp'))
+DefineProgram('BloodSystemTest', Glob('Tests/GraphicalTests/BloodSystemTest.cpp'))
+DefineProgram('DrawOrganTest', Glob('Tests/GraphicalTests/DrawOrganTest.cpp'))
 DefineProgram('EatableTest', Glob('Tests/UnitTests/EatableTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('ColliderTest', Glob('Tests/UnitTests/ColliderTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('Vec2dTest', Glob('Tests/UnitTests/Vec2dTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('SubstanceTest', Glob('Tests/UnitTests/SubstanceTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
-DefineProgram('BoxTestWithAnimal', Glob('Tests/UnitTests/BoxTestWithAnimal.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
-DefineProgram('TargetInSightTest', Glob('Tests/UnitTests/TargetInSightTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
-DefineProgram('LabTest', Glob('Tests/GraphicalTests/LabTest.cpp'))
-
+DefineProgram('CellHandlerTest', Glob('Tests/UnitTests/CellHandlerTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 
 if env['CXX'] == 'clang++':
     analyze_cmd = "clang++ -std=c++11 -stdlib=libc++ -Wall -Wextra -Werror " + includeFlags + " -Isrc/ --analyze -Xanalyzer -analyzer-output='html' "
