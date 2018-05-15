@@ -21,7 +21,6 @@
 #include <map>
 #include <stdexcept>
 #include <string>
-#include <vector>
 
 /*!
  * @class Application
@@ -127,17 +126,9 @@ public:
     /**
      *  @brief Read the lab size from the config manager
      *
-     *  @return the world size
+     *  @return the lab size
      */
     Vec2d getLabSize() const;
-
-/**
-     *  @brief Read the size of the simulated organ
-	 * from the config manager
-     *
-     *  @return the world size
-     */
-    Vec2d getOrganSize() const;
 	
     /**
      *  @brief Compute the centre of the world area (in local coordinates)
@@ -152,9 +143,6 @@ public:
      * @return The cursor position converted in the view coordinates
      */
     Vec2d getCursorPositionInView() const;
-
-	
-	void switchToView(View);
 
 protected:
     /*!
@@ -266,9 +254,10 @@ protected:
      */
 	void switchDebug();
 
-    void drawOnHelp(sf::RenderWindow& window, bool micro) const;
-
-
+	 /*!
+     * @brief upload new config file
+     */
+	void resetConfig();
 	
 protected:
     // The order is important since some fields need other to be initialised
@@ -277,12 +266,6 @@ protected:
 //    j::Value          mJSONRead;       ///< Application configuration
     Config*          mConfig;       ///< Application configuration
 
-    sf::View mStatsView;             ///< View for the stats area
-    int      mCurrentGraphId;        ///< Current graph ID
-
-
-    sf::View mHelpView;         ///< View for commands help
-
     Lab* mLab;                       ///< Simulated environment
 
     sf::Font mFont;                  ///< A font
@@ -290,7 +273,6 @@ protected:
     sf::RenderWindow mRenderWindow;  ///< SFML window / render target
     sf::View mSimulationView;        ///< View for simulation area
 	sf::View mLabView;        ///< View for simulation area
-	sf::View mOrganView;        ///< View for simulation area
 
     using TexturePool = std::map<std::string, sf::Texture*>;
     TexturePool mTextures;           ///< Pool of textures
@@ -299,7 +281,6 @@ protected:
 
     bool         mPaused;            ///< Tells if the application is in pause or not
     bool         mIsResetting;       ///< Is true for one main loop iteration when resetting.
-	bool         mIsSwitchingView;
                                      ///  This is useful to pause the clock while generating
                                      ///  a new world. Without this, a huge dt would result from
                                      ///  rebuilding the world.
@@ -309,7 +290,6 @@ protected:
 
 	sf::RectangleShape mSimulationBackground;
 	sf::RectangleShape mLabBackground;
-	sf::RectangleShape mOrganBackground;
 
 	// Views
 
@@ -379,7 +359,6 @@ sf::Texture& getAppTexture(std::string const& name);
  * @return true if cfg specify DEBUG=TRUE
  */
 bool isDebugOn();
-bool isOrganViewOn();
 
 /// Define a few macros
 

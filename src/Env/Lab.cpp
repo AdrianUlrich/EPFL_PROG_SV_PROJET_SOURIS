@@ -1,15 +1,9 @@
 #include "Lab.hpp"
 #include <exception>
 #include <Application.hpp>
-#include "Types.hpp"
-
-//DEBUG:
-//#include <iostream>
-//using namespace std;
-
 
 Lab::Lab()
-:	tracked(nullptr)
+:	NTTs(0)
 {
 	makeBoxes(getAppConfig().simulation_lab_nb_boxes);
 }
@@ -146,10 +140,10 @@ bool Lab::addAnimal(Animal* manimal)
 			{
 				if (val->isEmpty())
 				{
-					manimal->confine(val); //! La souris est dÃ©ja crÃ©Ã©e mais maintenant elle est dans une boite
+					manimal->confine(val); //! La souris est déja créée mais maintenant elle est dans une boite
 					bool succ(addEntity(manimal));
 					if (succ)
-						val->addOccupant(); //! La boite est occuppÃ©e
+						val->addOccupant(); //! La boite est occuppée
 					return succ;
 				}
 			}
@@ -162,49 +156,4 @@ bool Lab::addAnimal(Animal* manimal)
 bool Lab::addCheese(Cheese* caprice_des_dieux)
 {
 	return addEntity(caprice_des_dieux);
-}
-
-
-void Lab::trackAnimal(const Vec2d& p)
-{
-	for (auto val : NTTs)
-	{
-		if (val->isPointInside(p))
-		{
-			trackAnimal(val);
-			break;
-		}
-	}
-}
-
-void Lab::switchToView(sf::View view)
-{
-	getApp().switchToView(view);	
-}
-
-void Lab::stopTrackingAnyEntity()
-{
-	tracked=nullptr;
-}
-
-
-void Lab::updateTrackedAnimal() 
-{
-	if (foie != nullprt)
-	{
-		Organ::update();
-	}
-}
-
-void Lab::drawCurrentOrgan(sf::RenderTarget& target)
-{
-	if(foie =! nullprt)
-	{
-		tracked -> Animal::drawCurrentOrgan(target);
-	}
-}
-
-void Lab::trackAnimal(Animal* n) 
-{
-	tracked = n;
 }

@@ -80,20 +80,3 @@
 - Compile et fonctionne, mais les souris sortent instantanément du cadre
 > On peut quand même les voir avec pause(espace)
 
-*************************************************
-## 01.05 (mardi)
-
-- Partie 3.2 fin
-		 3.4 continuation 
-		 
-*************************************************
-## 08.05 (mardi)
-
-- Partie 3.4 continuation
-		 4.1 début
-
-*************************************************
-## 09.05 (mercredi)
-
-- Partie 3.4 continuation
-		 4.1 continuation

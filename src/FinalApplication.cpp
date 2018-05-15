@@ -16,7 +16,6 @@ IMPLEMENT_MAIN(FinalApplication);
 
 void FinalApplication::onRun()
 {
-    // Setup stats
 	Application::onRun();
 }
 
@@ -32,42 +31,19 @@ void FinalApplication::onEvent(sf::Event event, sf::RenderWindow&)
 
 			case sf::Keyboard::M:
 			{
-				if (!isOrganViewOn()){
 					getAppEnv().addAnimal(new Mouse
 										  (getCursorPositionInView()));
-				}
 			}
 				break;
 	
 			case sf::Keyboard::F: // F for food
-			{	if (!isOrganViewOn()){
-						getAppEnv().addCheese(new Cheese
-											  (getCursorPositionInView()));
-					}
-					
-			}
-				break;
-		
-			case sf::Keyboard::T:
 			{
-				getAppEnv().trackAnimal(getCursorPositionInView());
-            }
-				break;
-			
-			case sf::Keyboard::O:
-			{
-				getAppEnv().switchToView(ECM);
-            }
-				break;	
-			
-			case sf::Keyboard::Z:
-			{
-				if (!isOrganViewOn()){
-					getAppEnv().stopTrackingAnyEntity();
-				}
+					getAppEnv().addCheese(new Cheese
+										  (getCursorPositionInView()));					
 			}
 				break;
 
+	
         default:
             break;
         }
