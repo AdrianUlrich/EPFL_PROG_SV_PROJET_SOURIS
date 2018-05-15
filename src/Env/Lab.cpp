@@ -53,21 +53,17 @@ Lab::~Lab()
 
 void Lab::update(sf::Time dt)
 {
-	for (size_t j(0);j<NTTs.nbTypes;++j)
-	{	auto val NTTs[j];
-		size_t n(val.size());
-		for (size_t i(0); i<n; ++i)
-		{
-			val[i]->update(dt);
-			if (val[i]->isDead())
-			{
-				// NTTs[i]->resetBox(); //! La boite est liberee dans le destructeur de animal
-				delete val[i];
-				val[i]=val[--n];
-				val.pop_back();
-				//NTTs[i]=nullptr;
-				//NTTs.erase(NTTs.begin()+i);
-			}
+	size_t n(NTTs.size());
+	for (size_t i(0); i<n; ++i)
+	{	
+		val[i]->update(dt);
+		if (val[i]->isDead())
+		{	
+			//! La boite est liberee dans le destructeur de animal
+			
+			delete val[i]; //NTTs[i]=nullptr;
+			val[i]=val[--n]; //NTTs.erase(NTTs.begin()+i);
+			val.pop_back();
 		}
 	}
 }
@@ -75,20 +71,22 @@ void Lab::update(sf::Time dt)
 vector<SimulatedEntity*>* Lab::findTargetsInSightOf(Animal* a)
 {
 	vector<SimulatedEntity*>* ans(new vector<SimulatedEntity*>);
-	for(size_t i(0);i<NTTs.nbTypes;++i)
-	for (auto val : NTTs[1])
-	{//note: NTTs NEVER contains nullptrs or deleted pointers
-		if
-		(
-			/// animal may want to see himself sometimes
-			//val != a and
-			/// animal may want to interact with fellow animals
-			//a->eatable(val) and
-			a->isTargetInSight(val->getCenter()) //and
-			/// checks for closest target but animal may decide what to do with all its sights
-			//((ans==nullptr) or (distance(a->getCenter(),val->getCenter()))<(distance(a->getCenter(),ans->getCenter())))
-		)
-			ans->push_back(val);
+	for(unsigned char i(0);i<NTTs.nbTypes;++i)
+	{	for (auto val : *(NTTs[i]))
+		{//note: NTTs NEVER contain nullptrs or deleted pointers
+			if
+			(
+				/// animal may want to see himself sometimes
+				//val != a and
+				/// animal may want to interact with fellow animals
+				//a->eatable(val) and
+				///here we give vision to the animal of everything it should see and let it deal with it
+				a->isTargetInSight(val->getCenter()) //and
+				/// checks for closest target but animal may decide what to do with all its sights
+				//((ans==nullptr) or (distance(a->getCenter(),val->getCenter()))<(distance(a->getCenter(),ans->getCenter())))
+			)
+				ans->push_back(val);
+		}
 	}
 	return ans;
 }
@@ -104,8 +102,8 @@ void Lab::drawOn(sf::RenderTarget& target)
 				val->drawOn(target);
 		}
 	}
-	for (auto& val : NTTs)
-	{	for (auto NTT : val)
+	for(unsigned char i(0);i<NTTs.nbTypes;++i)
+	{	for (auto NTT : *(NTTs[i]))
 		{
 			NTT->drawOn(target);
 		}
@@ -114,30 +112,30 @@ void Lab::drawOn(sf::RenderTarget& target)
 
 void Lab::reset()
 {
-	for (auto& val : NTTs)
-	{	for (auto NTT : val)
+	for(unsigned char i(0);i<NTTs.nbTypes;++i)
+	{	for (auto NTT : *(NTTs[i]))
 		{
 			delete NTT;
-			NTT = nullptr;
+			//NTT = nullptr;
 		}
 	}
 	NTTs.clear();
 }
 
-bool Lab::addEntity(SimulatedEntity* ntt, size_t i)
+bool Lab::addEntity(SimulatedEntity* ntt, unsigned char i)
 {
-	NTTs[i].push_back(ntt);
+	NTTs[i]->push_back(ntt);
 	return true;
 }
 
-bool Lab::addAnimal(Animal* manimal)
+bool Lab::addAnimal(Animal* mickey)
 {
-	if (manimal==nullptr) return false;
+	if (mickey==nullptr) return false;
 	for (auto& vec : boites)
 	{
 		for (auto val : vec)
 		{
-			if (manimal->canBeConfinedIn(val))
+			if (mickey->canBeConfinedIn(val))
 			{
 				if (val->isEmpty())
 				{
@@ -178,7 +176,7 @@ if (c==nullptr) return false;
 
 void Lab::trackAnimal(const Vec2d& p)
 {
-	for (auto val : NTTs[1])
+	for (auto val : *(NTTs[1]))
 	{
 		if (val->isPointInside(p))
 		{

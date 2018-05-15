@@ -54,16 +54,16 @@ class Animal : public SimulatedEntity /// ABSTRACT
 
 		~Animal() {if (box!=nullptr) box->reset();}
   
-    /** SFML draw (Organ* Animal::foie) on window */
+		/** SFML draw (Organ* Animal::foie) on window */
 		void drawCurrentOrgan(sf::RenderTarget&);
+		void updateOrgan();
 
 		/** pure virtual inherited isDead() not yet redefined */
 		/** method to ACK that another entity died */
 		virtual void isDead(SimulatedEntity*) override;
-		void drawCurrentOrgan(sf::RenderTarget&);
-		void updateOrgan();
+		
+		
 	protected:
-
 		void setRotation(Angle a) {angle=a;}
 
 	private:

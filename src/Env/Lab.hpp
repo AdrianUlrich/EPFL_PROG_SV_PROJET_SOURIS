@@ -12,22 +12,6 @@
 #include "Animal.hpp"
 using std::vector;
 
-template<typename T,typename Q>
-struct NTTZ
-{
-	unsigned char nbTypes=2;
-	vector<Cheese*> first;
-	vector<Animal*> second;
-	vector<SimulatedEntity*>& operator[](size_t i)
-	{	switch(i)
-		{	case 0:
-			return first;
-			
-			case 1:
-			return second;
-		}
-	}
-}
 class Lab : public sf::NonCopyable
 {
 public :
@@ -65,11 +49,13 @@ public :
 	vector<SimulatedEntity*>* findTargetsInSightOf(Animal*);
 
 private:
-	bool addEntity(SimulatedEntity*,size_t);
+	bool addEntity(SimulatedEntity*,unsigned char);
 
 	vector<vector<Box*>> boites;
 
-	vector<NTTZ*> NTTs;
+	vector<Animal*> animals;
+	vector<Cheese*> cheeses;
+	vector<SimulatedEntity*> NTTs;
 	Animal* tracked;
 };
 
