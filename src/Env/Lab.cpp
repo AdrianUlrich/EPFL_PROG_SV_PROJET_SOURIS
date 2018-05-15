@@ -9,8 +9,7 @@
 //using namespace std;
 
 Lab::Lab()
-:	NTTs(2),
-	tracked(nullptr)
+:	tracked(nullptr)
 {
 	makeBoxes(getAppConfig().simulation_lab_nb_boxes);
 }
@@ -54,16 +53,17 @@ Lab::~Lab()
 
 void Lab::update(sf::Time dt)
 {
-	for (auto& val : NTTs) //Type: vector<sim*>
-	{size_t nNTTs(val.size());
-		for (size_t i(0); i<nNTTs; ++i)
+	for (size_t j(0);j<NTTs.nbTypes;++j)
+	{	auto val NTTs[j];
+		size_t n(val.size());
+		for (size_t i(0); i<n; ++i)
 		{
 			val[i]->update(dt);
 			if (val[i]->isDead())
 			{
 				// NTTs[i]->resetBox(); //! La boite est liberee dans le destructeur de animal
 				delete val[i];
-				val[i]=val[--nNTTs];
+				val[i]=val[--n];
 				val.pop_back();
 				//NTTs[i]=nullptr;
 				//NTTs.erase(NTTs.begin()+i);
@@ -75,7 +75,8 @@ void Lab::update(sf::Time dt)
 vector<SimulatedEntity*>* Lab::findTargetsInSightOf(Animal* a)
 {
 	vector<SimulatedEntity*>* ans(new vector<SimulatedEntity*>);
-	for (auto val : NTTs)
+	for(size_t i(0);i<NTTs.nbTypes;++i)
+	for (auto val : NTTs[1])
 	{//note: NTTs NEVER contains nullptrs or deleted pointers
 		if
 		(
