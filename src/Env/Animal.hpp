@@ -7,6 +7,7 @@ class Organ;
 #include <Utility/Utility.hpp>
 #include <Random/Random.hpp>
 
+class Organ;
 
 enum State
 {
