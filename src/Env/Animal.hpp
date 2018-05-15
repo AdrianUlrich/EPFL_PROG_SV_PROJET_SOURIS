@@ -46,6 +46,7 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		/** pure virtual inherited isDead not yet redefined */
 		
 		void drawCurrentOrgan(sf::RenderTarget&);
+		void updateOrgan();
 		
 	protected:
 	

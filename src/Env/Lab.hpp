@@ -1,9 +1,11 @@
 #ifndef I_LAB_HPP
 #define I_LAB_HPP
 
+#include <SFML/Graphics.hpp>
+
 #include <vector>
 #include <Utility/Vec2d.hpp>
-#include <SFML/Graphics.hpp>
+#include <Types.hpp>
 #include "Cheese.hpp"
 #include "Box.hpp"
 #include "Mouse.hpp"
@@ -30,12 +32,12 @@ public :
 
 	bool addAnimal(Mouse*);
 	bool addCheese(Cheese*);
-	bool addEntity(SimulatedEntity*);
+	bool addEntity(SimulatedEntity*,size_t);
 	
 	/**Focus sur un animal*/
 	void trackAnimal(Animal* n);
 	void trackAnimal(const Vec2d&);
-	void switchToView(sf::View view);
+	void switchToView(View view);
 	void stopTrackingAnyEntity();
 	
 	/** lien entre animal et organ */
@@ -45,7 +47,12 @@ public :
 	
 private:
 	vector<vector<Box*>> boites;
-	vector<SimulatedEntity*> NTTs;
+	
+	/** index:
+	 * 1 => animals
+	 * 0 => cheeses
+	 * */
+	vector<vector<SimulatedEntity*>> NTTs;
 	Animal* tracked;
 };
 

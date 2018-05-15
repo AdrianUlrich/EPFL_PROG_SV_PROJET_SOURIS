@@ -111,5 +111,10 @@ bool Animal::isTargetInSight(const Vec2d& position)
 
 void Animal::drawCurrentOrgan(sf::RenderTarget& target)
 {
-	foie-> Organ::drawOn(target);
+	foie->Organ::drawOn(target);
+}
+
+void Animal::updateOrgan()
+{
+	foie->update();
 }

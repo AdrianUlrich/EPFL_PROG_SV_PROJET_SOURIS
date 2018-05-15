@@ -1,12 +1,15 @@
 #include "Lab.hpp"
 #include <exception>
 #include <Application.hpp>
-#include "Types.hpp"
-#include <iostream>
-using namespace std;
+#include "Organ.hpp"
+
+//DEBUG:
+//#include <iostream>
+//using namespace std;
 
 Lab::Lab()
-:	tracked(nullptr)
+:	NTTs(2),
+	tracked(nullptr)
 {
 	makeBoxes(getAppConfig().simulation_lab_nb_boxes);
 }
@@ -50,21 +53,19 @@ Lab::~Lab()
 
 void Lab::update(sf::Time dt)
 {
-size_t nNTTs(NTTs.size());
-	for (size_t i(0); i<nNTTs; ++i)
-	{
-		if (NTTs[i] != nullptr)
+	for (auto& val : NTTs) //Type: vector<sim*>
+	{size_t nNTTs(val.size());
+		for (size_t i(0); i<nNTTs; ++i)
 		{
-			NTTs[i]->update(dt);
-			if (NTTs[i]->isDead())
+			val[i]->update(dt);
+			if (val[i]->isDead())
 			{
 				// NTTs[i]->resetBox(); //! La boite est liberee dans le destructeur de animal
-				delete NTTs[i];
-				NTTs[i]=NTTs[NTTs.size()-1];
-				NTTs.pop_back();
+				delete val[i];
+				val[i]=val[--nNTTs];
+				val.pop_back();
 				//NTTs[i]=nullptr;
 				//NTTs.erase(NTTs.begin()+i);
-				--nNTTs;
 			}
 		}
 	}
@@ -80,27 +81,29 @@ void Lab::drawOn(sf::RenderTarget& target)
 			val->drawOn(target);
 		}
 	}
-	for (auto NTT : NTTs)
-	{
-		NTT->drawOn(target);
+	for (auto& val : NTTs)
+	{	for (auto NTT : val)
+		{
+			NTT->drawOn(target);
+		}
 	}
 }
 
 void Lab::reset()
 {
-	for (auto& NTT : NTTs)
-	{
-		delete NTT;
-		NTT = nullptr;
+	for (auto& val : NTTs)
+	{	for (auto NTT : val)
+		{
+			delete NTT;
+			NTT = nullptr;
+		}
 	}
 	NTTs.clear();
 }
 
-bool Lab::addEntity(SimulatedEntity* ntt)
+bool Lab::addEntity(SimulatedEntity* ntt, size_t i)
 {
-	if (ntt==nullptr)// || NTTs.size()>100)
-		return false;
-	NTTs.push_back(ntt);
+	NTTs[i].push_back(ntt);
 	return true;
 }
 
@@ -116,7 +119,7 @@ bool Lab::addAnimal(Mouse* mickey)
 				if (val->isEmpty())
 				{
 					mickey->confine(val); //! La souris est déja créée mais maintenant elle est dans une boite
-					bool succ(addEntity(mickey));
+					bool succ(addEntity(mickey,1));
 					if (succ)
 						val->addOccupant(); //! La boite est occuppée
 					return succ;
@@ -124,20 +127,35 @@ bool Lab::addAnimal(Mouse* mickey)
 			}
 		}
 	}
-	if (mickey!=nullptr)
-		delete mickey;
+	delete mickey;
 	return false;
 }
 
-bool Lab::addCheese(Cheese* caprice_des_dieux)
+bool Lab::addCheese(Cheese* c)
 {
-	return addEntity(caprice_des_dieux);
+if (c==nullptr) return false;
+	for (auto& vec : boites)
+	{
+		for (auto val : vec)
+		{
+			if (c->canBeConfinedIn(val))
+			{
+				//if (val->isEmpty())
+				{
+					c->confine(val); //! Le fromton est déja créée mais maintenant elle est dans une boite
+					return addEntity(c,0);
+				}
+			}
+		}
+	}
+	delete c;
+	return false;
 }
 
 
 void Lab::trackAnimal(const Vec2d& p)
 {
-	for (auto val : NTTs)
+	for (auto val : NTTs[1])
 	{
 		if (val->isPointInside(p))
 		{
@@ -147,7 +165,7 @@ void Lab::trackAnimal(const Vec2d& p)
 	}
 }
 
-void Lab::switchToView(sf::View view)
+void Lab::switchToView(View view)
 {
 	getApp().switchToView(view);	
 }
@@ -160,17 +178,17 @@ void Lab::stopTrackingAnyEntity()
 
 void Lab::updateTrackedAnimal() 
 {
-	if (foie != nullprt)
+	if (tracked != nullptr)
 	{
-		Organ::update();
+		tracked->updateOrgan();
 	}
 }
 
 void Lab::drawCurrentOrgan(sf::RenderTarget& target)
 {
-	if(foie =! nullprt)
+	if(tracked != nullptr)
 	{
-		tracked -> Animal::drawCurrentOrgan(target);
+		tracked->drawCurrentOrgan(target);
 	}
 }
 
