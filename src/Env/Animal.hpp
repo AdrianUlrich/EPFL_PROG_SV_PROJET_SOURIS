@@ -2,8 +2,8 @@
 #define ANIMAL_HPP
 
 #include "SimulatedEntity.hpp"
-#include "Organ.hpp"
-//class Organ;
+//#include "Organ.hpp"
+class Organ;
 #include <Utility/Utility.hpp>
 #include <Random/Random.hpp>
 
@@ -45,7 +45,7 @@ class Animal : public SimulatedEntity /// ABSTRACT
 
 		/** pure virtual inherited isDead not yet redefined */
 		
-		//void drawCurrentOrgan(sf::RenderTarget&);
+		void drawCurrentOrgan(sf::RenderTarget&);
 		
 	protected:
 	

@@ -1,4 +1,5 @@
 #include "Animal.hpp"
+#include "Organ.hpp"
 
 #include <Utility/Arc.hpp>
 #include <Utility/Vec2d.hpp>
@@ -108,7 +109,7 @@ bool Animal::isTargetInSight(const Vec2d& position)
 }
 
 
-/*void Animal::drawCurrentOrgan(sf::RenderTarget& target)
+void Animal::drawCurrentOrgan(sf::RenderTarget& target)
 {
 	foie-> Organ::drawOn(target);
 }

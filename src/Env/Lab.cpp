@@ -139,9 +139,10 @@ void Lab::trackAnimal(const Vec2d& p)
 {
 	for (auto val : NTTs)
 	{
-		if ((p-val->getCenter()).lengthSquared() < val->getRadius()*val->getRadius())
+		if (val->isPointInside(p))
 		{
 			trackAnimal(val);
+			break;
 		}
 	}
 }
