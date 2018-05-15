@@ -27,7 +27,7 @@ Quantity Cheese::provideEnergy(Quantity qte)
 	if (energy<=0.) return 0.;
 	double oldEnergy(energy);
 	energy=std::max(0.,energy-qte);
-	entitySprite.setScale(Vec2d(1,1)*(energy/oldEnergy));
+	entitySprite.scale(Vec2d(1,1)*(energy/oldEnergy));
 	entity_size=energy;
 	return oldEnergy-/*new*/energy;
 }

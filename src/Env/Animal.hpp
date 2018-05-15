@@ -36,7 +36,7 @@ class Animal : public SimulatedEntity /// ABSTRACT
 
 		/** nutrition-related methods (called by Animal::update) */
 		bool isSatiated() const;
-		Vec2d getFoodLust() const;
+		Vec2d getFoodPull() const;
 		virtual Quantity getBite() const = 0; //! each different animal has different biteSize
 		void feed();
 

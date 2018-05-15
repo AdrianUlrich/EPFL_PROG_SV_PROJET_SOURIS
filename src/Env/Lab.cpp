@@ -55,7 +55,7 @@ size_t nNTTs(NTTs.size());
 		{
 			/// letting other entities know of the death
 			for (SimulatedEntity* val : NTTs)
-			{isDead(NTTs[i]);}
+			{val->isDead(NTTs[i]);}
 
 			// NTTs[i]->resetBox();
 			/// La boite est liberee par le destructeur de animal
@@ -74,7 +74,7 @@ size_t nNTTs(NTTs.size());
 	}
 }
 
-vector<SimulatedEntity*>* Lab::findTargetInSightOf(Animal* a)
+vector<SimulatedEntity*>* Lab::findTargetsInSightOf(Animal* a)
 {
 	vector<SimulatedEntity*>* ans(new vector<SimulatedEntity*>);
 	for (auto val : NTTs)
@@ -113,7 +113,7 @@ void Lab::drawOn(sf::RenderTarget& target)
 
 void Lab::reset()
 {
-	for (auto NTT/*&*/ : NTTs)
+	for (auto NTT : NTTs)
 	{
 		delete NTT;
 		//NTT = nullptr;

@@ -9,6 +9,7 @@
 #include <cmath>
 #include <algorithm>
 //#include <vector>
+#include <iostream>
 
 
 Intervals Animal::intervals = { -180, -100, -55, -25, -10, 0, 10, 25, 55, 100, 180};
@@ -51,16 +52,13 @@ void Animal::update(sf::Time dt)
 
 void Animal::updateState()
 {
-	vector<SimulatedEntity*>* food_near(nullptr);
 //	if (cible_actuelle->isDead())
 //	{
 //		cible_actuelle=nullptr;
 //		etat=WANDERING;
 //		velocite=getMaxSpeed();
 //	}
-	if ((isSatiated() or
-			((food_near=getAppEnv().findTargetInSightOf(this)).empty())) and
-			(etat!=WANDERING))
+	if (etat==IDLE or (isSatiated() and etat!=WANDERING))
 	{
 		etat = WANDERING;
 		velocite = getMaxSpeed();
@@ -68,29 +66,38 @@ void Animal::updateState()
 	}
 	else
 	{
-		if (etat == FOOD_IN_SIGHT /*and cible_actuelle!=nullptr*/ and this->isColliding(*cible_actuelle)) // when etat==FOOD_IN_SIGHT , cible_actuelle must be defined
-		{etat = FEEDING;}
-		else
+		if (etat == FOOD_IN_SIGHT /*and cible_actuelle!=nullptr*/ and isPointInside(cible_actuelle->getCenter())) // when etat==FOOD_IN_SIGHT , cible_actuelle must be defined
 		{
-			/// finding the nearest target
-			double mindist2(0.);
-			for (auto val : *food_near)
+			etat = FEEDING;
+			angle=(cible_actuelle->getCenter()-getCenter()).angle();
+			velocite=0.;
+		}
+		else if (etat!=FEEDING)
+		{
+			/// finding all targets in sight
+			auto food_near(getAppEnv().findTargetsInSightOf(this)); // Type is vector<sim*>*
+			if ((food_near->size())>1)
 			{
-				if (val!=this and eatable(val))
+				std::cerr<<food_near->size()<<std::flush;
+				/// finding the nearest target
+				double mindist2(-1.);
+				for (auto val : *food_near) // Type is sim*
 				{
-					double thisdist2((pos-(val->getCenter())).lengthSquared());
-					if (thisdist2 < mindist2 or mindist2 <= 0)
+					if (val!=this and eatable(val))
 					{
-						mindist2=thisdist2;
-						cible_actuelle = val;
+						double thisdist2((pos-(val->getCenter())).lengthSquared());
+						if (thisdist2 < mindist2 or mindist2<0)
+						{
+							mindist2=thisdist2;
+							cible_actuelle = val;
+							etat=FOOD_IN_SIGHT;
+						}
 					}
 				}
 			}
+			delete food_near;
 		}
-		if (cible_actuelle!=nullptr)
-			etat = FOOD_IN_SIGHT;
 	}
-	delete food_near;
 }
 
 void Animal::move(sf::Time dt)
@@ -108,18 +115,12 @@ void Animal::move(sf::Time dt)
 	if (box!=nullptr) {
 		if (new_p.y - getRadius() <= 	box->getTopLimit(true) // mur du haut de la boîte contenant p
 			||new_p.y + getRadius() >= 	box->getBottomLimit(true)) // mur du bas de la boîte contenant p
-		{
-			angle = -angle;
-			new_p = pos + getSpeedVector()*(dt.asSeconds());
-		}
+		{angle = -angle;}
 		if (new_p.x - getRadius() <= 	box->getLeftLimit(true) // mur de gauche de la boîte contenant p
 			||new_p.x + getRadius() >= 	box->getRightLimit(true)) // mur de droite de la boîte contenant p
-		{
-			angle = PI-angle;
-			new_p = pos + getSpeedVector()*(dt.asSeconds());
-		}
+		{angle = PI-angle;}
 	}
-	pos = new_p;
+pos += getSpeedVector()*(dt.asSeconds());
 }
 
 void Animal::move(Vec2d const& force,sf::Time t)
@@ -128,18 +129,31 @@ void Animal::move(Vec2d const& force,sf::Time t)
 	Vec2d accel(force/getMass());
 	Vec2d new_vel(getSpeedVector()+accel*dt);
 	Vec2d new_dir(new_vel.normalised());
-		angle = new_dir.angle();
-		velocite = std::min(new_vel.length(),getMaxSpeed());
-		pos+=getHeading()*velocite*dt;
+	angle = new_dir.angle();
+	velocite = std::min(new_vel.length(),getMaxSpeed());
+	auto new_p(pos+getHeading()*velocite*dt);
+	if (box!=nullptr) {
+		if (new_p.y - getRadius() <= 	box->getTopLimit(true) // mur du haut de la boîte contenant p
+			||new_p.y + getRadius() >= 	box->getBottomLimit(true)) // mur du bas de la boîte contenant p
+		{
+			angle = -angle;
+		}
+		if (new_p.x - getRadius() <= 	box->getLeftLimit(true) // mur de gauche de la boîte contenant p
+			||new_p.x + getRadius() >= 	box->getRightLimit(true)) // mur de droite de la boîte contenant p
+		{
+			angle = PI-angle;
+		}
+	}
+	pos += getSpeedVector()*dt;
 }
 
 bool Animal::isSatiated() const
 {
-	return !(
+	return (
 	(etat!=FEEDING and
-	energy<getAppConfig().animal_satiety_min) or
+	energy>getAppConfig().animal_satiety_min) or
 	(etat==FEEDING and
-	energy<getAppConfig().animal_satiety_max));
+	energy>getAppConfig().animal_satiety_max));
 }
 
 Vec2d Animal::getFoodPull() const
@@ -161,7 +175,7 @@ void Animal::isDead(SimulatedEntity* NTT)
 	if (cible_actuelle==NTT)
 	{
 		cible_actuelle=nullptr;
-		etat==IDLE;
+		etat=IDLE;
 	}
 	//std::cout<<"#PrayFor"<<static_cast<void*>(NTT)<<" who died due to police brutality :'("<<std::endl;
 }
