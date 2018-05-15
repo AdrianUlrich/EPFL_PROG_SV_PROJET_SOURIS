@@ -34,3 +34,7 @@
 *.geany
 
 build/
+
+\.sconsign\.dblite
+
+projet

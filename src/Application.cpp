@@ -412,16 +412,17 @@ void Application::handleEvent(sf::Event event, sf::RenderWindow& window)
             break;
 
         case sf::Keyboard::C:
-			delete mConfig;
-            mConfig = new Config(mAppDirectory + mCfgFile); // reconstruct
+			if (isDebugOn()){
+				resetConfig();
+				mConfig->switchDebug();
+			}
+			else {
+				resetConfig();
+			}
+			
             break;
 
-        // Save the world
-        case sf::Keyboard::S:
-			//  getLab().saveWorldToFile();
-            break;
-
-        // Toggle pause for simulation
+               // Toggle pause for simulation
         case sf::Keyboard::Space:
             mPaused = !mPaused;
             break;
@@ -630,6 +631,12 @@ void Application::switchDebug()
 {
 	getAppConfig().switchDebug();
 	chooseBackground();
+}
+
+void Application::resetConfig()
+{
+		delete mConfig;
+		mConfig = new Config(mAppDirectory + mCfgFile); // reconstruct
 }
 
 Application& getApp()

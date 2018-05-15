@@ -4,10 +4,10 @@
 #include <vector>
 #include <Utility/Vec2d.hpp>
 #include <SFML/Graphics.hpp>
-#include "Animal.hpp"
 #include "Cheese.hpp"
 #include "Box.hpp"
 #include "Mouse.hpp"
+using std::vector;
 
 class Lab : public sf::NonCopyable
 {
@@ -17,7 +17,9 @@ public :
 		*/
 	Lab();
 
-	/** destructor deletes pointers etc */
+	/** destructor deletes pointers etc
+		* uses reset() and destroyBoxes()
+		*/
 	~Lab();
 
 	void makeBoxes(unsigned int nbCagesPerRow);
@@ -27,13 +29,16 @@ public :
 	void drawOn(sf::RenderTarget&);
 	void reset();
 
-	bool addAnimal(Mouse*);
 	bool addCheese(Cheese*);
+	bool addAnimal(Animal*);
+
+	vector<SimulatedEntity*>* findTargetsInSightOf(Animal*);
 
 private:
-	std::vector<std::vector<Box*>> boites;
-	Animal* animal;
-	Cheese* cheese;
+	bool addEntity(SimulatedEntity*);
+
+	vector<vector<Box*>> boites;
+	vector<SimulatedEntity*> NTTs;
 };
 
 #endif //I_LAB_HPP

@@ -4,20 +4,24 @@
 #include <Utility/Vec2d.hpp>
 
 
-class Collider
+class Collider /// ABSTRACT
 {
 public:
-	Collider(Vec2d position, double rayon);
-	
-	Vec2d getCenter() const;
-	double getRadius() const;
+	//Collider(Vec2d const& position, double rayon);
 
+	/** pure virtual getters */
+	virtual Vec2d getCenter() const = 0;
+	virtual double getRadius() const = 0;
+
+	/** utility collider methods */
 	bool isColliding(Collider const& other) const;
 	bool isPointInside(Vec2d const&) const;
-
+	
+	virtual ~Collider() = default;
+	
 private:
-	Vec2d position;
-	double rayon;
+	//Vec2d position;
+	//double rayon;
 };
 
 bool operator |(Collider const& body1, Collider const& body2);

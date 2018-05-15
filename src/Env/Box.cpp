@@ -8,7 +8,8 @@ Box::Box (Vec2d position, double largeur, double hauteur, double epaisseur)
 	l(largeur),
 	h(hauteur),
 	e(epaisseur),
-	texture(&getAppTexture(getAppConfig().simulation_lab_fence))
+	texture(&getAppTexture(getAppConfig().simulation_lab_fence)),
+	empty(true)
 {
 	/*! initialisation murs */
 	double x(pos.x-l/2),y(pos.y-h/2);
@@ -75,8 +76,3 @@ void Box::drawOn(sf::RenderTarget& target)
 		target.draw(wal);
 	}
 }
-
-
-
-
-
