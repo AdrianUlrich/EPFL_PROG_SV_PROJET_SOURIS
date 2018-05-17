@@ -17,15 +17,15 @@ public:
 	double getHeight () const {return h;}
 	double getWallWidth () const {return e;}
 
-	double getLeftLimit(bool intern = false);
-	double getRightLimit(bool intern = false);
-	double getTopLimit(bool intern = false);
-	double getBottomLimit(bool intern = false);
-	bool isPositionInside(const Vec2d&);
-	bool isPositionOnWall(const Vec2d&);
+	double getLeftLimit(bool intern = false) const;
+	double getRightLimit(bool intern = false) const;
+	double getTopLimit(bool intern = false) const;
+	double getBottomLimit(bool intern = false) const;
+	bool isPositionInside(const Vec2d&) const;
+	bool isPositionOnWall(const Vec2d&) const;
 
-	void drawOn(sf::RenderTarget&);
-	bool isEmpty() {return empty;}
+	void drawOn(sf::RenderTarget&) const;
+	bool isEmpty() const {return empty;}
 	void addOccupant() {empty=false;}
 	void reset() {empty=true;}
 

@@ -35,7 +35,7 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		double getRadius() const override {return entity_size/2;}
 
 		/** confinement methode */
-		bool canBeConfinedIn(Box*);
+		virtual bool canBeConfinedIn(Box*) const;
 
 		/** eatable */
 		virtual bool eatable(SimulatedEntity const*) const = 0;

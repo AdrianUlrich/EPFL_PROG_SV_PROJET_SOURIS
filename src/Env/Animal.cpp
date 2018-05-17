@@ -26,6 +26,9 @@ Animal::Animal(Vec2d const& pos, double energy, sf::Texture* texture, double ray
 	cible_actuelle(nullptr)
 {}
 
+bool Animal::canBeConfinedIn(Box* b) const
+{return SimulatedEntity::canBeConfinedIn(b)&&b->isEmpty();}
+
 void Animal::update(sf::Time dt)
 {
 	SimulatedEntity::update(dt);
@@ -53,12 +56,6 @@ void Animal::update(sf::Time dt)
 
 void Animal::updateState()
 {
-//	if (cible_actuelle->isDead())
-//	{
-//		cible_actuelle=nullptr;
-//		etat=WANDERING;
-//		velocite=getMaxSpeed();
-//	}
 	if (etat==IDLE or (isSatiated() and etat!=WANDERING))
 	{
 		etat = WANDERING;

@@ -69,9 +69,9 @@ bool SimulatedEntity::isDead() const
 void SimulatedEntity::isDead(SimulatedEntity*)
 {}
 
-bool SimulatedEntity::canBeConfinedIn(Box* box)
+bool SimulatedEntity::canBeConfinedIn(Box* box) const
 {
-	return (box!=nullptr)&&(box->isPositionInside(pos) and box->isEmpty());
+	return box!=nullptr&&box->isPositionInside(pos); //and box->isEmpty();
 }
 
 void SimulatedEntity::confineInBox(Box* b)

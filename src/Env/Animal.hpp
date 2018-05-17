@@ -27,6 +27,9 @@ class Animal : public SimulatedEntity /// ABSTRACT
 
 		void update(sf::Time) override;
 		void updateState();
+		
+		virtual bool canBeConfinedIn(Box*) const override;
+		void fillBox() {box->addOccupant();}
 
 		/** movement-related methods (called by Animal::update) */
 		void move(sf::Time);

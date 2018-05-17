@@ -65,13 +65,13 @@ void Lab::update(sf::Time dt)
 			{val->isDead(NTTs[i]);}
 						
 			size_t a(animals.size());
-			for (size_t j(0); j<a; ++a)
+			for (size_t j(0); j<a; ++j)
 			{if (animals[j]==NTTs[i])
 			{animals[j]=animals[--a];
 			animals.pop_back();}}			
 			
 			a = cheeses.size();
-			for (size_t j(0); j<a; ++a)
+			for (size_t j(0); j<a; ++j)
 			{if (cheeses[j]==NTTs[i])
 			{cheeses[j]=cheeses[--a];
 			cheeses.pop_back();}}
@@ -116,7 +116,11 @@ void Lab::drawOn(sf::RenderTarget& target)
 				val->drawOn(target);
 		}
 	}
-	for (auto NTT : NTTs)
+	for (auto NTT : cheeses)
+	{
+		NTT->drawOn(target);
+	}	
+	for (auto NTT : animals)
 	{
 		NTT->drawOn(target);
 	}
@@ -136,53 +140,46 @@ void Lab::reset()
 
 bool Lab::addEntity(SimulatedEntity* ntt)
 {
-	NTTs.push_back(ntt);
-	return true;
+	if(ntt!=nullptr)
+	{
+		for(auto&vec:boites)
+		{
+			for(auto&val:vec)
+			{
+				if(ntt->canBeConfinedIn(val))
+				{
+					ntt->confine(val);
+					NTTs.push_back(ntt);
+					return true;
+				}
+			}
+		}
+		delete ntt;
+	}
+	return false;
 }
 
 bool Lab::addAnimal(Animal* mickey)
 {
-	if (mickey==nullptr) return false;
-	for (auto& vec : boites)
+	if(addEntity(mickey))
 	{
-		for (auto val : vec)
-		{
-			if (mickey->canBeConfinedIn(val) and val->isEmpty())
-			{
-				mickey->confine(val);
-				if (addEntity(mickey))
-				{
-					val->addOccupant(); //! La boite est occuppee
-					animals.push_back(mickey);
-					return true;
-				}
-			}
-		}
+		animals.push_back(mickey);
+		mickey->fillBox();
+		return true;
 	}
-	delete mickey;
-	return false;
+	else
+		return false;
 }
 
 bool Lab::addCheese(Cheese* c)
 {
-if (c==nullptr) return false;
-	for (auto& vec : boites)
+	if(addEntity(c))
 	{
-		for (auto val : vec)
-		{
-			if (c->canBeConfinedIn(val))
-			{
-				c->confine(val);
-				if (addEntity(c))
-				{
-					cheeses.push_back(c);
-					return true;
-				}
-			}
-		}
+		cheeses.push_back(c);
+		return true;
 	}
-	delete c;
-	return false;
+	else
+		return false;
 }
 
 
