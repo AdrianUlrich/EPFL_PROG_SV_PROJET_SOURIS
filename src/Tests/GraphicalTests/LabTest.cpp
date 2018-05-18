@@ -21,13 +21,13 @@ void LabTest::onRun()
 	getAppEnv().destroyBoxes();
 }
 
-void LabTest::onEvent(sf::Event event, sf::RenderWindow& t)
+void LabTest::onEvent(sf::Event event, sf::RenderWindow&)
 {
 if (event.type == sf::Event::KeyPressed) {
 	switch (event.key.code) {
 		case sf::Keyboard::T:
 			{
-				getAppEnv().trackAnimal(sf::Mouse::getPosition(t);)
+				getAppEnv().trackAnimal(getCursorPositionInView());
 			}
 			break;
 

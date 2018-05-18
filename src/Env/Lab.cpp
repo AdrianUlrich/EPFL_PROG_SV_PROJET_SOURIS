@@ -4,13 +4,15 @@
 #include <Application.hpp>
 #include "Organ.hpp"
 #include "Types.hpp"
+#include <Utility/Vec2d.hpp>
 
 //DEBUG:
-//#include <iostream>
-//using namespace std;
+#include <iostream>
+using namespace std;
 
 Lab::Lab()
 :	tracked(nullptr)
+,	cross(new sf::Sprite(buildSprite(Vec2d(0,0),40,getAppTexture(getAppConfig().entity_texture_tracked))))
 {
 	makeBoxes(getAppConfig().simulation_lab_nb_boxes);
 }
@@ -48,6 +50,7 @@ void Lab::destroyBoxes()
 
 Lab::~Lab()
 {
+	delete cross;
 	reset();
 	destroyBoxes();
 }
@@ -60,10 +63,12 @@ void Lab::update(sf::Time dt)
 		NTTs[i]->update(dt);
 		if (NTTs[i]->isDead())
 		{	
+			if (tracked==NTTs[i]) tracked=nullptr;
+			
 			/// letting other entities know
 			for (SimulatedEntity* val : NTTs)
 			{val->isDead(NTTs[i]);}
-						
+			
 			size_t a(animals.size());
 			for (size_t j(0); j<a; ++j)
 			{if (animals[j]==NTTs[i])
@@ -124,6 +129,12 @@ void Lab::drawOn(sf::RenderTarget& target)
 	{
 		NTT->drawOn(target);
 	}
+	
+	if (tracked!=nullptr)
+	{
+		cross->setPosition(tracked->getCenter()+tracked->getRadius()*Vec2d(-1,1));
+		target.draw(*cross);
+	}
 }
 
 void Lab::reset()
@@ -136,6 +147,7 @@ void Lab::reset()
 	NTTs.clear();
 	animals.clear();
 	cheeses.clear();
+	tracked=nullptr;
 }
 
 bool Lab::addEntity(SimulatedEntity* ntt)
@@ -189,6 +201,7 @@ void Lab::trackAnimal(const Vec2d& p)
 	{
 		if (val->isPointInside(p))
 		{
+			//cout<<"TAZDINGO"<<endl;
 			trackAnimal(val);
 			break;
 		}
@@ -197,7 +210,8 @@ void Lab::trackAnimal(const Vec2d& p)
 
 void Lab::switchToView(View view)
 {
-	getApp().switchToView(view);	
+	if (tracked!=nullptr)
+		getApp().switchToView(view);	
 }
 
 void Lab::stopTrackingAnyEntity()
@@ -207,22 +221,10 @@ void Lab::stopTrackingAnyEntity()
 
 
 void Lab::updateTrackedAnimal() 
-{
-	if (tracked != nullptr)
-	{
-		tracked->updateOrgan();
-	}
-}
+{if(tracked!=nullptr)tracked->updateOrgan();}
 
 void Lab::drawCurrentOrgan(sf::RenderTarget& target)
-{
-	if(tracked != nullptr)
-	{
-		tracked->drawCurrentOrgan(target);
-	}
-}
+{if(tracked != nullptr)tracked->drawCurrentOrgan(target);}
 
 void Lab::trackAnimal(Animal* n) 
-{
-	tracked = n;
-}
+{tracked=n;}

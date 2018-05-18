@@ -57,6 +57,7 @@ private:
 	vector<Cheese*> cheeses;
 	vector<SimulatedEntity*> NTTs;
 	Animal* tracked;
+	sf::Sprite* cross;
 };
 
 #endif //I_LAB_HPP

@@ -18,6 +18,7 @@ bool operator |(Collider const& body1, Collider const& body2)
 
 bool Collider::isPointInside(Vec2d const& other) const
 {
+	//return true;
 	auto position(getCenter()); auto rayon(getRadius());
 	return (((other-position).lengthSquared()) <= (rayon*rayon));
 }

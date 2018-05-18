@@ -23,6 +23,8 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		/** constructor */
 		Animal(Vec2d const& pos, double energy, sf::Texture* texture, double rayon);
 
+		~Animal();
+	
 		void drawOn(sf::RenderTarget&) override;
 
 		void update(sf::Time) override;
@@ -46,7 +48,6 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		virtual Quantity getBite() const = 0; //! each different animal has different biteSize
 		void feed();
 
-
 		/** champs de vision */
 		virtual double getViewRange() const {return AngleVision;}
 		virtual double getViewDistance() const {return DistanceVision;}
@@ -56,7 +57,6 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		bool isTargetInSight(const Vec2d& position);
 		void setTarget(SimulatedEntity* a) {cible_actuelle=a;}
 
-		~Animal() {if (box!=nullptr) box->reset();}
   
 		/** SFML draw (Organ* Animal::foie) on window */
 		void drawCurrentOrgan(sf::RenderTarget&);

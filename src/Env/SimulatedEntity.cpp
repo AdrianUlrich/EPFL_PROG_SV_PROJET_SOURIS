@@ -32,6 +32,12 @@ SimulatedEntity::SimulatedEntity(Vec2d const& pos, double energy, sf::Texture* t
 	))
 {}
 
+Vec2d SimulatedEntity::getCenter() const
+{return pos;}
+
+double SimulatedEntity::getRadius() const
+{return entity_size/2;}
+
 void SimulatedEntity::drawOn(sf::RenderTarget& target)
 {
 	if (isDebugOn())

@@ -8,15 +8,20 @@ class Organ
 {
 	public:
 		Organ(bool generation);
+		
+		virtual ~Organ() = default;
+		
 		void update();
 		void drawOn(sf::RenderTarget& target);
-		void updateRepresentation();
-		//void updateRepresentationAt();	
+		
 		double getWidth();
 		double getHeight();
 
+		void updateRepresentation();
+		//void updateRepresentationAt();
+
 	protected:
-		void generate();
+		virtual void generate();
 		void reloadConfig();
 		void reloadCacheStructure();
 		void createLiver();
@@ -26,8 +31,7 @@ class Organ
 		int nbCells;
 		float cellSize;
 		sf::RenderTexture renderingCache;
-		bool generation;
-
+		//bool generation;
 };
 
 

@@ -31,8 +31,8 @@ class SimulatedEntity : public Collider /// ABSTRACT
 		virtual void isDead(SimulatedEntity*);
 
 		/** overriding virtual collider getters */
-		Vec2d getCenter() const override {return pos;}
-		double getRadius() const override {return entity_size/2;}
+		Vec2d getCenter() const override;
+		double getRadius() const override;
 
 		/** confinement methode */
 		virtual bool canBeConfinedIn(Box*) const;

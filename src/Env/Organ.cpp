@@ -2,17 +2,16 @@
 
 #include <Application.hpp>
 
-Organ::Organ (bool generation)
-:	generation (true)
+Organ::Organ(bool generation)
 {
-	if (generation==true) generate();	
+	if (generation) generate();	
 }
 
 
 
 void Organ::update()
 {
-	//updateRepresentation()
+	updateRepresentation();
 }
 	
 void Organ::drawOn(sf::RenderTarget& target)
@@ -35,18 +34,17 @@ void Organ::generate()
 void Organ::reloadConfig()
 {
 	nbCells = getAppConfig().simulation_organ_nbCells;
-	cellSize = getWidth();
+	cellSize = getWidth()/nbCells;
 }
 
 void Organ::reloadCacheStructure()
 {
-	renderingCache.create(getWidth(), getHeight());	
+	renderingCache.create(cellSize*nbCells, cellSize*nbCells);	
 }
 
 
 void Organ::createLiver()
 {
-	
 	
 }
 
