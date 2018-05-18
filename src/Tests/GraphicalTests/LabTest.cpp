@@ -21,31 +21,38 @@ void LabTest::onRun()
 	getAppEnv().destroyBoxes();
 }
 
-void LabTest::onEvent(sf::Event event, sf::RenderWindow&)
+void LabTest::onEvent(sf::Event event, sf::RenderWindow& t)
 {
 if (event.type == sf::Event::KeyPressed) {
 	switch (event.key.code) {
+		case sf::Keyboard::T:
+			{
+				getAppEnv().trackAnimal(sf::Mouse::getPosition(t);)
+			}
+			break;
+
+
 		case sf::Keyboard::M:
 			{
 					getAppEnv().addAnimal(new Mouse
 										  (getCursorPositionInView()));
 			}
 				break;
-	
+
 		case sf::Keyboard::F: // F for food
 			{
 				std::cout << "foo" << std::endl;
 					getAppEnv().addCheese(new Cheese
-										  (getCursorPositionInView()));		
+										  (getCursorPositionInView()));
 			}
 				break;
-				
-		case sf::Keyboard::Num0: 
+
+		case sf::Keyboard::Num0:
 			{
 				getLab().destroyBoxes();
 			}
 				break;
-		
+
 		case sf::Keyboard::Num1:
 			{
 				getLab().reset();
@@ -61,7 +68,7 @@ if (event.type == sf::Event::KeyPressed) {
 				getLab().makeBoxes(2);
             }
 			break;
-			
+
 		case sf::Keyboard::Num3:
 		{
 			getLab().reset();
@@ -69,7 +76,7 @@ if (event.type == sf::Event::KeyPressed) {
 			getLab().makeBoxes(3);
 		}
 		break;
-		
+
 		case sf::Keyboard::Num4:
 		{
 			getLab().reset();
@@ -84,7 +91,7 @@ if (event.type == sf::Event::KeyPressed) {
 			getLab().destroyBoxes();
 			getLab().makeBoxes(5);
 		}
-		break;  
+		break;
 		default:
 			break;
 			}
