@@ -68,7 +68,8 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		
 		
 	protected:
-		void setRotation(Angle a) {angle=a;}
+		virtual void setRotation(Angle a);
+		virtual void setOrgan(Organ*o);
 
 	private:
 		State etat;

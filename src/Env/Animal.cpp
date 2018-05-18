@@ -35,6 +35,10 @@ Animal::~Animal()
 
 bool Animal::canBeConfinedIn(Box* b) const
 {return SimulatedEntity::canBeConfinedIn(b)&&b->isEmpty();}
+void Animal::setRotation(Angle a) 
+{angle=a;}
+void Animal::setOrgan(Organ*o) 
+{if(o!=nullptr){delete foie;foie=o;}}
 
 void Animal::update(sf::Time dt)
 {

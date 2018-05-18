@@ -29,11 +29,11 @@ bool CellHandler::hasBlood() const
 {return blood!=nullptr;}
 
 void CellHandler::setECM()
-{ecm=new CellECM(this);}
+{if(ecm==nullptr)ecm=new CellECM(this);}
 void CellHandler::setLiver()
-{liver=new CellLiver(this);}
+{if(liver==nullptr)liver=new CellLiver(this);}
 void CellHandler::setBlood(TypeBloodCell t)
-{blood=new CellBlood(this,t);}
+{if(blood==nullptr)blood=new CellBlood(this,t);}
 
 void CellHandler::updateSubstance(Substance const& s)
 {ecm->updateSubstance(s);}

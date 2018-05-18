@@ -13,6 +13,9 @@ class CellHandler;
 class Organ 
 {
 	public:
+		enum class Kind : short {ECM,Liver,Artery,Capillary};
+		
+	public:
 		Organ(bool generation);
 		
 		virtual ~Organ() = default;
@@ -25,9 +28,9 @@ class Organ
 		double getHeight() const;
 		
 		bool isOut(CellCoord const&) const;
-		CellCoord toCellCoord(Vec2d const&) const;
+		virtual CellCoord toCellCoord(Vec2d const&) const;
 
-		void updateRepresentation(bool);
+		void updateRepresentation(bool b=true);
 		virtual void updateRepresentationAt(CellCoord const&);
 		
 	protected:
@@ -36,16 +39,20 @@ class Organ
 		void reloadCacheStructure();
 		void createLiver();
 		void createBloodSystem();
+		
+		virtual void updateCellHandler(CellCoord const&,Kind);
 
 	private:
-		void drawRepresentation ();
+		void drawRepresentation();
 		
 		int nbCells;
 		float cellSize;
 		sf::RenderTexture renderingCache;
 		vector<vector<CellHandler*>> cellHandlers;
-		vector <sf::Vertex> bloodVertexes;
-		vector <sf::Vertex> liverVertexes;
+		vector<sf::Vertex> bloodVertexes;
+		vector<sf::Vertex> liverVertexes;
+		
+
 };
 
 
