@@ -27,9 +27,9 @@ class Organ
 		bool isOut(CellCoord const&) const;
 		CellCoord toCellCoord(Vec2d const&) const;
 
-		void updateRepresentation();
+		void updateRepresentation(bool);
 		virtual void updateRepresentationAt(CellCoord const&);
-
+		
 	protected:
 		virtual void generate();
 		void reloadConfig();
@@ -38,10 +38,14 @@ class Organ
 		void createBloodSystem();
 
 	private:
+		void drawRepresentation ();
+		
 		int nbCells;
 		float cellSize;
 		sf::RenderTexture renderingCache;
 		vector<vector<CellHandler*>> cellHandlers;
+		vector <sf::Vertex> bloodVertexes;
+		vector <sf::Vertex> liverVertexes;
 };
 
 

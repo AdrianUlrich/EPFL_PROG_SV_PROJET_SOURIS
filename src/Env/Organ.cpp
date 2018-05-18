@@ -12,7 +12,7 @@ Organ::Organ(bool generation)
 
 void Organ::update()
 {
-	updateRepresentation();
+	updateRepresentation(true);
 }
 	
 void Organ::drawOn(sf::RenderTarget& target)
@@ -63,6 +63,8 @@ void Organ::reloadConfig()
 void Organ::reloadCacheStructure()
 {
 	renderingCache.create(cellSize*nbCells, cellSize*nbCells);	
+	liverVertexes = generateVertexes(getAppConfig().simulation_organ["textures"], nbCells, cellSize);
+	bloodVertexes = liverVertexes;
 }
 
 
@@ -76,15 +78,55 @@ void Organ::createBloodSystem()
 	
 }
 
-void Organ::updateRepresentation()
+void Organ::updateRepresentation(bool also_update)
 {
 	renderingCache.clear(sf::Color(223,196,176));
 	renderingCache.display();	
+
+	if (also_update)
+	{
+		for (int y(0); y<nbCells; ++y)
+		{
+			for (int x(0); x<nbCells; ++x)
+			{
+				updateRepresentationAt({x,y}); // implicit constructor of CellCoord
+			}
+		}
+	}
+	
+	drawRepresentation();
+	
+}
+
+void Organ::drawRepresentation ()
+{
+	sf::RenderStates rs;
+	auto textures = getAppConfig().simulation_organ["textures"];
+	rs.texture = &getAppTexture(textures["blood"].toString()); // ici pour la texture liée une cellule sanguine
+	renderingCache.draw(bloodVertexes.data(), bloodVertexes.size(), sf::Quads, rs); 
+
+	rs.texture = &getAppTexture(textures["liver"].toString()); // ici pour la texture liée une cellule sanguine
+	renderingCache.draw(liverVertexes.data(), bloodVertexes.size(), sf::Quads, rs); 	
 }
 
 
-void Organ::updateRepresentationAt(CellCoord const&)
-{}
+void Organ::updateRepresentationAt(CellCoord const& c)
+{
+	int x(c.x),y(c.y);
+	auto i(indexesForCellVertexes(x,y,nbCells));
+	
+	sf::Uint8 a = cellHandlers[x][y]->hasBlood()?255:0;
+	bloodVertexes[i[0]].color.a=
+	bloodVertexes[i[1]].color.a=
+	bloodVertexes[i[2]].color.a=
+	bloodVertexes[i[3]].color.a=a;
+	
+	a = cellHandlers[x][y]->hasLiver()?255:0;
+	liverVertexes[i[0]].color.a=
+	liverVertexes[i[1]].color.a=
+	liverVertexes[i[2]].color.a=
+	liverVertexes[i[3]].color.a=a;
+}
 
 
 double Organ::getWidth() const
