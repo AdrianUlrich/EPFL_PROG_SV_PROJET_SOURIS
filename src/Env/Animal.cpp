@@ -1,4 +1,5 @@
 #include "Animal.hpp"
+#include "Organ.hpp"
 
 #include <Utility/Arc.hpp>
 #include <Utility/Vec2d.hpp>
@@ -9,26 +10,41 @@
 #include <cmath>
 #include <algorithm>
 //#include <vector>
-#include <iostream>
+//#include <iostream>
 
 
 Intervals Animal::intervals = { -180, -100, -55, -25, -10, 0, 10, 25, 55, 100, 180};
 Probs Animal::probs = {0.0000,0.0000,0.0005,0.0010,0.0050,0.9870,0.0050,0.0010,0.0005,0.0000,0.0000};
 
 Animal::Animal(Vec2d const& pos, double energy, sf::Texture* texture, double rayon)
-:	SimulatedEntity(pos,energy,texture,rayon),
-	etat(IDLE),
-	AngleVision(getAppConfig().mouse_view_range),
-	DistanceVision(getAppConfig().mouse_view_distance),
-	velocite(0.),
-	compteur(sf::Time::Zero),
-	cible_actuelle(nullptr)
+:	SimulatedEntity(pos,energy,texture,rayon)
+,	etat(IDLE)
+,	AngleVision(getAppConfig().mouse_view_range)
+,	DistanceVision(getAppConfig().mouse_view_distance)
+,	velocite(0.)
+,	compteur(sf::Time::Zero)
+,	cible_actuelle(nullptr)
+,	foie(new Organ(true))
 {}
+
+Animal::~Animal()
+{
+	if (box!=nullptr) box->reset();
+	delete foie;
+}
+
+bool Animal::canBeConfinedIn(Box* b) const
+{return SimulatedEntity::canBeConfinedIn(b)&&b->isEmpty();}
+void Animal::setRotation(Angle a) 
+{angle=a;}
+void Animal::setOrgan(Organ*o) 
+{if(o!=nullptr){delete foie;foie=o;}}
 
 void Animal::update(sf::Time dt)
 {
 	SimulatedEntity::update(dt);
 	compteur += dt;
+	updateState();
 	switch (etat)
 	{
 	case WANDERING:
@@ -46,18 +62,11 @@ void Animal::update(sf::Time dt)
 	default:
 		break;
 	}
-	updateState();
 	energy -= getAppConfig().animal_base_energy_consumption + getLossFactor()*velocite;
 }
 
 void Animal::updateState()
 {
-//	if (cible_actuelle->isDead())
-//	{
-//		cible_actuelle=nullptr;
-//		etat=WANDERING;
-//		velocite=getMaxSpeed();
-//	}
 	if (etat==IDLE or (isSatiated() and etat!=WANDERING))
 	{
 		etat = WANDERING;
@@ -78,7 +87,7 @@ void Animal::updateState()
 			auto food_near(getAppEnv().findTargetsInSightOf(this)); // Type is vector<sim*>*
 			if ((food_near->size())>1)
 			{
-				std::cerr<<food_near->size()<<std::flush;
+				//std::cerr<<food_near->size()<<std::flush;
 				/// finding the nearest target
 				double mindist2(-1.);
 				for (auto val : *food_near) // Type is sim*
@@ -162,7 +171,7 @@ Vec2d Animal::getFoodPull() const
 	double dist(distV.length());
 	double speed(std::min(getMaxSpeed(),dist*0.3));
 	Vec2d Vtarget(distV/dist * speed);
-	return Vtarget-getSpeedVector();
+	return (Vtarget-getSpeedVector());
 }
 
 void Animal::feed()
@@ -207,6 +216,7 @@ bool Animal::isTargetInSight(const Vec2d& position)
 		)
 	);
 }
+
 
 void Animal::drawCurrentOrgan(sf::RenderTarget& target)
 {

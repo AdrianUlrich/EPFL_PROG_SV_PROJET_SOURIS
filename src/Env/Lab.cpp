@@ -1,15 +1,18 @@
 #include "Lab.hpp"
 #include <exception>
+#include <algorithm>
 #include <Application.hpp>
 #include "Organ.hpp"
 #include "Types.hpp"
+#include <Utility/Vec2d.hpp>
 
 //DEBUG:
-//#include <iostream>
-//using namespace std;
+#include <iostream>
+using namespace std;
 
 Lab::Lab()
-:	NTTs(0)
+:	tracked(nullptr)
+,	cross(new sf::Sprite(buildSprite(Vec2d(0,0),40,getAppTexture(getAppConfig().entity_texture_tracked))))
 {
 	makeBoxes(getAppConfig().simulation_lab_nb_boxes);
 }
@@ -47,24 +50,38 @@ void Lab::destroyBoxes()
 
 Lab::~Lab()
 {
+	delete cross;
 	reset();
 	destroyBoxes();
 }
 
 void Lab::update(sf::Time dt)
 {
-
 	size_t n(NTTs.size());
 	for (size_t i(0); i<n; ++i)
 	{//if (NTTs[i] != nullptr) // NTTs ne contient jamais de nullptr ou dangling
 		NTTs[i]->update(dt);
 		if (NTTs[i]->isDead())
-		{
-      /// letting other animals know of the death
-			for (SimulatedEntities* val : NTTs)
+		{	
+			if (tracked==NTTs[i]) tracked=nullptr;
+			
+			/// letting other entities know
+			for (SimulatedEntity* val : NTTs)
 			{val->isDead(NTTs[i]);}
-    
-			//! La boite est liberee dans le destructeur de animal
+			
+			size_t a(animals.size());
+			for (size_t j(0); j<a; ++j)
+			{if (animals[j]==NTTs[i])
+			{animals[j]=animals[--a];
+			animals.pop_back();}}			
+			
+			a = cheeses.size();
+			for (size_t j(0); j<a; ++j)
+			{if (cheeses[j]==NTTs[i])
+			{cheeses[j]=cheeses[--a];
+			cheeses.pop_back();}}
+			
+			/// La boite est liberee dans le destructeur de animal
 			delete NTTs[i]; //NTTs[i]=nullptr;
 			NTTs[i]=NTTs[--n]; //NTTs.erase(NTTs.begin()+i);
 			NTTs.pop_back();
@@ -75,22 +92,20 @@ void Lab::update(sf::Time dt)
 vector<SimulatedEntity*>* Lab::findTargetsInSightOf(Animal* a)
 {
 	vector<SimulatedEntity*>* ans(new vector<SimulatedEntity*>);
-	for(unsigned char i(0);i<NTTs.nbTypes;++i)
-	{	for (auto val : *(NTTs[i]))
-		{//note: NTTs NEVER contain nullptrs or deleted pointers
-			if
-			(
-				/// animal may want to see himself sometimes
-				//val != a and
-				/// animal may want to interact with fellow animals
-				//a->eatable(val) and
-				///here we give vision to the animal of everything it should see and let it deal with it
-				a->isTargetInSight(val->getCenter()) //and
-				/// checks for closest target but animal may decide what to do with all its sights
-				//((ans==nullptr) or (distance(a->getCenter(),val->getCenter()))<(distance(a->getCenter(),ans->getCenter())))
-			)
-				ans->push_back(val);
-		}
+	for (auto val : NTTs)
+	{//note: NTTs NEVER contain nullptrs or deleted pointers
+		if
+		(
+			/// animal may want to see himself sometimes
+			//val != a and
+			/// animal may want to interact with fellow animals
+			//a->eatable(val) and
+			///here we give vision to the animal of everything it should see and let it deal with it
+			a->isTargetInSight(val->getCenter()) //and
+			/// checks for closest target but animal may decide what to do with all its sights
+			//((ans==nullptr) or (distance(a->getCenter(),val->getCenter()))<(distance(a->getCenter(),ans->getCenter())))
+		)
+			ans->push_back(val);
 	}
 	return ans;
 }
@@ -106,83 +121,87 @@ void Lab::drawOn(sf::RenderTarget& target)
 				val->drawOn(target);
 		}
 	}
-	for(unsigned char i(0);i<NTTs.nbTypes;++i)
-	{	for (auto NTT : *(NTTs[i]))
-		{
-			NTT->drawOn(target);
-		}
+	for (auto NTT : cheeses)
+	{
+		NTT->drawOn(target);
+	}	
+	for (auto NTT : animals)
+	{
+		NTT->drawOn(target);
+	}
+	
+	if (tracked!=nullptr)
+	{
+		cross->setPosition(tracked->getCenter()+tracked->getRadius()*Vec2d(-1,1));
+		target.draw(*cross);
 	}
 }
 
 void Lab::reset()
 {
-	for(unsigned char i(0);i<NTTs.nbTypes;++i)
-	{	for (auto NTT : *(NTTs[i]))
-		{
-			delete NTT;
-			//NTT = nullptr;
-		}
+	for (auto NTT : NTTs)
+	{
+		delete NTT;
+		//NTT = nullptr;
 	}
 	NTTs.clear();
+	animals.clear();
+	cheeses.clear();
+	tracked=nullptr;
 }
 
-bool Lab::addEntity(SimulatedEntity* ntt, unsigned char i)
+bool Lab::addEntity(SimulatedEntity* ntt)
 {
-	NTTs[i]->push_back(ntt);
-	return true;
+	if(ntt!=nullptr)
+	{
+		for(auto&vec:boites)
+		{
+			for(auto&val:vec)
+			{
+				if(ntt->canBeConfinedIn(val))
+				{
+					ntt->confine(val);
+					NTTs.push_back(ntt);
+					return true;
+				}
+			}
+		}
+		delete ntt;
+	}
+	return false;
 }
 
 bool Lab::addAnimal(Animal* mickey)
 {
-	if (mickey==nullptr) return false;
-	for (auto& vec : boites)
+	if(addEntity(mickey))
 	{
-		for (auto val : vec)
-		{
-			if (mickey->canBeConfinedIn(val))
-			{
-				if (val->isEmpty())
-				{
-					mickey->confine(val); //! La souris est deja creee mais maintenant elle est dans une boite
-					bool succ(addEntity(mickey,1));
-					if (succ)
-						val->addOccupant(); //! La boite est occuppee
-					return succ;
-				}
-			}
-		}
+		animals.push_back(mickey);
+		mickey->fillBox();
+		return true;
 	}
-	delete mickey;
-	return false;
+	else
+		return false;
 }
 
 bool Lab::addCheese(Cheese* c)
 {
-if (c==nullptr) return false;
-	for (auto& vec : boites)
+	if(addEntity(c))
 	{
-		for (auto val : vec)
-		{
-			if (c->canBeConfinedIn(val))
-			{
-				//if (val->isEmpty())
-				{
-					c->confine(val); //! Le fromton est d�ja cr��e mais maintenant elle est dans une boite
-					return addEntity(c,0);
-				}
-			}
-		}
+		cheeses.push_back(c);
+		return true;
 	}
-	delete c;
-	return false;
+	else
+		return false;
 }
+
 
 void Lab::trackAnimal(const Vec2d& p)
 {
-	for (auto val : *(NTTs[1]))
+	for (auto val : animals)
 	{
 		if (val->isPointInside(p))
 		{
+			//cout<<"TAZDINGO"<<endl;
 			trackAnimal(val);
 			break;
 		}
@@ -191,7 +210,8 @@ void Lab::trackAnimal(const Vec2d& p)
 
 void Lab::switchToView(View view)
 {
-	getApp().switchToView(view);	
+	if (tracked!=nullptr)
+		getApp().switchToView(view);	
 }
 
 void Lab::stopTrackingAnyEntity()
@@ -201,22 +221,10 @@ void Lab::stopTrackingAnyEntity()
 
 
 void Lab::updateTrackedAnimal() 
-{
-	if (tracked != nullptr)
-	{
-		tracked->updateOrgan();
-	}
-}
+{if(tracked!=nullptr)tracked->updateOrgan();}
 
 void Lab::drawCurrentOrgan(sf::RenderTarget& target)
-{
-	if(tracked != nullptr)
-	{
-		tracked->drawCurrentOrgan(target);
-	}
-}
+{if(tracked != nullptr)tracked->drawCurrentOrgan(target);}
 
 void Lab::trackAnimal(Animal* n) 
-{
-	tracked = n;
-}
+{tracked=n;}

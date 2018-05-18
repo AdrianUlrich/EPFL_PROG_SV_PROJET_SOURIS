@@ -23,7 +23,7 @@ public:
 	double getTotalConcentration() const;
 
 	bool operator==(Substance const&) const;
-	double operator[](const SubstanceId index) const;
+	double operator[](SubstanceId index) const;
 	Substance& operator +=(Substance const&);
 	Substance& operator -=(Substance const&);
 	Substance& operator *=(double);

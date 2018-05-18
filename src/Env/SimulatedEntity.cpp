@@ -32,6 +32,12 @@ SimulatedEntity::SimulatedEntity(Vec2d const& pos, double energy, sf::Texture* t
 	))
 {}
 
+Vec2d SimulatedEntity::getCenter() const
+{return pos;}
+
+double SimulatedEntity::getRadius() const
+{return entity_size/2;}
+
 void SimulatedEntity::drawOn(sf::RenderTarget& target)
 {
 	if (isDebugOn())
@@ -69,9 +75,9 @@ bool SimulatedEntity::isDead() const
 void SimulatedEntity::isDead(SimulatedEntity*)
 {}
 
-bool SimulatedEntity::canBeConfinedIn(Box* box)
+bool SimulatedEntity::canBeConfinedIn(Box* box) const
 {
-	return (box!=nullptr)&&(box->isPositionInside(pos) and box->isEmpty());
+	return box!=nullptr&&box->isPositionInside(pos); //and box->isEmpty();
 }
 
 void SimulatedEntity::confineInBox(Box* b)

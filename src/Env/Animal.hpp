@@ -2,9 +2,12 @@
 #define ANIMAL_HPP
 
 #include "SimulatedEntity.hpp"
+//#include "Organ.hpp"
+class Organ;
 #include <Utility/Utility.hpp>
 #include <Random/Random.hpp>
 
+class Organ;
 
 enum State
 {
@@ -20,10 +23,15 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		/** constructor */
 		Animal(Vec2d const& pos, double energy, sf::Texture* texture, double rayon);
 
+		~Animal();
+	
 		void drawOn(sf::RenderTarget&) override;
 
 		void update(sf::Time) override;
 		void updateState();
+		
+		virtual bool canBeConfinedIn(Box*) const override;
+		void fillBox() {box->addOccupant();}
 
 		/** movement-related methods (called by Animal::update) */
 		void move(sf::Time);
@@ -40,7 +48,6 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		virtual Quantity getBite() const = 0; //! each different animal has different biteSize
 		void feed();
 
-
 		/** champs de vision */
 		virtual double getViewRange() const {return AngleVision;}
 		virtual double getViewDistance() const {return DistanceVision;}
@@ -50,8 +57,7 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		bool isTargetInSight(const Vec2d& position);
 		void setTarget(SimulatedEntity* a) {cible_actuelle=a;}
 
-		~Animal() {if (box!=nullptr) box->reset();}
-
+  
 		/** SFML draw (Organ* Animal::foie) on window */
 		void drawCurrentOrgan(sf::RenderTarget&);
 		void updateOrgan();
@@ -62,7 +68,8 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		
 		
 	protected:
-		void setRotation(Angle a) {angle=a;}
+		virtual void setRotation(Angle a);
+		virtual void setOrgan(Organ*o);
 
 	private:
 		State etat;
@@ -75,8 +82,10 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		double DistanceVision;
 		double velocite;
 		sf::Time compteur;
-
+  
 		SimulatedEntity* cible_actuelle;
+  
+		Organ* foie;
 };
 
 #endif // ANIMAL_HPP

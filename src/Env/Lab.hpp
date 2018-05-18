@@ -9,6 +9,7 @@
 #include "Cheese.hpp"
 #include "Box.hpp"
 #include "Mouse.hpp"
+#include "Animal.hpp"
 using std::vector;
 
 class Lab : public sf::NonCopyable
@@ -33,7 +34,7 @@ public :
 
 	bool addCheese(Cheese*);
 	bool addAnimal(Animal*);
-
+	
 	/**Focus sur un animal*/
 	void trackAnimal(Animal* n);
 	void trackAnimal(const Vec2d&);
@@ -48,13 +49,15 @@ public :
 	vector<SimulatedEntity*>* findTargetsInSightOf(Animal*);
 
 private:
-	bool addEntity(SimulatedEntity*,unsigned char);
+	bool addEntity(SimulatedEntity*);
 
 	vector<vector<Box*>> boites;
 
 	vector<Animal*> animals;
 	vector<Cheese*> cheeses;
 	vector<SimulatedEntity*> NTTs;
+	Animal* tracked;
+	sf::Sprite* cross;
 };
 
 #endif //I_LAB_HPP

@@ -26,27 +26,27 @@ Box::Box (Vec2d position, double largeur, double hauteur, double epaisseur)
 		builtRecs[i] = buildRectangle(murs[i].second,murs[i].first,texture);
 }
 
-double Box::getLeftLimit(bool intern)
+double Box::getLeftLimit(bool intern) const
 {
 	return ((intern) ? murs[0].first.x : murs[0].second.x);
 }
 
-double Box::getRightLimit(bool intern)
+double Box::getRightLimit(bool intern) const
 {
 	return ((intern) ? murs[2].second.x : murs[2].first.x);
 }
 
-double Box::getTopLimit(bool intern)
+double Box::getTopLimit(bool intern) const
 {
 	return ((intern) ? murs[3].first.y : murs[3].second.y);
 }
 
-double Box::getBottomLimit(bool intern)
+double Box::getBottomLimit(bool intern) const
 {
 	return ((intern) ? murs[1].second.y : murs[1].first.y);
 }
 
-bool Box::isPositionInside(const Vec2d& pos)
+bool Box::isPositionInside(const Vec2d& pos) const
 {
 	return
 	(
@@ -57,7 +57,7 @@ bool Box::isPositionInside(const Vec2d& pos)
 	);
 }
 
-bool Box::isPositionOnWall(const Vec2d& pos)
+bool Box::isPositionOnWall(const Vec2d& pos) const
 {
 	return
 	(
@@ -69,7 +69,7 @@ bool Box::isPositionOnWall(const Vec2d& pos)
 	);
 }
 
-void Box::drawOn(sf::RenderTarget& target)
+void Box::drawOn(sf::RenderTarget& target) const
 {
 	for (auto wal : builtRecs)
 	{

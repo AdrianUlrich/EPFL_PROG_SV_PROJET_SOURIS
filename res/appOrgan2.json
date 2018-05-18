@@ -51,15 +51,15 @@
             "mass":1,
             "size":180,
             "longevity":40000,
-            "max speed":250,
+            "max speed":100,
             "view":{
                "range":6.283185307,
                "distance":250
             },
             "energy":{
                "initial":30,
-               "loss factor":0.00000,
-               "bite":0.1
+               "loss factor":0,
+               "bite":2
             },
             "texture":{
                "white":"mouse2.png"
@@ -74,8 +74,8 @@
 	  "fence" : "wood.png"
       },
       "organ":{
-         "size": 120,
-         "cells": 120,
+         "size": 5000,
+         "cells": 50,
          "texture":"lab3.png",
 	  "textures": {
 	      "ecm": "ecm2.png",
@@ -92,8 +92,8 @@
 	      "range" : 0.02
 	  },
 	  "blood": {
-	      "capillary min dist" : 2,
-	      "creation start" : 2
+	      "capillary min dist" : 3,
+	      "creation start" : 4
 	  },
 	  "liver": {
 	      "fract uptake" : 0.5,
