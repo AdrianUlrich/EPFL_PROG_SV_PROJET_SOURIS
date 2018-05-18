@@ -50,9 +50,16 @@ public:
 	const std::string  window_title;
 	const int window_antialiasing_level;
 
+	// stats
+	const double stats_refresh_rate;
+	const std::string stats_log_folder = "logs/";
+	const std::string stats_log_prefix = "log_";
+	const std::string stats_log_header = "# Plot with GNUPLOT : gnuplot -e \"plot for [i=1:6] 'log_0.txt' u i w l title columnheader(i)\"";
+
 	// debug
 	const sf::Color debug_text_color = sf::Color::White;
 	const size_t default_debug_text_size = 20;
+
 
 	//simulation
 	const std::string simulation_lab_texture;
@@ -92,6 +99,8 @@ public:
 	const double liver_km_max_krebs;
 	const int liver_decay_atp;
 	const double liver_division_cost;
+	const int liver_division_radius;
+	const double liver_division_energy;
 	
 	// cancer
 	const double cancer_fract_uptake;
@@ -99,6 +108,7 @@ public:
 	const double cancer_km_max_glycolysis;
 	const int cancer_time_next_division;
 	const int cancer_range_next_division;
+	const double cancer_division_energy;
 	
 	// living entity
 	const std::string entity_texture_tracked = "target.png";

@@ -4,20 +4,20 @@
       "time":{
          "factor":0.5,
          "max dt":0.05,
-	  "fixed step" : 0.01
+	  "fixed step" : 0.001
       },
        "substance":{
 	   "max" : 200000,
-	   "diffusion radius" : 2,
-	   "diffusion constant" : 300,
+	   "diffusion radius" : 3,
+	   "diffusion constant" : 100,
 	   "glucose": {
-	       "base": 8000,
+	       "base":  6000,
 	       "range": 600,
-	       "delta": 100
+	       "delta": 1000
 	   },
 	   "bromopyruvate":{
 	       "base" : 0,
-	       "delta": 30
+	       "delta": 500
 	   },
 	   "vgef":{
 	       "diffusion radius" : 2,
@@ -32,7 +32,6 @@
          }
       },
       "animal":{
-		 "time between rotations":0.08,
          "random walk low energy":false,
          "meal retention":0.7,
          "feed time":0.4,
@@ -53,7 +52,7 @@
             "longevity":40000,
             "max speed":100,
             "view":{
-               "range":6.283185307,
+               "range":2.283185307,
                "distance":250
             },
             "energy":{
@@ -74,8 +73,8 @@
 	  "fence" : "wood.png"
       },
       "organ":{
-         "size": 2400,
-         "cells": 120,
+         "size":500,
+         "cells": 50,
          "texture":"lab3.png",
 	  "textures": {
 	      "ecm": "ecm2.png",
@@ -97,24 +96,24 @@
 	  },
 	  "liver": {
 	      "fract uptake" : 0.5,
-	      "time next division" : 10,
+	      "time next division" : 15,
 	      "range next division" : 5,
 	      "km glycolysis" : 240,
 	      "km max glycolysis" : 300,
 	      "km krebs" : 100,
 	      "km max krebs" : 450,
-	      "decay atp" : 40,
+	      "decay atp" : 3000,
 	      "division cost" : 0.5,
-	      "division radius" : 2,
-	      "division energy" : 7
+	      "division radius" : 1,
+	      "division energy" : 10
 	  },
 	  "cancer": {
 	      "fract uptake" : 0.5,
-	      "time next division" : 15,
+	      "time next division" : 50,
 	      "range next division" : 4,
 	      "km glycolysis" : 220,
-	      "km max glycolysis" : 370,
-	      "division energy" : 4
+	      "km max glycolysis" : 3200,
+	      "division energy" : 8
 	  },
 
           "debug texture":"lab.png"

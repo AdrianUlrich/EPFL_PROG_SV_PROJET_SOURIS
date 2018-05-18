@@ -4,8 +4,8 @@
  * Antoine Madrona
  */
 
-#ifndef INFOSV_BLOODSYSTEM_TEST_HPP
-#define INFOSV_BLOODSYSTEM_TEST_HPP
+#ifndef INFOSV_LIVER_TEST_HPP
+#define INFOSV_LIVER_TEST_HPP
 
 #include <Application.hpp>
 #include <Env/Mouse.hpp>
@@ -35,6 +35,7 @@ public:
 	{
 		reloadConfig();
 		reloadCacheStructure();
+		createBloodSystem();
 		updateRepresentation();
 	}
 public:
@@ -58,15 +59,15 @@ public:
 	
 	void transplant(TransplantOrgan* org)
 	{
+
 		setOrgan(org);
 	}
-
 };
 
-class DrawOrganTest : public Application
+class LiverTest : public Application
 {
 public:
-	DrawOrganTest(int argc, char const** argv)
+	LiverTest(int argc, char const** argv)
 		: Application(argc, argv)
 		{
 		}
@@ -79,4 +80,4 @@ private:
 	GuineaPigMouse* mGuineaPig;
 	bool mSimulationStart;
 };
-#endif // INFOSV_BLOODSYSTEM_TEST_HPP
+#endif // INFOSV_LIVER_TEST_HPP
