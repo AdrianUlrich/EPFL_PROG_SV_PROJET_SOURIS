@@ -172,6 +172,43 @@ void Substance::update(SubstanceId subId, double scalaire)
 
 void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 {
+	switch (id)
+	{
+		case SubstanceId::VGEF :
+		{
+			double oho(c*cVGEF);
+			if (oho<SUBSTANCE_PRECISION) return;
+			cVGEF-=oho;
+			receiver.cVGEF+=oho;
+		}
+		break;
+			
+		case SubstanceId::GLUCOSE :
+		{
+			double oho(c*cGLU);
+			if (oho<SUBSTANCE_PRECISION) return;
+			cGLU-=oho;
+			receiver.cGLU+=oho;
+		}
+		break;
+		
+		case SubstanceId::BROMOPYRUVATE :
+		{
+			double oho(c*cBMP);
+			if (oho<SUBSTANCE_PRECISION) return;
+			cBMP-=oho;
+			receiver.cBMP+=oho;
+		}
+		break;
+		
+		default:
+			throw std::invalid_argument("Valid arguments are [0,1,2]");
+	}
+	normalise();
+	
+	
+	
+	/*
 	double grad((this->operator[](id))*c);
 	if (grad<SUBSTANCE_PRECISION) return;
 	receiver.update(id,1+grad/receiver[id]);
@@ -192,4 +229,5 @@ void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 		default:
 			throw std::invalid_argument("Valid arguments are [0,1,2]");
 	}
+	*/
 }
