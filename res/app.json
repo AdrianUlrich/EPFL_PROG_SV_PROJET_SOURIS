@@ -58,7 +58,7 @@
             },
             "energy":{
                "initial":30,
-               "loss factor":0.00005,
+               "loss factor":0.00000,
                "bite":0.1
             },
             "texture":{

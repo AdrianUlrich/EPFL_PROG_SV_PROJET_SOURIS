@@ -41,10 +41,11 @@ void BloodSystemTest::onUpdate(sf::Time /*dt*/)
 	}
 }
 
-void TransplantOrgan::generateCapillaryOneStep(CellCoord& current_position, const CellCoord& initial_dir, int& nbCells, const int& maxLength)
+/// again void -> bool
+bool TransplantOrgan::generateCapillaryOneStep(CellCoord& current_position, const CellCoord& initial_dir, int& nbCells, const int& maxLength)
 		{
 
-			Organ::generateCapillaryOneStep(current_position, initial_dir, nbCells, maxLength);
+			return Organ::generateCapillaryOneStep(current_position, initial_dir, nbCells, maxLength);
 		}
 
 void BloodSystemTest::onEvent(sf::Event event, sf::RenderWindow&)

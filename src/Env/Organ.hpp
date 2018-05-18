@@ -38,7 +38,11 @@ class Organ
 		void reloadConfig();
 		void reloadCacheStructure();
 		void createLiver();
-		void createBloodSystem();
+		
+		void createBloodSystem(bool generateCapillaries=true);
+		virtual void generateArtery(int,int);
+		virtual bool generateCapillaryOneStep(CellCoord& p, CellCoord const& dir, int& NBcells, int const& maxLength);
+		virtual void generateCapillaryFromPosition(CellCoord& p, CellCoord dir);
 		
 		virtual void updateCellHandler(CellCoord const&,Kind);
 
@@ -54,6 +58,5 @@ class Organ
 		
 
 };
-
 
 #endif // ORGAN_HPP

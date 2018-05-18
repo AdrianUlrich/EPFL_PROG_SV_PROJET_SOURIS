@@ -40,8 +40,9 @@ public:
 	}
 public:
 	// breaking encapsulation for the TransplantOrgan class
-	void generateCapillaryOneStep(CellCoord& current_position, const CellCoord& initial_dir, int& nbCells, const int& maxLength) override;
-
+	bool generateCapillaryOneStep(CellCoord& current_position, const CellCoord& initial_dir, int& nbCells, const int& maxLength) override;
+	/// I used a bool as return value to control the flow in a while loop
+	
 	CellCoord toCellCoord(Vec2d const& substrateCoord) const override
 		{
 			return Organ::toCellCoord(substrateCoord);

@@ -4,6 +4,11 @@
 #include <Application.hpp>
 #include <Utility/Vertex.hpp>
 #include <Types.hpp>
+#include <Random/Random.hpp>
+
+#include <algorithm>
+#include <vector>
+using std::vector;
 
 Organ::Organ(bool generation)
 {
@@ -77,17 +82,6 @@ void Organ::reloadCacheStructure()
 	renderingCache.create(cellSize*nbCells, cellSize*nbCells);	
 	liverVertexes = generateVertexes(getAppConfig().simulation_organ["textures"], nbCells, cellSize);
 	bloodVertexes = liverVertexes;
-}
-
-
-void Organ::createLiver()
-{
-	
-}
-
-void Organ::createBloodSystem()
-{
-	
 }
 
 void Organ::updateRepresentation(bool also_update)
@@ -183,3 +177,114 @@ void Organ::updateCellHandler(CellCoord const& c, Kind k)
 	}
 }
 
+
+void Organ::createLiver()
+{
+	
+}
+
+void Organ::createBloodSystem(bool generateCapillaries)
+{
+	/// Making Artery
+	int SIZE_ARTERY(std::max(.03*nbCells,1.));
+	int startX((nbCells-SIZE_ARTERY)/2),endX(startX+SIZE_ARTERY);
+	generateArtery(startX,endX);
+	if (!generateCapillaries) return;
+
+	/// Making Capillaries
+	int MIN_DIST(getAppConfig().blood_capillary_min_dist+1);
+	int START_CREATION_FROM(getAppConfig().blood_creation_start);
+	int NB_CAPILLARY((nbCells-START_CREATION_FROM)/3);
+	--startX;
+	int counter(0);
+	for(int y(0); y<nbCells && counter<NB_CAPILLARY; ++y)
+	{
+		if(uniform(1,3)==1)
+		{
+			CellCoord c(startX,y);
+			generateCapillaryFromPosition(c,{-1,0});
+			++counter;
+			y+=MIN_DIST;
+		}
+	}
+	for(int y(0); y<nbCells && counter<NB_CAPILLARY; ++y)
+	{
+		if(uniform(1,3)==1)
+		{
+			CellCoord c(endX,y);
+			generateCapillaryFromPosition(c,{1,0});
+			++counter;
+			y+=MIN_DIST;
+		}
+	}
+
+}
+
+void Organ::generateArtery(int startX, int endX)
+{
+	for(int x(startX); x<endX; ++x)
+	{
+		for(int y(0); y<nbCells; ++y)
+		{
+			cellHandlers[x][y]->setBlood(TypeBloodCell::ARTERY);
+		}
+	}
+}
+
+bool Organ::generateCapillaryOneStep(CellCoord& p, CellCoord const& dir, int& NBcells, int const& maxLength)
+{
+	if (NBcells>=maxLength) return false;
+	bool tried1(false),tried2(false);
+	while (not (tried1 and tried2))
+	{
+		switch (uniform(1,6))
+		{
+			case 1:
+			{
+				tried1=true;
+				CellCoord c(p.x,p.y-1);
+				if (!isOut(c) and !cellHandlers[c.x][c.y]->hasBlood())
+				{
+					cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::CAPILLARY);
+					p=c;
+					++NBcells;
+					return true;
+				}
+			}
+			/* Else falls through. */
+			case 2:
+			{
+				tried2=true;
+				CellCoord c(p.x,p.y+1);
+				if (!isOut(c) and !cellHandlers[c.x][c.y]->hasBlood())
+				{
+					cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::CAPILLARY);
+					p=c;
+					++NBcells;
+					return true;
+				}
+			}
+			/* Else falls through. */
+			default:
+			{
+				CellCoord c(p+dir);
+				if (!isOut(c) and !cellHandlers[c.x][c.y]->hasBlood())
+				{
+					cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::CAPILLARY);
+					p=c;
+					++NBcells;
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+void Organ::generateCapillaryFromPosition(CellCoord& p, CellCoord dir)
+{
+	/// Growing Capillaries
+	const int LENGTH_CAPILLARY((nbCells/2)-4);
+	int length(1);
+	while (generateCapillaryOneStep(p,dir,length,LENGTH_CAPILLARY));
+}
