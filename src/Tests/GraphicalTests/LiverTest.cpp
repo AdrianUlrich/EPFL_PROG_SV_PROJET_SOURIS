@@ -6,29 +6,29 @@
  * Antoine Madrona
  */
 
-#include <Tests/GraphicalTests/DrawOrganTest.hpp>
+#include <Tests/GraphicalTests/LiverTest.hpp>
 #include <Utility/Utility.hpp>
 #include <Env/Organ.hpp>
 #include <Env/Lab.hpp>
 #include <Env/Mouse.hpp>
 
-IMPLEMENT_MAIN(DrawOrganTest)
+IMPLEMENT_MAIN(LiverTest)
 
-void DrawOrganTest::onRun()
+void LiverTest::onRun()
 {
     // Setup stats
 	Application::onRun();
 
 }
-void DrawOrganTest::onSimulationStart()
+void LiverTest::onSimulationStart()
 {
-	mCurrentOrgan = new TransplantOrgan();
-	mGuineaPig = new GuineaPigMouse(getApp().getLabSize()/2);
-	mGuineaPig->transplant(mCurrentOrgan);
 	mSimulationStart = true;
+	mGuineaPig = new GuineaPigMouse(getApp().getLabSize()/2);
+	mCurrentOrgan = new TransplantOrgan();
+	mGuineaPig->transplant(mCurrentOrgan);
 }
 
-void DrawOrganTest::onUpdate(sf::Time /*dt*/)
+void LiverTest::onUpdate(sf::Time /*dt*/)
 {
 	if (mSimulationStart){
 		getAppEnv().destroyBoxes();
@@ -40,7 +40,7 @@ void DrawOrganTest::onUpdate(sf::Time /*dt*/)
 	}
 }
 
-void DrawOrganTest::onEvent(sf::Event event, sf::RenderWindow&)
+void LiverTest::onEvent(sf::Event event, sf::RenderWindow&)
 {
 if (event.type == sf::Event::KeyPressed) {
 	switch (event.key.code) {
@@ -48,7 +48,7 @@ if (event.type == sf::Event::KeyPressed) {
 			{
 				Vec2d physicalPos(getCursorPositionInView());
 				CellCoord pos(mCurrentOrgan->toCellCoord(physicalPos));
-				mCurrentOrgan->updateCellHandler(pos, Organ::Kind::Artery);
+				mCurrentOrgan->updateCellHandler(pos, Organ::Kind::Capillary);
 			}
 				break;
 		case sf::Keyboard::H:
@@ -58,12 +58,28 @@ if (event.type == sf::Event::KeyPressed) {
 				mCurrentOrgan->updateCellHandler(pos, Organ::Kind::Liver);
 			}
 				break;
-
+				/*
+		case sf::Keyboard::T:
+			{
+				Vec2d physicalPos(getCursorPositionInView());
+				CellCoord pos(mCurrentOrgan->toCellCoord(physicalPos));
+				mCurrentOrgan->setCancerAt(pos);
+			}
+				break;
+				*/
 			case sf::Keyboard::O:
 			{
 				getAppEnv().switchToView(ECM);
             }
-				break;			
+				break;
+				
+		case sf::Keyboard::S: // S stands for Substance
+			{
+				if (isOrganViewOn()){
+					toggleConcentrationView();
+				}
+			}
+				break;
 		default:
 			break;
 			}

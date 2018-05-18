@@ -11,7 +11,6 @@
 #include <JSON/JSON.hpp>
 #include "Config.hpp"
 #include "Types.hpp"
-//#include <Utility/AnimalTracker.hpp>
 #include <Utility/Vec2d.hpp>
 
 #include <SFML/Graphics.hpp>
@@ -156,6 +155,12 @@ public:
 	
 	void switchToView(View);
 
+	bool isConcentrationOn() const
+		{
+			return mCurrentView == CONCENTRATION;
+		}
+	
+	
 protected:
     /*!
      *  @brief Called once before starting the main loop
@@ -268,9 +273,14 @@ protected:
 
     void drawOnHelp(sf::RenderWindow& window, bool micro) const;
 
-
+    
 	
 protected:
+ /*!
+     * @brief toggle concentration view mode
+     */
+	void toggleConcentrationView();
+	
     // The order is important since some fields need other to be initialised
     std::string const mAppDirectory; ///< Path to the executable's directory
     std::string const mCfgFile;      ///< Relative path to the CFG

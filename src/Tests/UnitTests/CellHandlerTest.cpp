@@ -4,8 +4,11 @@
  */
 
 #include <Application.hpp>
-#include <Env/Organ.hpp>
+#include <Env/CellLiver.hpp>
+#include <Env/CellBlood.hpp>
+#include <Env/CellECM.hpp>
 #include <Env/CellHandler.hpp>
+#include <Env/CellOrgan.hpp>
 #include <Tests/UnitTests/CheckUtility.hpp>
 #include <Utility/Constants.hpp>
 
@@ -27,12 +30,10 @@ public:
 	{
 		reloadConfig();
 	}
-
-	// prevents updating representation in empty organ
 	void updateRepresentationAt(const CellCoord&) override
 		{}
-
-	int getGridSize()
+	
+	int getGridSize() const 
 		{
 			return getAppConfig().simulation_organ_nbCells;
 		}
