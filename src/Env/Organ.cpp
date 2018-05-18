@@ -195,7 +195,7 @@ void Organ::createBloodSystem(bool generateCapillaries)
 	int MIN_DIST(getAppConfig().blood_capillary_min_dist+1);
 	int START_CREATION_FROM(getAppConfig().blood_creation_start);
 	int NB_CAPILLARY((nbCells-START_CREATION_FROM)/3);
-	--startX;
+	--endX;
 	int counter(0);
 	for(int y(0); y<nbCells && counter<NB_CAPILLARY; ++y)
 	{
