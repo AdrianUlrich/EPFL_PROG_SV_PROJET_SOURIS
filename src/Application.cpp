@@ -521,15 +521,15 @@ void Application::handleEvent(sf::Event event, sf::RenderWindow& window)
         case sf::Keyboard::Left:
         if (mCurrentView == LAB)
             mSimulationView.move(-100, 0);
-            break;
+        break;
         case sf::Keyboard::Up:
         if (mCurrentView == LAB)
             mSimulationView.move(0, -100);
-            break;
+        break;
         case sf::Keyboard::Down:
         if (mCurrentView == LAB)
             mSimulationView.move(0, 100);
-            break;
+        break;
 
         default:
             onEvent(event, window);

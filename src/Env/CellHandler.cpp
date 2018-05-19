@@ -21,6 +21,11 @@ CellHandler::~CellHandler()
 	delete blood;
 }
 
+CellCoord CellHandler::getPos() const
+{return pos;}
+Organ* CellHandler::getOrgan() const
+{return organ;}
+
 bool CellHandler::hasECM() const
 {return ecm!=nullptr;}
 bool CellHandler::hasLiver() const

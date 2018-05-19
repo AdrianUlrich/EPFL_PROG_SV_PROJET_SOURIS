@@ -18,7 +18,8 @@ class CellHandler
 		~CellHandler();
 			
 			
-			
+		CellCoord getPos() const;
+		Organ* getOrgan() const;
 			
 		/** 4.2 gets sets interacts and checks for CellXXXs */
 		bool hasECM() const;

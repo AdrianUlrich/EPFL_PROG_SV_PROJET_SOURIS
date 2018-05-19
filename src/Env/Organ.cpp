@@ -7,10 +7,12 @@
 #include <Random/Random.hpp>
 
 #include <algorithm>
+#include <string>
 #include <vector>
 using std::vector;
 
 Organ::Organ(bool generation)
+	:	currentSubst(SubstanceId::GLUCOSE)
 {
 	if (generation) generate();	
 }
@@ -22,10 +24,17 @@ double Organ::getHeight() const
 {return getAppConfig().simulation_organ_size;}
 
 bool Organ::isOut(CellCoord const& c) const
-{return c.x<0 or c.y<0 or c.x>nbCells-1 or c.y>nbCells-1;}
+{return c.x<0 or c.y<0 or c.x>=nbCells or c.y>=nbCells;}
 
 CellCoord Organ::toCellCoord(Vec2d const& pos) const
 {return vec2dToCellCoord(pos,getWidth(),getHeight(),cellSize);}
+
+void Organ::updateCellHandlerAt(CellCoord const& p, Substance const& s)
+{if(!isOut(p))cellHandlers[p.x][p.y]->updateSubstance(s);}
+
+double Organ::getConcentrationAt(CellCoord const& p, SubstanceId id) const
+{return isOut(p)?0:cellHandlers[p.x][p.y]->getECMQuantity(id);}
+
 
 void Organ::update()
 {
@@ -86,12 +95,11 @@ void Organ::reloadCacheStructure()
 	renderingCache.create(cellSize*nbCells, cellSize*nbCells);	
 	liverVertexes = generateVertexes(getAppConfig().simulation_organ["textures"], nbCells, cellSize);
 	bloodVertexes = liverVertexes;
+	concentrationVertexes = liverVertexes;
 }
 
 void Organ::updateRepresentation(bool also_update)
 {
-	renderingCache.clear(sf::Color(223,196,176));
-
 	if (also_update)
 		for (int y(0); y<nbCells; ++y)
 			for (int x(0); x<nbCells; ++x)
@@ -107,9 +115,28 @@ void Organ::drawRepresentation ()
 {
 	sf::RenderStates rs;
 	auto textures = getAppConfig().simulation_organ["textures"];
-	rs.texture = &getAppTexture(textures["liver"].toString()); // ici pour la texture liée une cellule hépatique
-	renderingCache.draw(liverVertexes.data(), bloodVertexes.size(), sf::Quads, rs); 	
-	rs.texture = &getAppTexture(textures["blood"].toString()); // ici pour la texture liée une cellule sanguine
+	
+	if (getApp().isConcentrationOn())
+	{
+		renderingCache.clear();
+		std::string s;
+		switch (currentSubst)
+		{
+			case SubstanceId::GLUCOSE : s="glucose";break;
+			case SubstanceId::BROMOPYRUVATE : s="bromopyruvate";break;
+			case SubstanceId::VGEF : s="vgef";break;
+		}
+		rs.texture = &getAppTexture(textures[s].toString()); // ici pour la texture liee aux concentrations
+		renderingCache.draw(concentrationVertexes.data(), concentrationVertexes.size(), sf::Quads, rs); 
+	}
+	else 
+	{
+		renderingCache.clear(sf::Color(223,196,176));
+		rs.texture = &getAppTexture(textures["liver"].toString()); // ici pour la texture liee a une cellule hépatique
+		renderingCache.draw(liverVertexes.data(), liverVertexes.size(), sf::Quads, rs); 	
+	}
+	
+	rs.texture = &getAppTexture(textures["blood"].toString()); // ici pour la texture liee a une cellule sanguine
 	renderingCache.draw(bloodVertexes.data(), bloodVertexes.size(), sf::Quads, rs); 
 }
 
@@ -152,6 +179,13 @@ void Organ::updateRepresentationAt(CellCoord const& c)
 		liverVertexes[i[1]].color.a=
 		liverVertexes[i[2]].color.a=
 		liverVertexes[i[3]].color.a=0;
+	}
+	if (getApp().isConcentrationOn())
+	{
+		concentrationVertexes[i[0]].color.a=
+		concentrationVertexes[i[1]].color.a=
+		concentrationVertexes[i[2]].color.a=
+		concentrationVertexes[i[3]].color.a=std::max(int(255*getConcentrationAt(c,currentSubst)/getAppConfig().substance_max_value),5);
 	}
 }
 
