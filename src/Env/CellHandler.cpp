@@ -52,3 +52,11 @@ void CellHandler::bloodTakeFromEcm(SubstanceId id, double fract)
 
 bool CellHandler::isOut(CellCoord const& c)
 {return organ->isOut(c);}
+
+void CellHandler::update(sf::Time dt)
+{
+	/// update will return true if the CellOrgan died
+	if (hasECM() and ecm->update(dt)) {delete ecm;ecm=nullptr;}
+	if (hasLiver() and liver->update(dt)) {delete liver;liver=nullptr;}
+	if (hasBlood() and blood->update(dt)) {delete blood;blood=nullptr;}
+}

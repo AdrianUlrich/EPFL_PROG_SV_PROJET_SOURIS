@@ -29,6 +29,10 @@ CellCoord Organ::toCellCoord(Vec2d const& pos) const
 
 void Organ::update()
 {
+	sf::Time dt(sf::seconds(getAppConfig().simulation_fixed_step));
+	for (auto& vec : cellHandlers)
+		for (auto val : vec)
+			val->update(dt);		
 	updateRepresentation();
 }
 	
@@ -180,7 +184,17 @@ void Organ::updateCellHandler(CellCoord const& c, Kind k)
 
 void Organ::createLiver()
 {
-	
+	int r(nbCells+1);
+	for (int x(0); x<nbCells; ++x)
+	{
+		int ox(x-nbCells);
+		for (int y(0); y<nbCells; ++y)
+		{
+			int oy(y-nbCells);
+			if (x*x+oy*oy<r*r and ox*ox+y*y<r*r)
+				cellHandlers[x][y]->setLiver();
+		}
+	}
 }
 
 void Organ::createBloodSystem(bool generateCapillaries)
@@ -189,32 +203,35 @@ void Organ::createBloodSystem(bool generateCapillaries)
 	int SIZE_ARTERY(std::max(.03*nbCells,1.));
 	int startX((nbCells-SIZE_ARTERY)/2),endX(startX+SIZE_ARTERY);
 	generateArtery(startX,endX);
-	if (!generateCapillaries) return;
-
-	/// Making Capillaries
-	int MIN_DIST(getAppConfig().blood_capillary_min_dist+1);
-	int START_CREATION_FROM(getAppConfig().blood_creation_start);
-	int NB_CAPILLARY((nbCells-START_CREATION_FROM)/3);
-	--endX;
-	int counter(0);
-	for(int y(0); y<nbCells && counter<NB_CAPILLARY; ++y)
+	
+	if (generateCapillaries)
 	{
-		if(uniform(1,3)==1)
+		/// Making Capillaries
+		int MIN_DIST(getAppConfig().blood_capillary_min_dist+1);
+		int START_CREATION_FROM(getAppConfig().blood_creation_start);
+		int NB_CAPILLARY((nbCells-START_CREATION_FROM)/3);
+		--endX;
+		int counter(0);
+		for(int y(0); y<nbCells-START_CREATION_FROM && counter<NB_CAPILLARY; ++y)
 		{
-			CellCoord c(startX,y);
-			generateCapillaryFromPosition(c,{-1,0});
-			++counter;
-			y+=MIN_DIST;
+			if(uniform(1,3)==1)
+			{
+				CellCoord c(startX,y);
+				generateCapillaryFromPosition(c,{-1,0});
+				++counter;
+				y+=MIN_DIST;
+			}
 		}
-	}
-	for(int y(0); y<nbCells && counter<NB_CAPILLARY; ++y)
-	{
-		if(uniform(1,3)==1)
+		counter = 0;
+		for(int y(0); y<nbCells-START_CREATION_FROM && counter<NB_CAPILLARY; ++y)
 		{
-			CellCoord c(endX,y);
-			generateCapillaryFromPosition(c,{1,0});
-			++counter;
-			y+=MIN_DIST;
+			if(uniform(1,3)==1)
+			{
+				CellCoord c(endX,y);
+				generateCapillaryFromPosition(c,{1,0});
+				++counter;
+				y+=MIN_DIST;
+			}
 		}
 	}
 
@@ -234,6 +251,7 @@ void Organ::generateArtery(int startX, int endX)
 bool Organ::generateCapillaryOneStep(CellCoord& p, CellCoord const& dir, int& NBcells, int const& maxLength)
 {
 	if (NBcells>=maxLength) return false;
+	
 	bool tried1(false),tried2(false);
 	while (not (tried1 and tried2))
 	{
@@ -286,5 +304,7 @@ void Organ::generateCapillaryFromPosition(CellCoord& p, CellCoord dir)
 	/// Growing Capillaries
 	const int LENGTH_CAPILLARY((nbCells/2)-4);
 	int length(1);
-	while (generateCapillaryOneStep(p,dir,length,LENGTH_CAPILLARY));
+	while (generateCapillaryOneStep(p,dir,length,LENGTH_CAPILLARY))
+	// cout<<'{'<<p.x<<','<<p.y<<'}'<<endl;
+	;
 }

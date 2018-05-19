@@ -17,3 +17,10 @@ Quantity CellOrgan::getQuantity(SubstanceId id) const
 
 void CellOrgan::uptakeOnGradient(double fract,CellOrgan* other,SubstanceId id)
 {substance->uptakeOnGradient(fract,*(other->substance),id);}
+
+
+bool CellOrgan::update(sf::Time)
+{
+	/// by default the CellOrgan doesn't die
+	return false;
+}

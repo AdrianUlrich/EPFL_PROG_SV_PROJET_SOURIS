@@ -36,6 +36,8 @@ class CellHandler
 		
 		/** isOut method from organ pointer */		
 		bool isOut(CellCoord const&);
+		
+		void update(sf::Time);
 			
 	private:
 		CellCoord pos;
