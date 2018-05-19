@@ -12,52 +12,64 @@
 #include "Animal.hpp"
 using std::vector;
 
-class Lab : public sf::NonCopyable
+class Lab final : public sf::NonCopyable
 {
-public :
-	/** default constructor
-		* uses makeboxes(getAppConfig().simulation_lab_nb_boxes)
-		*/
-	Lab();
+	public :
+		/** default constructor
+			* uses makeboxes(getAppConfig().simulation_lab_nb_boxes)
+			*/
+		Lab();
 
-	/** destructor deletes pointers etc
-		* uses reset() and destroyBoxes()
-		*/
-	~Lab();
+		/** destructor deletes pointers etc
+			* uses reset() and destroyBoxes()
+			*/
+		~Lab();
 
-	void makeBoxes(unsigned int nbCagesPerRow);
-	void destroyBoxes();
+		void makeBoxes(unsigned int nbCagesPerRow);
+		void destroyBoxes();
 
-	void update(sf::Time dt);
-	void drawOn(sf::RenderTarget&);
-	void reset();
+		void update(sf::Time dt);
+		void drawOn(sf::RenderTarget&);
+		void reset();
 
-	bool addCheese(Cheese*);
-	bool addAnimal(Animal*);
-	
-	/**Focus sur un animal*/
-	void trackAnimal(Animal* n);
-	void trackAnimal(const Vec2d&);
-	void switchToView(View view);
-	void stopTrackingAnyEntity();
-	
-	/** lien entre animal et organ */
-	void updateTrackedAnimal();
-	void drawCurrentOrgan(sf::RenderTarget& target);
-  
-  /** providing vision to animals */
-	vector<SimulatedEntity*>* findTargetsInSightOf(Animal*);
+		bool addCheese(Cheese*);
+		bool addAnimal(Animal*);
+		
+		/**Focus sur un animal*/
+		void trackAnimal(Animal* n);
+		void trackAnimal(const Vec2d&);
+		void switchToView(View view);
+		void stopTrackingAnyEntity();
+		
+		/** lien entre animal et organ */
+		void updateTrackedAnimal();
+		void drawCurrentOrgan(sf::RenderTarget& target);
+	  
+		/** providing vision to animals */
+		vector<SimulatedEntity*>* findTargetsInSightOf(Animal*);
+		
+		/** Interactive Controls */
+		double getDelta(SubstanceId) const;
+		SubstanceId getCurrentSubst() const;
+		SubstanceId nextSubstance();
+		void increaseCurrentSubst();
+		void decreaseCurrentSubst();
 
-private:
-	bool addEntity(SimulatedEntity*);
+	private:
+		bool addEntity(SimulatedEntity*);
 
-	vector<vector<Box*>> boites;
+		vector<vector<Box*>> boites;
 
-	vector<Animal*> animals;
-	vector<Cheese*> cheeses;
-	vector<SimulatedEntity*> NTTs;
-	Animal* tracked;
-	sf::Sprite* cross;
+		vector<Animal*> animals;
+		vector<Cheese*> cheeses;
+		vector<SimulatedEntity*> NTTs;
+		Animal* tracked;
+		sf::Sprite* cross;
+		
+		SubstanceId currentSubstance;
+		double deltaGlucose;
+		double deltaBromo;
+		double deltaVGEF;
 };
 
 #endif //I_LAB_HPP

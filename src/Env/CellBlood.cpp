@@ -19,7 +19,13 @@ bool CellBlood::update(sf::Time dt)
 	{
 		CellCoord pos(handler->getPos());
 		int RAYON_DIFFUSION(getAppConfig().substance_diffusion_radius);
-		Substance C0(0,getAppConfig().base_glucose,getAppConfig().base_bromo);
+		double m(getAppConfig().substance_max_value);
+		Substance C0
+		(
+			std::min(m,std::max(-m,getAppEnv().getDelta(SubstanceId::VGEF))),
+			std::min(m,std::max(-m,getAppConfig().base_glucose+getAppEnv().getDelta(SubstanceId::GLUCOSE))),
+			std::min(m,std::max(-m,getAppConfig().base_bromo+getAppEnv().getDelta(SubstanceId::BROMOPYRUVATE)))
+		);
 		double D(getAppConfig().substance_diffusion_constant);
 		for (int i(-RAYON_DIFFUSION);i<=RAYON_DIFFUSION;++i)
 		{
@@ -32,6 +38,6 @@ bool CellBlood::update(sf::Time dt)
 		}
 		
 	}
-	return CellOrgan::update(dt);// or ; // return true if dead
+	return false;//CellOrgan::update(dt) would return true if dead (i.e of cancer)
 }
 
