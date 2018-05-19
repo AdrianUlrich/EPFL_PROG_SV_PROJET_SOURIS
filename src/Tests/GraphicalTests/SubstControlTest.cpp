@@ -55,32 +55,15 @@ if (event.type == sf::Event::KeyPressed) {
 			{
 				Vec2d physicalPos(getCursorPositionInView());
 				CellCoord pos(mCurrentOrgan->toCellCoord(physicalPos));
-				mCurrentOrgan->updateCellHandler(pos, Organ::Kind::Liver);			}
-				break;
-
-				/* // A DECOMMENTER QUAND NECESSAIRE
-		case sf::Keyboard::X:
-			{
-				Vec2d physicalPos(getCursorPositionInView());
-				mCurrentOrgan->setCancerAt(physicalPos);
+				mCurrentOrgan->updateCellHandler(pos, Organ::Kind::Liver);
 			}
 				break;
-				*/
+	
 			case sf::Keyboard::O:
 			{
 				getAppEnv().switchToView(ECM);
             }
 				break;
-				
-		case sf::Keyboard::S: // S stands for Substance
-			{
-				if (isOrganViewOn()){
-					toggleConcentrationView();
-				}
-			}
-				break;
-
-		
 			case sf::Keyboard::N: // next substance
 			{
 				if (isOrganViewOn()){
@@ -107,7 +90,15 @@ if (event.type == sf::Event::KeyPressed) {
 				}
 				
 			}
-				break;		
+				break;
+				
+		case sf::Keyboard::S: // S stands for Substance
+			{
+				if (isOrganViewOn()){
+					toggleConcentrationView();
+				}
+			}
+				break;
 		default:
 			break;
 			}

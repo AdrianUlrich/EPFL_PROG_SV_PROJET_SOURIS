@@ -9,6 +9,8 @@
 #include "Config.hpp"
 #include <JSON/JSONSerialiser.hpp>
 #include <Utility/Constants.hpp>
+#include <iomanip> // setprecision
+#include <sstream> // stringstream
 
 #include <algorithm>
 #include <cassert>
@@ -118,6 +120,7 @@ Application::Application(int argc, char const** argv)
 , mCfgFile(configFileRelativePath(argc, argv))
 //, mJSONRead(mAppDirectory + mCfgFile)
 , mConfig(new Config(mAppDirectory + mCfgFile))
+, mCurrentGraphId(-1)
 , mLab(nullptr)
 , mPaused(false)
 , mIsResetting(false)
@@ -176,7 +179,6 @@ void Application::run()
 {
     // Load lab and stats
     mLab   = new Lab;
-
     // Set up subclasses
     onRun();
     onSimulationStart();
@@ -206,6 +208,7 @@ void Application::run()
         while (mRenderWindow.pollEvent(event)) {
             handleEvent(event, mRenderWindow);
         }
+
 
         // Update logics
 		
@@ -400,6 +403,7 @@ Vec2d Application::getCursorPositionInView() const
 {
     return mRenderWindow.mapPixelToCoords(sf::Mouse::getPosition(mRenderWindow), mSimulationView);
 }
+
 
 void Application::createWindow(Vec2d const& size)
 {
@@ -635,7 +639,9 @@ void Application::render(sf::Drawable const& simulationBackground, sf::Drawable 
         // Render the stats
         mRenderWindow.setView(mStatsView);
         mRenderWindow.draw(statsBackground);
-
+        //getStats().drawOn(mRenderWindow);
+		// Render the controls
+		drawControls(mRenderWindow);
         // Render the command help for MICRO
         mRenderWindow.setView(mHelpView);
         mRenderWindow.draw(statsBackground);
@@ -649,7 +655,6 @@ void Application::render(sf::Drawable const& simulationBackground, sf::Drawable 
     // so that handling event (zoom + move) is easier
     mRenderWindow.setView(mSimulationView);
 }
-
 
 void Application::togglePause()
 {
@@ -741,8 +746,14 @@ void Application::drawOnHelp(sf::RenderWindow& window, bool micro) const
     if(micro)
     {
         text = {    "---------------------",
+                    "CS: current substance",
+                    "CP: cursor position",
                     "L: Switch to Lab View",
-                    "S: Toggle to ConcView of CS",
+                    "S: Toogle to ConcView of CS",
+                    "X: Set Cancer at the CP",
+                    "N: Switch to the next substance",
+                    "PageUp and 2: Increase CS",
+                    "PageDown and 3: Decrease CS"
                     };
     } else {
         text = {    "---------------------",
@@ -828,5 +839,80 @@ bool isOrganViewOn()
 }
 
 
+void Application::drawControls(sf::RenderWindow& target) {
+	auto const LEGEND_MARGIN(10);
+	auto lastLegendY(LEGEND_MARGIN);
+	auto const FONT_SIZE = 13;
+	drawTitle(target, sf::Color::Red, LEGEND_MARGIN, lastLegendY, FONT_SIZE);
+	lastLegendY += FONT_SIZE + 4;
+	drawOneControl(target, s::DELTAGLUC, mLab->getDelta(GLUCOSE),
+				   sf::Color::Blue, LEGEND_MARGIN, lastLegendY, FONT_SIZE);
+	lastLegendY += FONT_SIZE + 4;
 
+	drawOneControl(target, s::DELTABROM, mLab->getDelta(BROMOPYRUVATE),
+				   sf::Color::Yellow, LEGEND_MARGIN, lastLegendY, FONT_SIZE);
+	lastLegendY += FONT_SIZE + 4;
+
+	drawOneControl(target, s::DELTAVGEF, mLab->getDelta(VGEF),
+				   sf::Color::Green, LEGEND_MARGIN, lastLegendY, FONT_SIZE);
+}
+
+void Application::drawTitle(sf::RenderWindow& target
+								 , sf::Color color
+								 , size_t xcoord
+								 , size_t ycoord
+								 , size_t font_size
+							) 
+{
+	std::stringstream tmpStream;
+	auto text = s::CURRENTSUBST + " : ";
+
+	// TODO: add in Utility
+	switch(mLab->getCurrentSubst()){
+		case GLUCOSE:
+			text+= "Glucose";
+			break;
+		case BROMOPYRUVATE:
+			text+= "Bromo";
+			break;
+		case VGEF:
+			text+= "VGEF";
+			break;
+		default:
+			text += "None";
+	}
 	
+	auto legend = sf::Text(text, getAppFont(), font_size);
+	legend.setPosition(xcoord, ycoord);
+#if SFML_VERSION_MAJOR >= 2 && SFML_VERSION_MINOR >= 4
+	legend.setFillColor(color);
+#else
+	legend.setColor(color);
+#endif
+	target.draw(legend);
+}
+void Application::drawOneControl(sf::RenderWindow& target
+								 , std::string name
+								 , double value
+								 , sf::Color color
+								 , size_t xcoord
+								 , size_t ycoord
+								 , size_t font_size
+								 ) 
+{
+	std::stringstream tmpStream;
+	
+	tmpStream << std::fixed << std::setprecision(2) << value;
+	auto value_str = tmpStream.str();
+	value_str = value_str.substr(0, value_str.find_last_not_of("0"));
+	auto text = name + " : " +  value_str;
+	auto legend = sf::Text(text, getAppFont(), font_size);
+	legend.setPosition(xcoord, ycoord);
+#if SFML_VERSION_MAJOR >= 2 && SFML_VERSION_MINOR >= 4
+	legend.setFillColor(color);
+#else
+	legend.setColor(color);
+#endif
+	target.draw(legend);
+}
+

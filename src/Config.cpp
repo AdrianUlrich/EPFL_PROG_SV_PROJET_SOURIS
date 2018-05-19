@@ -53,7 +53,7 @@ Config::Config(std::string path) : mConfig(j::readFromFile(path))
 	,liver_decay_atp(mConfig["simulation"]["organ"]["liver"]["decay atp"].toInt())
 	,liver_division_cost(mConfig["simulation"]["organ"]["liver"]["division cost"].toDouble())	,liver_division_radius(mConfig["simulation"]["organ"]["liver"]["division radius"].toInt())
 	,liver_division_energy(mConfig["simulation"]["organ"]["liver"]["division energy"].toDouble())
-	
+	,liver_glucose_usage(mConfig["simulation"]["organ"]["liver"]["glucose usage"].toDouble())
 	// cancer
 	,cancer_fract_uptake(mConfig["simulation"]["organ"]["cancer"]["fract uptake"].toDouble())
 	,cancer_km_glycolysis(mConfig["simulation"]["organ"]["cancer"]["km glycolysis"].toDouble())
@@ -61,7 +61,7 @@ Config::Config(std::string path) : mConfig(j::readFromFile(path))
 	,cancer_time_next_division(mConfig["simulation"]["organ"]["cancer"]["time next division"].toInt())
 	,cancer_range_next_division(mConfig["simulation"]["organ"]["cancer"]["range next division"].toInt())
 	,cancer_division_energy(mConfig["simulation"]["organ"]["cancer"]["division energy"].toDouble())
-
+	,cancer_glucose_usage(mConfig["simulation"]["organ"]["cancer"]["glucose usage"].toDouble())
 // cheese
 , cheese_texture(mConfig["simulation"]["cheese"]["texture"].toString())
 //, grass_size(mConfig["simulation"]["grass"]["size"].toDouble())

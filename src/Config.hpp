@@ -101,6 +101,7 @@ public:
 	const double liver_division_cost;
 	const int liver_division_radius;
 	const double liver_division_energy;
+	const double liver_glucose_usage;
 	
 	// cancer
 	const double cancer_fract_uptake;
@@ -109,6 +110,7 @@ public:
 	const int cancer_time_next_division;
 	const int cancer_range_next_division;
 	const double cancer_division_energy;
+	const double cancer_glucose_usage;
 	
 	// living entity
 	const std::string entity_texture_tracked = "target.png";
