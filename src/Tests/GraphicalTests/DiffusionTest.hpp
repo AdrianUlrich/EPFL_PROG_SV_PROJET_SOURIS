@@ -4,8 +4,8 @@
  * Antoine Madrona
  */
 
-#ifndef INFOSV_BLOODSYSTEM_TEST_HPP
-#define INFOSV_BLOODSYSTEM_TEST_HPP
+#ifndef INFOSV_DIFFUSION_TEST_HPP
+#define INFOSV_DIFFUSION_TEST_HPP
 
 #include <Application.hpp>
 #include <Env/Mouse.hpp>
@@ -63,10 +63,10 @@ public:
 
 };
 
-class DrawOrganTest : public Application
+class DiffusionTest : public Application
 {
 public:
-	DrawOrganTest(int argc, char const** argv)
+	DiffusionTest(int argc, char const** argv)
 		: Application(argc, argv)
 		{
 		}
@@ -79,4 +79,4 @@ private:
 	GuineaPigMouse* mGuineaPig;
 	bool mSimulationStart;
 };
-#endif // INFOSV_BLOODSYSTEM_TEST_HPP
+#endif // INFOSV_DIFFUSION_TEST_HPP

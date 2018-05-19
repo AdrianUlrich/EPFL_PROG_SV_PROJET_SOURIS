@@ -7,10 +7,12 @@
 #include <Random/Random.hpp>
 
 #include <algorithm>
+#include <string>
 #include <vector>
 using std::vector;
 
 Organ::Organ(bool generation)
+	:	currentSubst(SubstanceId::GLUCOSE)
 {
 	if (generation) generate();	
 }
@@ -22,13 +24,24 @@ double Organ::getHeight() const
 {return getAppConfig().simulation_organ_size;}
 
 bool Organ::isOut(CellCoord const& c) const
-{return c.x<0 or c.y<0 or c.x>nbCells-1 or c.y>nbCells-1;}
+{return c.x<0 or c.y<0 or c.x>=nbCells or c.y>=nbCells;}
 
 CellCoord Organ::toCellCoord(Vec2d const& pos) const
 {return vec2dToCellCoord(pos,getWidth(),getHeight(),cellSize);}
 
+void Organ::updateCellHandlerAt(CellCoord const& p, Substance const& s)
+{if(!isOut(p))cellHandlers[p.x][p.y]->updateSubstance(s);}
+
+double Organ::getConcentrationAt(CellCoord const& p, SubstanceId id) const
+{return isOut(p)?0:cellHandlers[p.x][p.y]->getECMQuantity(id);}
+
+
 void Organ::update()
 {
+	sf::Time dt(sf::seconds(getAppConfig().simulation_fixed_step));
+	for (auto& vec : cellHandlers)
+		for (auto val : vec)
+			val->update(dt);		
 	updateRepresentation();
 }
 	
@@ -82,12 +95,11 @@ void Organ::reloadCacheStructure()
 	renderingCache.create(cellSize*nbCells, cellSize*nbCells);	
 	liverVertexes = generateVertexes(getAppConfig().simulation_organ["textures"], nbCells, cellSize);
 	bloodVertexes = liverVertexes;
+	concentrationVertexes = liverVertexes;
 }
 
 void Organ::updateRepresentation(bool also_update)
 {
-	renderingCache.clear(sf::Color(223,196,176));
-
 	if (also_update)
 		for (int y(0); y<nbCells; ++y)
 			for (int x(0); x<nbCells; ++x)
@@ -103,9 +115,28 @@ void Organ::drawRepresentation ()
 {
 	sf::RenderStates rs;
 	auto textures = getAppConfig().simulation_organ["textures"];
-	rs.texture = &getAppTexture(textures["liver"].toString()); // ici pour la texture liée une cellule hépatique
-	renderingCache.draw(liverVertexes.data(), bloodVertexes.size(), sf::Quads, rs); 	
-	rs.texture = &getAppTexture(textures["blood"].toString()); // ici pour la texture liée une cellule sanguine
+	
+	if (getApp().isConcentrationOn())
+	{
+		renderingCache.clear();
+		std::string s;
+		switch (currentSubst)
+		{
+			case SubstanceId::GLUCOSE : s="glucose";break;
+			case SubstanceId::BROMOPYRUVATE : s="bromopyruvate";break;
+			case SubstanceId::VGEF : s="vgef";break;
+		}
+		rs.texture = &getAppTexture(textures[s].toString()); // ici pour la texture liee aux concentrations
+		renderingCache.draw(concentrationVertexes.data(), concentrationVertexes.size(), sf::Quads, rs); 
+	}
+	else 
+	{
+		renderingCache.clear(sf::Color(223,196,176));
+		rs.texture = &getAppTexture(textures["liver"].toString()); // ici pour la texture liee a une cellule hépatique
+		renderingCache.draw(liverVertexes.data(), liverVertexes.size(), sf::Quads, rs); 	
+	}
+	
+	rs.texture = &getAppTexture(textures["blood"].toString()); // ici pour la texture liee a une cellule sanguine
 	renderingCache.draw(bloodVertexes.data(), bloodVertexes.size(), sf::Quads, rs); 
 }
 
@@ -149,6 +180,13 @@ void Organ::updateRepresentationAt(CellCoord const& c)
 		liverVertexes[i[2]].color.a=
 		liverVertexes[i[3]].color.a=0;
 	}
+	if (getApp().isConcentrationOn())
+	{
+		concentrationVertexes[i[0]].color.a=
+		concentrationVertexes[i[1]].color.a=
+		concentrationVertexes[i[2]].color.a=
+		concentrationVertexes[i[3]].color.a=std::max(int(255*getConcentrationAt(c,currentSubst)/getAppConfig().substance_max_value),5);
+	}
 }
 
 void Organ::updateCellHandler(CellCoord const& c, Kind k)
@@ -180,7 +218,17 @@ void Organ::updateCellHandler(CellCoord const& c, Kind k)
 
 void Organ::createLiver()
 {
-	
+	int r(nbCells+1);
+	for (int x(0); x<nbCells; ++x)
+	{
+		int ox(x-nbCells);
+		for (int y(0); y<nbCells; ++y)
+		{
+			int oy(y-nbCells);
+			if (x*x+oy*oy<r*r and ox*ox+y*y<r*r)
+				cellHandlers[x][y]->setLiver();
+		}
+	}
 }
 
 void Organ::createBloodSystem(bool generateCapillaries)
@@ -189,32 +237,35 @@ void Organ::createBloodSystem(bool generateCapillaries)
 	int SIZE_ARTERY(std::max(.03*nbCells,1.));
 	int startX((nbCells-SIZE_ARTERY)/2),endX(startX+SIZE_ARTERY);
 	generateArtery(startX,endX);
-	if (!generateCapillaries) return;
-
-	/// Making Capillaries
-	int MIN_DIST(getAppConfig().blood_capillary_min_dist+1);
-	int START_CREATION_FROM(getAppConfig().blood_creation_start);
-	int NB_CAPILLARY((nbCells-START_CREATION_FROM)/3);
-	--endX;
-	int counter(0);
-	for(int y(0); y<nbCells && counter<NB_CAPILLARY; ++y)
+	
+	if (generateCapillaries)
 	{
-		if(uniform(1,3)==1)
+		/// Making Capillaries
+		int MIN_DIST(getAppConfig().blood_capillary_min_dist+1);
+		int START_CREATION_FROM(getAppConfig().blood_creation_start);
+		int NB_CAPILLARY((nbCells-START_CREATION_FROM)/3);
+		--endX;
+		int counter(0);
+		for(int y(0); y<nbCells-START_CREATION_FROM && counter<NB_CAPILLARY; ++y)
 		{
-			CellCoord c(startX,y);
-			generateCapillaryFromPosition(c,{-1,0});
-			++counter;
-			y+=MIN_DIST;
+			if(uniform(1,3)==1)
+			{
+				CellCoord c(startX,y);
+				generateCapillaryFromPosition(c,{-1,0});
+				++counter;
+				y+=MIN_DIST;
+			}
 		}
-	}
-	for(int y(0); y<nbCells && counter<NB_CAPILLARY; ++y)
-	{
-		if(uniform(1,3)==1)
+		counter = 0;
+		for(int y(0); y<nbCells-START_CREATION_FROM && counter<NB_CAPILLARY; ++y)
 		{
-			CellCoord c(endX,y);
-			generateCapillaryFromPosition(c,{1,0});
-			++counter;
-			y+=MIN_DIST;
+			if(uniform(1,3)==1)
+			{
+				CellCoord c(endX,y);
+				generateCapillaryFromPosition(c,{1,0});
+				++counter;
+				y+=MIN_DIST;
+			}
 		}
 	}
 
@@ -234,6 +285,7 @@ void Organ::generateArtery(int startX, int endX)
 bool Organ::generateCapillaryOneStep(CellCoord& p, CellCoord const& dir, int& NBcells, int const& maxLength)
 {
 	if (NBcells>=maxLength) return false;
+	
 	bool tried1(false),tried2(false);
 	while (not (tried1 and tried2))
 	{
@@ -286,5 +338,7 @@ void Organ::generateCapillaryFromPosition(CellCoord& p, CellCoord dir)
 	/// Growing Capillaries
 	const int LENGTH_CAPILLARY((nbCells/2)-4);
 	int length(1);
-	while (generateCapillaryOneStep(p,dir,length,LENGTH_CAPILLARY));
+	while (generateCapillaryOneStep(p,dir,length,LENGTH_CAPILLARY))
+	// cout<<'{'<<p.x<<','<<p.y<<'}'<<endl;
+	;
 }

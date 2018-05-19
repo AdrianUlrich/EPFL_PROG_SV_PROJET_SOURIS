@@ -1,9 +1,13 @@
 #ifndef ORGAN_HPP
 #define ORGAN_HPP
 
+#include "Substance.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <Application.hpp>
 #include <Utility/Utility.hpp>
+#include <Types.hpp>
+
 #include <vector>
 using std::vector;
 
@@ -33,10 +37,14 @@ class Organ
 		void updateRepresentation(bool b=true);
 		virtual void updateRepresentationAt(CellCoord const&);
 		
+		void updateCellHandlerAt(CellCoord const&, Substance const&);
+		double getConcentrationAt(CellCoord const&,SubstanceId) const;
+		
 	protected:
 		virtual void generate();
 		void reloadConfig();
 		void reloadCacheStructure();
+		
 		void createLiver();
 		
 		void createBloodSystem(bool generateCapillaries=true);
@@ -49,14 +57,16 @@ class Organ
 	private:
 		void drawRepresentation();
 		
+	private:		
 		int nbCells;
 		float cellSize;
 		sf::RenderTexture renderingCache;
 		vector<vector<CellHandler*>> cellHandlers;
 		vector<sf::Vertex> bloodVertexes;
 		vector<sf::Vertex> liverVertexes;
+		vector<sf::Vertex> concentrationVertexes;
 		
-
+		SubstanceId currentSubst;
 };
 
 #endif // ORGAN_HPP

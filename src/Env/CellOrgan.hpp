@@ -15,6 +15,8 @@ class CellOrgan ///ABSTRACT
 		void updateSubstance(Substance const&);
 		Quantity getQuantity(SubstanceId) const;
 		void uptakeOnGradient(double,CellOrgan*,SubstanceId);
+		
+		virtual bool update(sf::Time);
 			
 	protected:
 		Substance* substance;

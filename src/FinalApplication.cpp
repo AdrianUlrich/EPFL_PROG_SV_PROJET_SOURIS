@@ -18,6 +18,7 @@ void FinalApplication::onRun()
 {
     // Setup stats
 	Application::onRun();
+
 }
 
 void FinalApplication::onSimulationStart()
@@ -47,7 +48,22 @@ void FinalApplication::onEvent(sf::Event event, sf::RenderWindow&)
 					
 			}
 				break;
-		
+			
+			case sf::Keyboard::S: // S stands for Substance
+			{
+				if (isOrganViewOn()){
+					toggleConcentrationView();
+				}
+			}
+				break;
+
+
+			case sf::Keyboard::Num1:
+			{
+				getAppEnv().updateTrackedAnimal();
+			}
+				break;
+
 			case sf::Keyboard::T:
 			{
 				getAppEnv().trackAnimal(getCursorPositionInView());

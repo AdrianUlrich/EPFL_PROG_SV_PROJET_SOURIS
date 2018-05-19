@@ -6,9 +6,11 @@
 class CellLiver: public CellOrgan
 {
 	public:
-		CellLiver(CellHandler*);
-			
+		CellLiver(CellHandler*,double atp = 100);
+
+		virtual bool update(sf::Time) override;
 	private:
+		double atp;
 };
 
 #endif // CELLLIVER_HPP

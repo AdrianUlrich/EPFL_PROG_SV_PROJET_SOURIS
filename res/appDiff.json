@@ -4,20 +4,20 @@
       "time":{
          "factor":0.5,
          "max dt":0.05,
-	  "fixed step" : 0.01
+	  "fixed step" : 0.1
       },
        "substance":{
-	   "max" : 200000,
-	   "diffusion radius" : 2,
-	   "diffusion constant" : 300,
+	   "max" : 20000,
+	   "diffusion radius" : 20,
+	   "diffusion constant" : 500,
 	   "glucose": {
-	       "base": 8000,
+	       "base": 600,
 	       "range": 600,
 	       "delta": 100
 	   },
 	   "bromopyruvate":{
 	       "base" : 0,
-	       "delta": 30
+	       "delta": 100
 	   },
 	   "vgef":{
 	       "diffusion radius" : 2,
@@ -74,8 +74,8 @@
 	  "fence" : "wood.png"
       },
       "organ":{
-         "size": 2400,
-         "cells": 120,
+         "size": 50,
+         "cells": 50,
          "texture":"lab3.png",
 	  "textures": {
 	      "ecm": "ecm2.png",
@@ -92,7 +92,7 @@
 	      "range" : 0.02
 	  },
 	  "blood": {
-	      "capillary min dist" : 1,
+	      "capillary min dist" : 2,
 	      "creation start" : 2
 	  },
 	  "liver": {
@@ -103,16 +103,16 @@
 	      "km max glycolysis" : 300,
 	      "km krebs" : 100,
 	      "km max krebs" : 450,
-	      "decay atp" : 40,
+	      "decay atp" : 3000,
 	      "division cost" : 0.5,
-	      "division radius" : 2,
-	      "division energy" : 7
+	      "division radius" : 1,
+	      "division energy" : 10
 	  },
 	  "cancer": {
-	      "fract uptake" : 0.5,
-	      "time next division" : 15,
+	      "fract uptake" : 0.2,
+	      "time next division" : 50,
 	      "range next division" : 4,
-	      "km glycolysis" : 220,
+	      "km glycolysis" : 22,
 	      "km max glycolysis" : 370,
 	      "division energy" : 4
 	  },

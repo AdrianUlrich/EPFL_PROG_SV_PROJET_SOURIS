@@ -207,10 +207,6 @@ void Application::run()
             handleEvent(event, mRenderWindow);
         }
 
-        // Set active graph -> dealt in stats ?
-//        auto activeIndex = mCurrentGraphId;
-//        getStats().setActive(activeIndex);
-
         // Update logics
 		
         float timeFactor = getAppConfig().simulation_time_factor;
@@ -405,8 +401,6 @@ Vec2d Application::getCursorPositionInView() const
     return mRenderWindow.mapPixelToCoords(sf::Mouse::getPosition(mRenderWindow), mSimulationView);
 }
 
-
-
 void Application::createWindow(Vec2d const& size)
 {
     sf::VideoMode vm(size.x, size.y);
@@ -521,21 +515,21 @@ void Application::handleEvent(sf::Event event, sf::RenderWindow& window)
 
         // Reset the simulation
         case sf::Keyboard::Right:
-          if (mCurrentView == LAB)
+            if (mCurrentView == LAB)
             mSimulationView.move(100, 0);
-          break;
+            break;
         case sf::Keyboard::Left:
-          if (mCurrentView == LAB)
+        if (mCurrentView == LAB)
             mSimulationView.move(-100, 0);
-          break;
+        break;
         case sf::Keyboard::Up:
-          if (mCurrentView == LAB)
+        if (mCurrentView == LAB)
             mSimulationView.move(0, -100);
-          break;
+        break;
         case sf::Keyboard::Down:
-          if (mCurrentView == LAB)
+        if (mCurrentView == LAB)
             mSimulationView.move(0, 100);
-          break;
+        break;
 
         default:
             onEvent(event, window);
@@ -747,8 +741,8 @@ void Application::drawOnHelp(sf::RenderWindow& window, bool micro) const
     if(micro)
     {
         text = {    "---------------------",
-
                     "L: Switch to Lab View",
+                    "S: Toggle to ConcView of CS",
                     };
     } else {
         text = {    "---------------------",
@@ -758,9 +752,7 @@ void Application::drawOnHelp(sf::RenderWindow& window, bool micro) const
                     "T: track the entity at CP",
                     "O: switch to OrganView",
                     "Z: stop to track any entity",
-                    "R: reset the lab",
-					"ESC: close the window",
-					"Space bar : pause"
+                    "R: reset the lab"
                     };
     }
     for (auto& command : text)
@@ -816,6 +808,14 @@ View Application::getCurrentView() const
 {
 	return mCurrentView;
 }
+void Application::toggleConcentrationView()
+{
+	if (mCurrentView == CONCENTRATION)
+		mCurrentView = ECM;
+	else
+		if (mCurrentView == ECM)
+			mCurrentView = CONCENTRATION;
+}
 
 bool isDebugOn()
 {
@@ -826,3 +826,7 @@ bool isOrganViewOn()
 {
 	return getApp().getCurrentView() != LAB;
 }
+
+
+
+	
