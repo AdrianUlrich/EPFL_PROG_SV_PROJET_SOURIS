@@ -7,17 +7,17 @@
 	  "fixed step" : 0.1
       },
        "substance":{
-	   "max" : 20000,
-	   "diffusion radius" : 20,
-	   "diffusion constant" : 500,
+	   "max" : 200000,
+	   "diffusion radius" : 3,
+	   "diffusion constant" : 100,
 	   "glucose": {
-	       "base": 600,
+	       "base":  0,
 	       "range": 600,
-	       "delta": 100
+	       "delta": 1000
 	   },
 	   "bromopyruvate":{
 	       "base" : 0,
-	       "delta": 100
+	       "delta": 500
 	   },
 	   "vgef":{
 	       "diffusion radius" : 2,
@@ -53,7 +53,7 @@
             "longevity":40000,
             "max speed":100,
             "view":{
-               "range":6.283185307,
+               "range":2.283185307,
                "distance":250
             },
             "energy":{
@@ -74,7 +74,7 @@
 	  "fence" : "wood.png"
       },
       "organ":{
-         "size": 50,
+         "size":500,
          "cells": 50,
          "texture":"lab3.png",
 	  "textures": {
@@ -92,12 +92,12 @@
 	      "range" : 0.02
 	  },
 	  "blood": {
-	      "capillary min dist" : 2,
+	      "capillary min dist" : 1,
 	      "creation start" : 2
 	  },
 	  "liver": {
 	      "fract uptake" : 0.5,
-	      "time next division" : 10,
+	      "time next division" : 15,
 	      "range next division" : 5,
 	      "km glycolysis" : 240,
 	      "km max glycolysis" : 300,
@@ -106,15 +106,17 @@
 	      "decay atp" : 3000,
 	      "division cost" : 0.5,
 	      "division radius" : 1,
-	      "division energy" : 10
+	      "division energy" : 10,
+	      "glucose usage"   : 0.4
 	  },
 	  "cancer": {
-	      "fract uptake" : 0.2,
+	      "fract uptake" : 0.5,
 	      "time next division" : 50,
 	      "range next division" : 4,
-	      "km glycolysis" : 22,
-	      "km max glycolysis" : 370,
-	      "division energy" : 4
+	      "km glycolysis" : 220,
+	      "km max glycolysis" : 3200,
+	      "division energy" : 8,
+	      "glucose usage"   : 0.01
 	  },
 
           "debug texture":"lab.png"
@@ -127,8 +129,8 @@
       "antialiasing level":4,
       "title":"INFOSV Simulation",
       "simulation":{
-         "width":600,
-         "height":600
+         "width":400,
+         "height":400
       },
       "stats":{
          "width":200

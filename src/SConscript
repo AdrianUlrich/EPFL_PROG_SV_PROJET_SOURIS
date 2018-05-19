@@ -88,10 +88,10 @@ def DefineProgram(name, additional_src):
 
 DefineProgram('application', Glob('FinalApplication.cpp'))
 DefineProgram('BloodSystemTest', Glob('Tests/GraphicalTests/BloodSystemTest.cpp'))
+DefineProgram('SubstControlTest', Glob('Tests/GraphicalTests/SubstControlTest.cpp'))
 DefineProgram('LiverTest', Glob('Tests/GraphicalTests/LiverTest.cpp'))
 DefineProgram('DiffusionTest', Glob('Tests/GraphicalTests/DiffusionTest.cpp'))
 DefineProgram('DrawOrganTest', Glob('Tests/GraphicalTests/DrawOrganTest.cpp'))
-DefineProgram('LabTest', Glob('Tests/GraphicalTests/LabTest.cpp'))
 DefineProgram('EatableTest', Glob('Tests/UnitTests/EatableTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('ColliderTest', Glob('Tests/UnitTests/ColliderTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))
 DefineProgram('Vec2dTest', Glob('Tests/UnitTests/Vec2dTest.cpp') + Glob('Tests/UnitTests/CatchTests.cpp'))

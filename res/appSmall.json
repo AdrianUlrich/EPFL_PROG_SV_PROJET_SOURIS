@@ -106,7 +106,8 @@
 	      "decay atp" : 3000,
 	      "division cost" : 0.5,
 	      "division radius" : 1,
-	      "division energy" : 10
+	      "division energy" : 10,
+	      "glucose usage"   : 0.4
 	  },
 	  "cancer": {
 	      "fract uptake" : 0.5,
@@ -114,7 +115,8 @@
 	      "range next division" : 4,
 	      "km glycolysis" : 220,
 	      "km max glycolysis" : 3200,
-	      "division energy" : 8
+	      "division energy" : 8,
+	      "glucose usage"   : 0.01
 	  },
 
           "debug texture":"lab.png"
@@ -127,8 +129,8 @@
       "antialiasing level":4,
       "title":"INFOSV Simulation",
       "simulation":{
-         "width":600,
-         "height":600
+         "width":400,
+         "height":400
       },
       "stats":{
          "width":200
