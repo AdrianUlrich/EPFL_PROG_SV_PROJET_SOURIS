@@ -27,6 +27,9 @@ Animal::Animal(Vec2d const& pos, double energy, sf::Texture* texture, double ray
 ,	foie(new Organ(true))
 {}
 
+void Animal::updateCurrentSubstance(SubstanceId const& id)
+{foie->setSubstance(id);}
+
 Animal::~Animal()
 {
 	if (box!=nullptr) box->reset();

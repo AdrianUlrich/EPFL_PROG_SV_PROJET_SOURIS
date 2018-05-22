@@ -240,6 +240,7 @@ double Lab::getDelta(SubstanceId id) const
 		case SubstanceId::GLUCOSE : return deltaGlucose;
 		case SubstanceId::BROMOPYRUVATE : return deltaBromo;
 		case SubstanceId::VGEF : return deltaVGEF;
+		default: return 0;
 	}
 }
 
@@ -254,6 +255,7 @@ SubstanceId Lab::nextSubstance()
 		case SubstanceId::BROMOPYRUVATE : currentSubstance=SubstanceId::VGEF;break;
 		case SubstanceId::VGEF : currentSubstance=SubstanceId::GLUCOSE;break;
 	}
+	tracked->updateCurrentSubstance(currentSubstance);
 	return currentSubstance;
 }
 

@@ -6,6 +6,7 @@
 class Organ;
 #include <Utility/Utility.hpp>
 #include <Random/Random.hpp>
+#include <Types.hpp>
 
 class Organ;
 
@@ -65,6 +66,8 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		/** pure virtual inherited isDead() not yet redefined */
 		/** method to ACK that another entity died */
 		virtual void isDead(SimulatedEntity*) override;
+		
+		void updateCurrentSubstance(SubstanceId const& id);
 		
 		
 	protected:

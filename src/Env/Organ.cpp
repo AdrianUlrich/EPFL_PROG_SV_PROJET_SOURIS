@@ -17,6 +17,9 @@ Organ::Organ(bool generation)
 	if (generation) generate();	
 }
 
+void Organ::setSubstance(SubstanceId const& id)
+{currentSubst=id;}
+
 double Organ::getWidth() const
 {return getAppConfig().simulation_organ_size;}
 

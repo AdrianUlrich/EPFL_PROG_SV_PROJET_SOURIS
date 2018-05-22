@@ -40,6 +40,8 @@ class Organ
 		void updateCellHandlerAt(CellCoord const&, Substance const&);
 		double getConcentrationAt(CellCoord const&,SubstanceId) const;
 		
+		void setSubstance(SubstanceId const& id);
+		
 	protected:
 		virtual void generate();
 		void reloadConfig();
