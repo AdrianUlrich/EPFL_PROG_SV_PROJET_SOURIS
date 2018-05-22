@@ -278,3 +278,10 @@ void Lab::decreaseCurrentSubst()
 		case SubstanceId::VGEF: deltaVGEF-=getAppConfig().delta_vgef;break;
 	}
 }
+
+void Lab::setCancerAt(Vec2d const& pos)
+{tracked->setCancerAt(pos);}
+
+void Lab::printSubstanceAt(Vec2d const& pos) const
+{tracked->printSubstanceAt(currentSubstance,pos);}
+

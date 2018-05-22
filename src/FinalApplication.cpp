@@ -56,7 +56,7 @@ void FinalApplication::onEvent(sf::Event event, sf::RenderWindow&)
 			}
 				break;
 				
-				/* // A DECOMMENTER QUAND NECESSAIRE	
+				 // A DECOMMENTER QUAND NECESSAIRE	
 			case sf::Keyboard::X: 
 			{
 				if (isOrganViewOn()){
@@ -65,7 +65,7 @@ void FinalApplication::onEvent(sf::Event event, sf::RenderWindow&)
 
 			}
 				break;
-				*/
+				
 			case sf::Keyboard::N: // next substance
 			{
 				if (isOrganViewOn()){

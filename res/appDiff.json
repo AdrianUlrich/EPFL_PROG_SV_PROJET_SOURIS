@@ -11,7 +11,7 @@
 	   "diffusion radius" : 3,
 	   "diffusion constant" : 100,
 	   "glucose": {
-	       "base":  0,
+	       "base":  500,
 	       "range": 600,
 	       "delta": 1000
 	   },

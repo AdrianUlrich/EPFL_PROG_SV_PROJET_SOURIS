@@ -30,6 +30,9 @@ Animal::Animal(Vec2d const& pos, double energy, sf::Texture* texture, double ray
 void Animal::updateCurrentSubstance(SubstanceId const& id)
 {foie->setSubstance(id);}
 
+void Animal::printSubstanceAt(SubstanceId id, Vec2d const& pos) const
+{foie->printSubstanceAt(id,pos);}
+
 Animal::~Animal()
 {
 	if (box!=nullptr) box->reset();
@@ -222,11 +225,10 @@ bool Animal::isTargetInSight(const Vec2d& position)
 
 
 void Animal::drawCurrentOrgan(sf::RenderTarget& target)
-{
-	foie->Organ::drawOn(target);
-}
+{foie->Organ::drawOn(target);}
 
 void Animal::updateOrgan()
-{
-	foie->update();
-}
+{foie->update();}
+
+void Animal::setCancerAt(Vec2d const& pos)
+{foie->setCancerAt(pos);}

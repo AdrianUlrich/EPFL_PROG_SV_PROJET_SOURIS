@@ -69,7 +69,9 @@ class Animal : public SimulatedEntity /// ABSTRACT
 		
 		void updateCurrentSubstance(SubstanceId const& id);
 		
-		
+		void setCancerAt(Vec2d const& pos);		
+		void printSubstanceAt(SubstanceId id, Vec2d const& pos) const;
+
 	protected:
 		virtual void setRotation(Angle a);
 		virtual void setOrgan(Organ*o);

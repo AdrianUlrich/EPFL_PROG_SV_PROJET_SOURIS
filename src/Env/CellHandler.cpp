@@ -3,6 +3,8 @@
 #include "CellECM.hpp"
 #include "CellBlood.hpp"
 #include "CellLiver.hpp"
+#include "CellLiverCancer.hpp"
+#include <Types.hpp>
 
 CellHandler::CellHandler(CellCoord pos, Organ* o)
 	:	pos(pos)
@@ -10,6 +12,7 @@ CellHandler::CellHandler(CellCoord pos, Organ* o)
 	,	ecm(new CellECM(this))
 	,	liver(nullptr)
 	,	blood(nullptr)
+	,	cancer(false)
 {
 	
 }
@@ -32,6 +35,8 @@ bool CellHandler::hasLiver() const
 {return liver!=nullptr;}
 bool CellHandler::hasBlood() const
 {return blood!=nullptr;}
+bool CellHandler::hasCancer() const
+{return cancer;}
 
 void CellHandler::setECM()
 {if(ecm==nullptr)ecm=new CellECM(this);}
@@ -39,6 +44,15 @@ void CellHandler::setLiver()
 {if(liver==nullptr)liver=new CellLiver(this);}
 void CellHandler::setBlood(TypeBloodCell t)
 {if(blood==nullptr)blood=new CellBlood(this,t);}
+void CellHandler::setCANCER()
+{
+	cancer=true;
+	CellLiverCancer* cancer(new CellLiverCancer(this));
+	if (liver!=nullptr)
+		cancer->updateSubstance({.0,liver->getQuantity(SubstanceId::GLUCOSE),.0});
+	delete liver;
+	liver=cancer;
+}
 
 void CellHandler::updateSubstance(Substance const& s)
 {ecm->updateSubstance(s);}
@@ -62,6 +76,8 @@ void CellHandler::update(sf::Time dt)
 {
 	/// update will return true if the CellOrgan died
 	if (hasECM() and ecm->update(dt)) {delete ecm;ecm=nullptr;}
-	if (hasLiver() and liver->update(dt)) {delete liver;liver=nullptr;}
+	if (hasLiver() and liver->update(dt)) {delete liver;liver=nullptr;cancer=false;}
 	if (hasBlood() and blood->update(dt)) {delete blood;blood=nullptr;}
 }
+
+

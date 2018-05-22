@@ -2,6 +2,8 @@
 #define CELLLIVER_HPP
 
 #include "CellOrgan.hpp"
+#include <Utility/Utility.hpp>
+
 
 class CellLiver: public CellOrgan
 {
@@ -9,13 +11,16 @@ class CellLiver: public CellOrgan
 		CellLiver(CellHandler*,double atp = 100);
 
 		virtual bool update(sf::Time) override;
-		
+	
+	protected:
 		virtual double getFractUptake() const;
-		void uptake(SubstanceId id, double fract);
 		virtual double getKrebsKm() const;
 		virtual double getKrebsVmax() const;
-		virtual void ATPSynthesis(sf::Time dt) const;
-		
+		virtual double getFractGlu() const;
+		virtual void ATPSynthesis(sf::Time dt);
+		virtual void Krebs(sf::Time dt);
+		void glycolysis(sf::Time dt);	
+
 	private:
 		double atp;
 };

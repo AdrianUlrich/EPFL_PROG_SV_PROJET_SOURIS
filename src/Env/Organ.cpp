@@ -44,8 +44,9 @@ void Organ::update()
 	sf::Time dt(sf::seconds(getAppConfig().simulation_fixed_step));
 	for (auto& vec : cellHandlers)
 		for (auto val : vec)
-			val->update(dt);		
+			val->update(dt);
 	updateRepresentation();
+	//printAvgSubst(SubstanceId::GLUCOSE);
 }
 	
 void Organ::drawOn(sf::RenderTarget& target)
@@ -99,6 +100,7 @@ void Organ::reloadCacheStructure()
 	liverVertexes = generateVertexes(getAppConfig().simulation_organ["textures"], nbCells, cellSize);
 	bloodVertexes = liverVertexes;
 	concentrationVertexes = liverVertexes;
+	cancerVertexes = liverVertexes;
 }
 
 void Organ::updateRepresentation(bool also_update)
@@ -122,21 +124,23 @@ void Organ::drawRepresentation ()
 	if (getApp().isConcentrationOn())
 	{
 		renderingCache.clear();
-		std::string s;
+		std::string S;
 		switch (currentSubst)
 		{
-			case SubstanceId::GLUCOSE : s="glucose";break;
-			case SubstanceId::BROMOPYRUVATE : s="bromopyruvate";break;
-			case SubstanceId::VGEF : s="vgef";break;
+			case SubstanceId::GLUCOSE : S="glucose";break;
+			case SubstanceId::BROMOPYRUVATE : S="bromopyruvate";break;
+			case SubstanceId::VGEF : S="vgef";break;
 		}
-		rs.texture = &getAppTexture(textures[s].toString()); // ici pour la texture liee aux concentrations
+		rs.texture = &getAppTexture(textures[S].toString()); // ici pour la texture liee aux concentrations
 		renderingCache.draw(concentrationVertexes.data(), concentrationVertexes.size(), sf::Quads, rs); 
 	}
 	else 
 	{
 		renderingCache.clear(sf::Color(223,196,176));
-		rs.texture = &getAppTexture(textures["liver"].toString()); // ici pour la texture liee a une cellule hépatique
+		rs.texture = &getAppTexture(textures["liver"].toString()); // ici pour la texture liee a une cellule hepatique
 		renderingCache.draw(liverVertexes.data(), liverVertexes.size(), sf::Quads, rs); 	
+		rs.texture = &getAppTexture(textures["cancer"].toString()); // ici pour la texture liee a une cellule hepatique cancereuse
+		renderingCache.draw(cancerVertexes.data(), cancerVertexes.size(), sf::Quads, rs);
 	}
 	
 	rs.texture = &getAppTexture(textures["blood"].toString()); // ici pour la texture liee a une cellule sanguine
@@ -149,46 +153,53 @@ void Organ::updateRepresentationAt(CellCoord const& c)
 	int x(c.x),y(c.y);
 	auto i(indexesForCellVertexes(x,y,nbCells));
 	
-	/// lots of lines but minimises number of assignments(8) and checks(1 or 2)
-	if(cellHandlers[x][y]->hasBlood())
-	{
-		bloodVertexes[i[0]].color.a=
-		bloodVertexes[i[1]].color.a=
-		bloodVertexes[i[2]].color.a=
-		bloodVertexes[i[3]].color.a=255;
-		liverVertexes[i[0]].color.a=
-		liverVertexes[i[1]].color.a=
-		liverVertexes[i[2]].color.a=
-		liverVertexes[i[3]].color.a=0;
-	}
-	else if(cellHandlers[x][y]->hasLiver())
-	{
-		liverVertexes[i[0]].color.a=
-		liverVertexes[i[1]].color.a=
-		liverVertexes[i[2]].color.a=
-		liverVertexes[i[3]].color.a=255;
-		bloodVertexes[i[0]].color.a=
-		bloodVertexes[i[1]].color.a=
-		bloodVertexes[i[2]].color.a=
-		bloodVertexes[i[3]].color.a=0;
-	}
-	else
-	{
-		bloodVertexes[i[0]].color.a=
-		bloodVertexes[i[1]].color.a=
-		bloodVertexes[i[2]].color.a=
-		bloodVertexes[i[3]].color.a=0;
-		liverVertexes[i[0]].color.a=
-		liverVertexes[i[1]].color.a=
-		liverVertexes[i[2]].color.a=
-		liverVertexes[i[3]].color.a=0;
-	}
 	if (getApp().isConcentrationOn())
 	{
 		concentrationVertexes[i[0]].color.a=
 		concentrationVertexes[i[1]].color.a=
 		concentrationVertexes[i[2]].color.a=
 		concentrationVertexes[i[3]].color.a=std::max(int(255*getConcentrationAt(c,currentSubst)/getAppConfig().substance_max_value),5);
+	}
+	
+	/// inefficient implementation but project is super inefficient anyways...
+	if (cellHandlers[x][y]->hasBlood())
+		bloodVertexes[i[0]].color.a=
+		bloodVertexes[i[1]].color.a=
+		bloodVertexes[i[2]].color.a=
+		bloodVertexes[i[3]].color.a=255;
+	else
+		bloodVertexes[i[0]].color.a=
+		bloodVertexes[i[1]].color.a=
+		bloodVertexes[i[2]].color.a=
+		bloodVertexes[i[3]].color.a=0;
+	
+	if (cellHandlers[x][y]->hasLiver())	
+		if (cellHandlers[x][y]->hasCancer())
+			cancerVertexes[i[0]].color.a=
+			cancerVertexes[i[1]].color.a=
+			cancerVertexes[i[2]].color.a=
+			cancerVertexes[i[3]].color.a=255;
+		else
+		{
+			liverVertexes[i[0]].color.a=
+			liverVertexes[i[1]].color.a=
+			liverVertexes[i[2]].color.a=
+			liverVertexes[i[3]].color.a=255;
+			cancerVertexes[i[0]].color.a=
+			cancerVertexes[i[1]].color.a=
+			cancerVertexes[i[2]].color.a=
+			cancerVertexes[i[3]].color.a=0;
+		}
+	else
+	{
+		liverVertexes[i[0]].color.a=
+		liverVertexes[i[1]].color.a=
+		liverVertexes[i[2]].color.a=
+		liverVertexes[i[3]].color.a=0;
+		cancerVertexes[i[0]].color.a=
+		cancerVertexes[i[1]].color.a=
+		cancerVertexes[i[2]].color.a=
+		cancerVertexes[i[3]].color.a=0;
 	}
 }
 
@@ -210,6 +221,10 @@ void Organ::updateCellHandler(CellCoord const& c, Kind k)
 		
 		case Kind::Capillary :
 		cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::CAPILLARY);
+		break;
+		
+		case Kind::CANCER :
+		cellHandlers[c.x][c.y]->setCANCER();
 		break;
 		
 		default:
@@ -341,7 +356,30 @@ void Organ::generateCapillaryFromPosition(CellCoord& p, CellCoord dir)
 	/// Growing Capillaries
 	const int LENGTH_CAPILLARY((nbCells/2)-4);
 	int length(1);
-	while (generateCapillaryOneStep(p,dir,length,LENGTH_CAPILLARY))
+	while (generateCapillaryOneStep(p,dir,length,LENGTH_CAPILLARY));
 	// cout<<'{'<<p.x<<','<<p.y<<'}'<<endl;
-	;
+}
+
+void Organ::setCancerAt(Vec2d const& pos)
+{updateCellHandler(toCellCoord(pos),Kind::CANCER);}
+
+#include <iostream>
+void Organ::printAvgSubst(SubstanceId id) const
+{
+	using namespace std;
+	double sum(0);
+	int i(0);
+	for (auto& vec : cellHandlers)
+		for (auto val : vec)
+			if (val->hasLiver())
+			{
+				++i;
+				sum+=val->getLiverQuantity(id);
+			}
+	cout<<sum/i<<endl;
+}
+void Organ::printSubstanceAt(SubstanceId id, Vec2d const& pos) const
+{
+	using namespace std;
+	cout<<getConcentrationAt(toCellCoord(pos),id)<<endl;
 }

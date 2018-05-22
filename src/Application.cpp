@@ -590,8 +590,12 @@ void Application::handleEvent(sf::Event event, sf::RenderWindow& window)
 
     // Drag view: end drag
     case sf::Event::MouseButtonReleased:
+		{
         if (event.mouseButton.button == sf::Mouse::Left)
             mIsDragging = false;
+        if (mCurrentView == ECM)
+			getAppEnv().printSubstanceAt(getCursorPositionInView());
+		}
         break;
 
     // Drag view: move view

@@ -17,7 +17,7 @@ class CellHandler;
 class Organ 
 {
 	public:
-		enum class Kind : short {ECM,Liver,Artery,Capillary};
+		enum class Kind : short {ECM,Liver,Artery,Capillary,CANCER};
 		
 	public:
 		Organ(bool generation);
@@ -42,6 +42,9 @@ class Organ
 		
 		void setSubstance(SubstanceId const& id);
 		
+		void setCancerAt(Vec2d const& pos);
+		void printSubstanceAt(SubstanceId id, Vec2d const& pos) const;
+
 	protected:
 		virtual void generate();
 		void reloadConfig();
@@ -58,7 +61,7 @@ class Organ
 
 	private:
 		void drawRepresentation();
-		
+		void printAvgSubst(SubstanceId id) const;
 	private:		
 		int nbCells;
 		float cellSize;
@@ -67,6 +70,7 @@ class Organ
 		vector<sf::Vertex> bloodVertexes;
 		vector<sf::Vertex> liverVertexes;
 		vector<sf::Vertex> concentrationVertexes;
+		vector<sf::Vertex> cancerVertexes;
 		
 		SubstanceId currentSubst;
 };

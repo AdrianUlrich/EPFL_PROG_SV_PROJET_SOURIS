@@ -54,6 +54,10 @@ class Lab final : public sf::NonCopyable
 		SubstanceId nextSubstance();
 		void increaseCurrentSubst();
 		void decreaseCurrentSubst();
+		
+		/** Silence like a cancer grows ~Simund&Garfunkel */
+		void setCancerAt(Vec2d const& pos);
+		void printSubstanceAt(Vec2d const& pos) const;
 
 	private:
 		bool addEntity(SimulatedEntity*);

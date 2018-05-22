@@ -4,13 +4,13 @@
 #include <Utility/Utility.hpp>
 #include "Types.hpp"
 #include "Substance.hpp"
-class Organ;
+#include "Organ.hpp"
 class CellECM;
 class CellBlood;
 class CellLiver;
 
 
-class CellHandler
+class CellHandler final
 {
 	public:
 		CellHandler(CellCoord,Organ*);
@@ -25,9 +25,11 @@ class CellHandler
 		bool hasECM() const;
 		bool hasLiver() const;
 		bool hasBlood() const;
+		bool hasCancer() const;
 		void setECM();
 		void setLiver();
 		void setBlood(TypeBloodCell);
+		void setCANCER();
 		void updateSubstance(Substance const&);
 		Quantity getECMQuantity(SubstanceId) const;
 		Quantity getLiverQuantity(SubstanceId) const;
@@ -39,6 +41,7 @@ class CellHandler
 		bool isOut(CellCoord const&);
 		
 		void update(sf::Time);
+		
 			
 	private:
 		CellCoord pos;
@@ -46,7 +49,9 @@ class CellHandler
 		
 		CellECM* ecm;
 		CellLiver* liver;
-		CellBlood* blood;		
+		CellBlood* blood;	
+		
+		bool cancer;	
 };
 
 #endif // CELLHANDLER_HPP

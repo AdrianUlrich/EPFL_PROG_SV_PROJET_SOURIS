@@ -7,6 +7,7 @@
 #include <iostream>
 #include <algorithm>
 #include <exception>
+#include <cmath>
 
 Substance::Substance()
 : cVGEF(0), cGLU(0), cBMP(0)
@@ -148,7 +149,7 @@ Substance operator*(Substance sub, double scalaire)
 
 void Substance::update(SubstanceId subId, double scalaire)
 {
-	if ((scalaire<0?-scalaire:scalaire)<EPSILON)
+	if (std::abs(scalaire)<EPSILON)
 		cVGEF = cGLU = cBMP = 0;
 	switch (subId)
 	{
@@ -177,7 +178,7 @@ void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 		case SubstanceId::VGEF :
 		{
 			double oho(c*cVGEF);
-			if (oho<SUBSTANCE_PRECISION) return;
+			if (std::abs(oho)<SUBSTANCE_PRECISION) return;
 			cVGEF-=oho;
 			receiver.cVGEF+=oho;
 		}
@@ -186,7 +187,7 @@ void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 		case SubstanceId::GLUCOSE :
 		{
 			double oho(c*cGLU);
-			if (oho<SUBSTANCE_PRECISION) return;
+			if (std::abs(oho)<SUBSTANCE_PRECISION) return;
 			cGLU-=oho;
 			receiver.cGLU+=oho;
 		}
@@ -195,7 +196,7 @@ void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 		case SubstanceId::BROMOPYRUVATE :
 		{
 			double oho(c*cBMP);
-			if (oho<SUBSTANCE_PRECISION) return;
+			if (std::abs(oho)<SUBSTANCE_PRECISION) return;
 			cBMP-=oho;
 			receiver.cBMP+=oho;
 		}

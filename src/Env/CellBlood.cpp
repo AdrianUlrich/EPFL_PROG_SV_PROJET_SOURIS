@@ -9,9 +9,10 @@
 CellBlood::CellBlood(CellHandler* h,TypeBloodCell t)
 	:	CellOrgan(h)
 	,	type(t)
-{
-	
-}
+{}
+
+TypeBloodCell CellBlood::getType() const
+{return type;}
 
 bool CellBlood::update(sf::Time dt)
 {

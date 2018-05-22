@@ -10,6 +10,8 @@ class CellBlood: public CellOrgan
 		CellBlood(CellHandler*,TypeBloodCell t=ARTERY);
 		
 		virtual bool update(sf::Time) override;
+		
+		TypeBloodCell getType() const;
 	private:
 		TypeBloodCell type;
 };

@@ -3,6 +3,7 @@
 
 #include <Types.hpp>
 #include <Utility/Constants.hpp>
+#include <Utility/Utility.hpp>
 
 class Substance 
 {	
