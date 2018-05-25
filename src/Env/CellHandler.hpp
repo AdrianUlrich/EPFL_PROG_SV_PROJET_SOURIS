@@ -26,10 +26,10 @@ class CellHandler final
 		bool hasLiver() const;
 		bool hasBlood() const;
 		bool hasCancer() const;
-		void setECM();
-		void setLiver();
-		void setBlood(TypeBloodCell);
-		void setCANCER();
+		bool setECM();
+		bool setLiver();
+		bool setBlood(TypeBloodCell);
+		bool setCANCER();
 		void updateSubstance(Substance const&);
 		Quantity getECMQuantity(SubstanceId) const;
 		Quantity getLiverQuantity(SubstanceId) const;
@@ -42,6 +42,7 @@ class CellHandler final
 		
 		bool update(sf::Time);
 		void updateCellHandlerAt(CellCoord const&, Substance const&);
+		bool updateCellHandlerAt(CellCoord const&, Organ::Kind);
 
 		
 		void printAtp() const;

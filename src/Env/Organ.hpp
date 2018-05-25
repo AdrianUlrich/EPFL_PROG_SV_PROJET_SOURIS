@@ -44,6 +44,7 @@ class Organ
 		
 		void setCancerAt(Vec2d const& pos);
 		void printSubstanceAt(SubstanceId id, Vec2d const& pos) const;
+		bool propagate(CellCoord const&,Kind);
 
 	protected:
 		virtual void generate();
@@ -57,7 +58,7 @@ class Organ
 		virtual bool generateCapillaryOneStep(CellCoord& p, CellCoord const& dir, int& NBcells, int const& maxLength);
 		virtual void generateCapillaryFromPosition(CellCoord& p, CellCoord dir);
 		
-		virtual void updateCellHandler(CellCoord const&,Kind);
+		virtual bool updateCellHandler(CellCoord const&,Kind);
 
 	private:
 		void drawRepresentation();

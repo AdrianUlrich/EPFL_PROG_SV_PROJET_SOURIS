@@ -40,20 +40,22 @@ bool CellHandler::hasBlood() const
 bool CellHandler::hasCancer() const
 {return cancer;}
 
-void CellHandler::setECM()
-{if(ecm==nullptr)ecm=new CellECM(this);}
-void CellHandler::setLiver()
-{if(liver==nullptr)liver=new CellLiver(this);}
-void CellHandler::setBlood(TypeBloodCell t)
-{if(blood==nullptr)blood=new CellBlood(this,t);}
-void CellHandler::setCANCER()
+bool CellHandler::setECM()
+{if(ecm==nullptr){ecm=new CellECM(this);return true;}return false;}
+bool CellHandler::setLiver()
+{if(liver==nullptr){liver=new CellLiver(this);return true;}return false;}
+bool CellHandler::setBlood(TypeBloodCell t)
+{if(blood==nullptr){blood=new CellBlood(this,t);return true;}return false;}
+bool CellHandler::setCANCER()
 {
+	if (cancer) return false;
 	cancer=true;
 	CellLiverCancer* cancer(new CellLiverCancer(this));
 	if (liver!=nullptr)
 		cancer->updateSubstance({.0,liver->getQuantity(SubstanceId::GLUCOSE),.0});
 	delete liver;
 	liver=cancer;
+	return true;
 }
 
 void CellHandler::updateSubstance(Substance const& s)
@@ -89,3 +91,6 @@ void CellHandler::printAtp() const
 
 void CellHandler::updateCellHandlerAt(CellCoord const& c, Substance const& S)
 {if (c==pos) updateSubstance(S); else organ->updateCellHandlerAt(c,S);}
+
+void CellHandler::updateCellHandlerAt(CellCoord const& c, Kind k)
+{if (c!=pos) organ->propagate(c,S);}

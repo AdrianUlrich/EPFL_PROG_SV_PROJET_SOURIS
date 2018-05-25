@@ -17,6 +17,9 @@ Organ::Organ(bool generation)
 	if (generation) generate();	
 }
 
+bool Organ::propagate(CellCoord const&c, Kind k)
+{return updateCellHandler(c,k);}
+
 void Organ::setSubstance(SubstanceId const& id)
 {currentSubst=id;}
 
@@ -208,28 +211,23 @@ void Organ::updateCellHandler(CellCoord const& c, Kind k)
 	switch (k)
 	{
 		case Kind::ECM :
-		cellHandlers[c.x][c.y]->setECM();
-		break;
+		return cellHandlers[c.x][c.y]->setECM();
 		
 		case Kind::Liver :
-		cellHandlers[c.x][c.y]->setLiver();
-		break;
+		return cellHandlers[c.x][c.y]->setLiver();
 		
 		case Kind::Artery :
-		cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::ARTERY);
-		break;
+		return cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::ARTERY);
 		
 		case Kind::Capillary :
-		cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::CAPILLARY);
-		break;
+		return cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::CAPILLARY);
 		
 		case Kind::CANCER :
-		cellHandlers[c.x][c.y]->setCANCER();
-		break;
+		return cellHandlers[c.x][c.y]->setCANCER();
 		
 		default:
 		//NOPE
-		break;
+		return false;
 	}
 	updateRepresentationAt(c);
 }

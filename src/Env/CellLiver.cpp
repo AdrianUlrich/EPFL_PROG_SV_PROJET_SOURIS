@@ -22,7 +22,7 @@ bool CellLiver::update(sf::Time dt)
 	ATPSynthesis(dt);
 	atp*=1-exp(-getAppConfig().liver_decay_atp*dt.asSeconds());
 	atp-=uniform(getAppConfig().base_atp_usage , getAppConfig().base_atp_usage+getAppConfig().range_atp_usage);
-	if (atp<=0) std::cout<<"ded"<<std::endl;
+	divide();
 	return atp<=0 or atp!=atp; ///< Checking for -nan value
 }
 void CellLiver::ATPSynthesis(sf::Time dt)
@@ -67,8 +67,17 @@ double CellLiver::getGlycoVmax() const
 double CellLiver::getFractGlu() const
 {return getAppConfig().liver_glucose_usage;}
 
+double CellLiver::getDivisionEnergy() const
+{return getAppConfig().liver_division_energy;}
+
 void CellLiver::printAtp() const
 {
 	using namespace std;
 	cout<<atp<<endl;
+}
+
+void CellLiver::divide(Kind k)
+{
+	// calcul de position etk etk
+	if (handler->updateCellHandlerAt(position,k))
 }

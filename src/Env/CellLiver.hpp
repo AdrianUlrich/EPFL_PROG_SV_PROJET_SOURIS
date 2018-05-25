@@ -2,6 +2,7 @@
 #define CELLLIVER_HPP
 
 #include "CellOrgan.hpp"
+#include "Organ.hpp"
 #include <Utility/Utility.hpp>
 
 
@@ -22,7 +23,8 @@ class CellLiver: public CellOrgan
 		virtual double getFractGlu() const;
 		virtual void ATPSynthesis(sf::Time dt);
 		virtual void Krebs(sf::Time dt);
-		void glycolysis(sf::Time dt);	
+		void glycolysis(sf::Time dt);
+		virtual void divide(Kind k = Organ::Kind::Liver);
 
 	private:
 		double atp;

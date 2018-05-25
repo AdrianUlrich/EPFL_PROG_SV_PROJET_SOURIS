@@ -17,6 +17,7 @@ class CellLiverCancer: public CellLiver
 		virtual double getFractGlu() const override;
 		//virtual void ATPSynthesis(sf::Time dt) override;
 		virtual void Krebs(sf::Time) override;
+		virtual void divide() override;
 
 	private:
 };
