@@ -4,10 +4,10 @@
 double CellLiverCancer::getFractUptake() const
 {return getAppConfig().cancer_fract_uptake;}
 
-double CellLiverCancer::getKrebsKm() const
+double CellLiverCancer::getGlycoKm() const
 {return getAppConfig().cancer_km_glycolysis;}
 
-double CellLiverCancer::getKrebsVmax() const
+double CellLiverCancer::getGlycoVmax() const
 {return getAppConfig().cancer_km_max_glycolysis;}
 
 double CellLiverCancer::getFractGlu() const

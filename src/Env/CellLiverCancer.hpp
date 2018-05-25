@@ -12,8 +12,8 @@ class CellLiverCancer: public CellLiver
 		//virtual bool update(sf::Time) override;
 		
 	protected:
-		virtual double getKrebsKm() const override;
-		virtual double getKrebsVmax() const override;
+		virtual double getGlycoKm() const override;
+		virtual double getGlycoVmax() const override;
 		virtual double getFractGlu() const override;
 		//virtual void ATPSynthesis(sf::Time dt) override;
 		virtual void Krebs(sf::Time) override;

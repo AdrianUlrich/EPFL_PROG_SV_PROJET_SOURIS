@@ -34,7 +34,7 @@ bool CellBlood::update(sf::Time dt)
 			{
 				double r(Vec2d(i,j).length());
 				Substance C(C0*0.5*(1-std::erf(r/sqrt(4*D*dt.asSeconds()))));
-				handler->getOrgan()->updateCellHandlerAt(pos+CellCoord(i,j),C);
+				handler->updateCellHandlerAt(pos+CellCoord(i,j),C);
 			}
 		}
 		

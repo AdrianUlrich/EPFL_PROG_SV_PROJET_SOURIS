@@ -40,7 +40,11 @@ class CellHandler final
 		/** isOut method from organ pointer */		
 		bool isOut(CellCoord const&);
 		
-		void update(sf::Time);
+		bool update(sf::Time);
+		void updateCellHandlerAt(CellCoord const&, Substance const&);
+
+		
+		void printAtp() const;
 		
 			
 	private:

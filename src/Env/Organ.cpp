@@ -42,10 +42,11 @@ double Organ::getConcentrationAt(CellCoord const& p, SubstanceId id) const
 void Organ::update()
 {
 	sf::Time dt(sf::seconds(getAppConfig().simulation_fixed_step));
-	for (auto& vec : cellHandlers)
-		for (auto val : vec)
-			val->update(dt);
-	updateRepresentation();
+	for (int x(0); x<nbCells; ++x)
+		for (int y(0); y<nbCells; ++y)
+			if (cellHandlers[x][y]->update(dt))
+				updateRepresentationAt(CellCoord(x,y));
+	updateRepresentation(getApp().isConcentrationOn());
 	//printAvgSubst(SubstanceId::GLUCOSE);
 }
 	
@@ -109,7 +110,6 @@ void Organ::updateRepresentation(bool also_update)
 		for (int y(0); y<nbCells; ++y)
 			for (int x(0); x<nbCells; ++x)
 				updateRepresentationAt({x,y}); // implicit constructor of CellCoord
-	
 	drawRepresentation();
 	
 	renderingCache.display();	
@@ -231,6 +231,7 @@ void Organ::updateCellHandler(CellCoord const& c, Kind k)
 		//NOPE
 		break;
 	}
+	updateRepresentationAt(c);
 }
 
 
@@ -381,5 +382,7 @@ void Organ::printAvgSubst(SubstanceId id) const
 void Organ::printSubstanceAt(SubstanceId id, Vec2d const& pos) const
 {
 	using namespace std;
-	cout<<getConcentrationAt(toCellCoord(pos),id)<<endl;
+	auto c(toCellCoord(pos));
+	cout<<getConcentrationAt(c,id)<<' ';
+	cellHandlers[c.x][c.y]->printAtp();
 }

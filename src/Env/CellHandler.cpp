@@ -6,6 +6,8 @@
 #include "CellLiverCancer.hpp"
 #include <Types.hpp>
 
+#include <iostream>
+
 CellHandler::CellHandler(CellCoord pos, Organ* o)
 	:	pos(pos)
 	,	organ(o)
@@ -72,12 +74,18 @@ void CellHandler::bloodTakeFromEcm(SubstanceId id, double fract)
 bool CellHandler::isOut(CellCoord const& c)
 {return organ->isOut(c);}
 
-void CellHandler::update(sf::Time dt)
+bool CellHandler::update(sf::Time dt)
 {
+	bool changed(false);
 	/// update will return true if the CellOrgan died
-	if (hasECM() and ecm->update(dt)) {delete ecm;ecm=nullptr;}
-	if (hasLiver() and liver->update(dt)) {delete liver;liver=nullptr;cancer=false;}
-	if (hasBlood() and blood->update(dt)) {delete blood;blood=nullptr;}
+	if (hasECM() and ecm->update(dt)) {delete ecm;ecm=nullptr;changed=true;}
+	if (hasLiver() and liver->update(dt)) {delete liver;liver=nullptr;cancer=false;changed=true;}
+	if (hasBlood() and blood->update(dt)) {delete blood;blood=nullptr;changed=true;}
+	return changed;
 }
 
+void CellHandler::printAtp() const
+{if (hasLiver()) liver->printAtp(); else std::cout<<"no liver cell here"<<std::endl;}
 
+void CellHandler::updateCellHandlerAt(CellCoord const& c, Substance const& S)
+{if (c==pos) updateSubstance(S); else organ->updateCellHandlerAt(c,S);}
