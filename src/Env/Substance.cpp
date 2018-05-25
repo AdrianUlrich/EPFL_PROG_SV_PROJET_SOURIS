@@ -7,19 +7,19 @@
 #include <iostream>
 #include <algorithm>
 #include <exception>
-#include <cmath>
 
 Substance::Substance()
-: cVGEF(0), cGLU(0), cBMP(0)
+  : cVGEF(0)
+  , cGLU(0)
+  , cBMP(0)
 {}
 
 Substance::Substance(double cVGEF, double cGLU, double cBMP)
-:	cMAX(getAppConfig().substance_max_value),
-	cVGEF(cVGEF),
-	cGLU(cGLU),
-	cBMP(cBMP)
+  :	cVGEF(cVGEF)
+  ,	cGLU(cGLU)
+  ,	cBMP(cBMP)
 {
-	normalise();	
+	normalise();
 }
 
 void Substance::normalise()
@@ -31,7 +31,7 @@ void Substance::normalise()
 	if (cVGEF < SUBSTANCE_PRECISION)	cVGEF = 0;
 	if (cGLU < SUBSTANCE_PRECISION)		cGLU = 0;
 	if (cBMP < SUBSTANCE_PRECISION)		cBMP = 0;
-	
+
 	/*
 	cVGEF= min(cMAX,max(0,cVGEF));
 	cGLU = min(cMAX,max(0,cGLU));
@@ -41,7 +41,7 @@ void Substance::normalise()
 
 bool Substance::isNull(double precision)
 {
-	return ((isEqual(cVGEF,0, precision))	
+	return ((isEqual(cVGEF,0, precision))
 		and (isEqual(cGLU, 0, precision))
 		and (isEqual(cBMP, 0, precision)));
 }
@@ -68,7 +68,7 @@ double Substance::getTotalConcentration() const
 
 bool Substance::operator ==(Substance const& sub) const
 {
-	return ((isEqual(cVGEF,sub[VGEF], 			SUBSTANCE_PRECISION)) 
+	return ((isEqual(cVGEF,sub[VGEF], 			SUBSTANCE_PRECISION))
 		and (isEqual(cGLU, sub[GLUCOSE], 		SUBSTANCE_PRECISION))
 		and (isEqual(cBMP, sub[BROMOPYRUVATE], 	SUBSTANCE_PRECISION)));
 }
@@ -78,22 +78,22 @@ bool operator !=(Substance const& sub1, Substance const& sub2 )
 	return not (sub1==sub2);
 }
 
-double Substance::operator[](SubstanceId index) const
+double const& Substance::operator[](SubstanceId index) const
 {
 	switch (index)
 	{
 		case VGEF:
 			return cVGEF;
-			
+
 		case GLUCOSE:
 			return cGLU;
-			
+
 		case BROMOPYRUVATE:
 			return cBMP;
-			
+
 		default:
 			throw std::invalid_argument("Valid arguments are [0,1,2]");
-	} 
+	}
 }
 
 std::ostream& operator<<(std::ostream& sortie, Substance const& sub)
@@ -108,11 +108,11 @@ return sortie;
 Substance& Substance::operator+=(Substance const& sub)
 {
 	normalise();
-	
+
 	cVGEF+=sub[VGEF];
 	cGLU +=sub[GLUCOSE];
 	cBMP +=sub[BROMOPYRUVATE];
-	
+
 	normalise();
 	return *this;
 }
@@ -120,11 +120,11 @@ Substance& Substance::operator+=(Substance const& sub)
 Substance& Substance::operator-=(Substance const& sub)
 {
 	normalise();
-	
+
 	cVGEF-=sub[VGEF];
 	cGLU -=sub[GLUCOSE];
 	cBMP -=sub[BROMOPYRUVATE];
-	
+
 	normalise();
 	return *this;
 }
@@ -133,16 +133,16 @@ Substance& Substance::operator-=(Substance const& sub)
 Substance& Substance::operator*=(double scalaire)
 {
 	normalise();
-	
+
 	cVGEF*= scalaire;
 	cGLU *= scalaire;
 	cBMP *= scalaire;
 	normalise();
-	
-	return *this;	
+
+	return *this;
 }
 
-Substance operator*(Substance sub, double scalaire)
+Substance& operator*(Substance sub, double scalaire)
 {
 	return sub *= scalaire;
 }
@@ -156,15 +156,15 @@ void Substance::update(SubstanceId subId, double scalaire)
 		case 2: // VGEF
 			cVGEF*= scalaire;
 			break;
-			
+
 		case 0: // GLUCOSE
 			cGLU *= scalaire;
 			break;
-			
+
 		case 1: // BROMOPYRUVATE
 			cBMP *= scalaire;
 			break;
-			
+
 		default:
 			throw std::invalid_argument("Valid arguments are [0,1,2]");
 	}
@@ -183,7 +183,7 @@ void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 			receiver.cVGEF+=oho;
 		}
 		break;
-			
+
 		case SubstanceId::GLUCOSE :
 		{
 			double oho(c*cGLU);
@@ -192,7 +192,7 @@ void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 			receiver.cGLU+=oho;
 		}
 		break;
-		
+
 		case SubstanceId::BROMOPYRUVATE :
 		{
 			double oho(c*cBMP);
@@ -201,14 +201,14 @@ void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 			receiver.cBMP+=oho;
 		}
 		break;
-		
+
 		default:
 			throw std::invalid_argument("Valid arguments are [0,1,2]");
 	}
 	normalise();
-	
-	
-	
+
+
+
 	/*
 	double grad((this->operator[](id))*c);
 	if (grad<SUBSTANCE_PRECISION) return;
@@ -218,17 +218,21 @@ void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 		case 2: // VGEF
 			cVGEF-=grad;
 			break;
-			
+
 		case 0: // GLUCOSE
 			cGLU -= grad;
 			break;
-			
+
 		case 1: // BROMOPYRUVATE
 			cBMP -= grad;
 			break;
-			
+
 		default:
 			throw std::invalid_argument("Valid arguments are [0,1,2]");
 	}
 	*/
 }
+
+#include <cmath>
+
+const double Substance::cMAX = getAppConfig().substance_max_value;
