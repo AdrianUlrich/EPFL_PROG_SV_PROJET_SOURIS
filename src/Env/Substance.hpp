@@ -14,58 +14,58 @@ public:
   /** \brief Constructeur utilisant des concentrations
    * initiales
    *
-   * \param cVGEF quantit� de VGEF
-   * \param cGLU quantit� de glucose
-   * \param cBMP quantit�� de bromopyruvate
+   * \param cVGEF quantite de VGEF
+   * \param cGLU quantite de glucose
+   * \param cBMP quantitee de bromopyruvate
    */
   Substance(double cVGEF, double cGLU, double cBMP);
 
-  /** \brief Constructeur par d�faut initialisant
-   * les concentrations � z�ro
+  /** \brief Constructeur par defaut initialisant
+   * les concentrations a zero
    */
 	Substance();
 
-  /** \brief Constructeur de copie par d�faut
+  /** \brief Constructeur de copie par defaut
    */
 	Substance(const Substance& sub) = default;
 
-  /** \brief Op�rateur d'assignement par d�faut
+  /** \brief Operateur d'assignement par defaut
    *
-   * \param Substance � assigner
-   * \return L'instance assign�e
+   * \param Substance a assigner
+   * \return L'instance assignee
    */
 	Substance& operator=(Substance const&) = default;
 
-  /** \brief Destructeur par d�faut
+  /** \brief Destructeur par defaut
    */
 	~Substance() = default;
 
   /**
-   * \param precision (par d�faut SUBSTANCE_PRECISION)
-   * \return vrai si les quantit�s sont nulles
+   * \param precision (par defaut SUBSTANCE_PRECISION)
+   * \return vrai si les quantites sont nulles
    */
 	bool isNull(double precision = SUBSTANCE_PRECISION);
 
   /** \brief Multiplie la valeur d'une concentration
-   * sp�cifi�e
+   * specifiee
    *
-   * \param SubstanceId La substance � modifier
-   * \param scalaire Le param�tre de modification
-   * (Si 0, annule toutes les quantit�s)
+   * \param SubstanceId La substance a modifier
+   * \param scalaire Le parametre de modification
+   * (Si 0, annule toutes les quantites)
    * \return void
    */
 	void update(SubstanceId,double scalaire);
 
   /** \brief Prend une fraction d'une concentration de
-   * l'instance courante et la donne � une autre
+   * l'instance courante et la donne a une autre
    * instance
    *
-   * Si la quantit� � transf�rer est inf�rieure �
-   * SUBSTANCE_PRECISION, on ne transf�re pas
+   * Si la quantite a transferer est inferieure a
+   * SUBSTANCE_PRECISION, on ne transfere pas
    *
-   * \param double fraction � transf�rer
+   * \param double fraction a transferer
    * \param Substance& receveur
-   * \param SubstanceId Substance � transf�rer
+   * \param SubstanceId Substance a transferer
    *
    * \return void
    */
@@ -92,12 +92,12 @@ public:
 	double getTotalConcentration() const;
 
   /** \brief Comparaison entre instances Substance
-   * \return vrai si identiques � SUBSTANCE_PRECISION pr�s
+   * \return vrai si identiques a SUBSTANCE_PRECISION pres
    */
 	bool operator==(Substance const&) const;
 
-  /** \brief Acc�s en lecture seule des quantit�s
-   * \param SubstanceId Lla quantit� � lire
+  /** \brief Acces en lecture seule des quantites
+   * \param SubstanceId Lla quantite a lire
    */
 	double const& operator[](SubstanceId) const;
 
@@ -116,7 +116,7 @@ public:
 
 private:
 
-  /** \brief M�thode priv�e responsable de restreindre
+  /** \brief Methode privee responsable de restreindre
    * les valeurs des substances entre SUBSTANCE_PRECISION
    * et substance_max_value
    */
@@ -126,24 +126,24 @@ private:
 
 	static const double cMAX; /**< substance_max_value */
 
-	double cVGEF; /**< quantit� de VGEF */
-	double cGLU; /**< quantit� de glucose */
-	double cBMP; /**< quantit� de bromopyruvate */
+	double cVGEF; /**< quantite de VGEF */
+	double cGLU; /**< quantite de glucose */
+	double cBMP; /**< quantite de bromopyruvate */
 };
 
 /** \brief multiplication par un scalaire
  *
- * \param Substance � multiplier
+ * \param Substance a multiplier
  * \param scalaire
  */
 Substance& operator*(Substance,double);
 
 /** \brief Comparaison entre instances de substance
- * \return l'inverse de l'op�rateur==
+ * \return l'inverse de l'operateur==
  */
 bool operator!=(Substance const&,Substance const&);
 
-/** \brief surcharge de l'op�rateur de flux pour affichage
+/** \brief surcharge de l'operateur de flux pour affichage
  * dans la console
  */
 std::ostream& operator<<(std::ostream&, Substance const&);
