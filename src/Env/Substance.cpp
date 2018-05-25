@@ -7,6 +7,9 @@
 #include <iostream>
 #include <algorithm>
 #include <exception>
+#include <cmath>
+
+const double Substance::cMAX = getAppConfig().substance_max_value;
 
 Substance::Substance()
   : cVGEF(0)
@@ -232,7 +235,3 @@ void Substance::uptakeOnGradient(double c, Substance& receiver, SubstanceId id)
 	}
 	*/
 }
-
-#include <cmath>
-
-const double Substance::cMAX = getAppConfig().substance_max_value;
