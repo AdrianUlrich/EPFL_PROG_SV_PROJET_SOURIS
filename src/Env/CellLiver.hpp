@@ -91,7 +91,7 @@ class CellLiver: public CellOrgan
      * \param Type de cellule
      * \return void
      */
-		virtual void divide(Kind k = Organ::Kind::Liver);
+		virtual void divide(Organ::Kind k = Organ::Kind::Liver);
 
 	private:
 
