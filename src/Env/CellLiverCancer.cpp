@@ -26,5 +26,5 @@ double CellLiverCancer::getDivisionEnergy() const
 void CellLiverCancer::Krebs(sf::Time)
 {}
 
-void CellLiverCancer::divide(Kind)
+void CellLiverCancer::divide(Organ::Kind)
 {CellLiver::divide(Organ::Kind::CANCER);}

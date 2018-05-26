@@ -36,7 +36,7 @@ void CellLiver::Krebs(sf::Time dt)
 	double P(.8);
 	Quantity S(P*(*substance)[SubstanceId::GLUCOSE]);
 	substance->update(SubstanceId::GLUCOSE,1-P);
-	atp+=((S*getKrebsVmax())/(S+getKrebsKm()))*dt.asSeconds();
+	atp+=1.5*((S*getKrebsVmax())/(S+getKrebsKm()))*dt.asSeconds();
 }
 
 void CellLiver::glycolysis(sf::Time dt)
@@ -45,8 +45,8 @@ void CellLiver::glycolysis(sf::Time dt)
 	Quantity S(P*(*substance)[SubstanceId::GLUCOSE]);
 	substance->update(SubstanceId::GLUCOSE,1-P);
 	Quantity I((*substance)[SubstanceId::BROMOPYRUVATE]);
-	substance->update(SubstanceId::BROMOPYRUVATE,0.1*dt.asSeconds());
-	atp+=(S*getGlycoVmax())/(S*getGlycoKm()*(1+I*1.666))*dt.asSeconds();
+	substance->update(SubstanceId::BROMOPYRUVATE,0.001*dt.asSeconds());
+	atp+=0.5*(S*getGlycoVmax())/(S*getGlycoKm()*(1+I*1.666))*dt.asSeconds();
 }
 
 double CellLiver::getFractUptake() const
@@ -79,6 +79,6 @@ void CellLiver::printAtp() const
 void CellLiver::divide(Organ::Kind k)
 {
   CellCoord offset(uniform(-1,1),uniform(-1,1));
-	if (handler->updateCellHandlerAt(offset,k))
+  if (handler->updateCellHandlerAt(offset,k))
     atp-=getAppConfig().liver_division_cost;
 }

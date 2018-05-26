@@ -9,16 +9,18 @@
 #include <exception>
 #include <cmath>
 
-const double Substance::cMAX = getAppConfig().substance_max_value;
+
 
 Substance::Substance()
-  : cVGEF(0)
+  : cMAX(getAppConfig().substance_max_value)
+  , cVGEF(0)
   , cGLU(0)
   , cBMP(0)
 {}
 
 Substance::Substance(double cVGEF, double cGLU, double cBMP)
-  :	cVGEF(cVGEF)
+  :	cMAX(getAppConfig().substance_max_value)
+  , cVGEF(cVGEF)
   ,	cGLU(cGLU)
   ,	cBMP(cBMP)
 {
@@ -81,7 +83,7 @@ bool operator !=(Substance const& sub1, Substance const& sub2 )
 	return not (sub1==sub2);
 }
 
-double Substance::operator[](SubstanceId index) const
+double const& Substance::operator[](SubstanceId index) const
 {
 	switch (index)
 	{
@@ -145,7 +147,7 @@ Substance& Substance::operator*=(double scalaire)
 	return *this;
 }
 
-Substance operator*(Substance sub, double scalaire)
+Substance& operator*(Substance sub, double scalaire)
 {
 	return sub *= scalaire;
 }

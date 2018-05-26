@@ -29,7 +29,7 @@ CellHandler::~CellHandler()
 
 CellCoord CellHandler::getPos() const
 {return pos;}
-Organ* CellHandler::gesdtOrgan() const
+Organ* CellHandler::getOrgan() const
 {return organ;}
 
 bool CellHandler::hasECM() const
@@ -93,5 +93,5 @@ void CellHandler::printAtp() const
 void CellHandler::updateCellHandlerAt(CellCoord const& c, Substance const& S)
 {if (c==pos) updateSubstance(S); else organ->updateCellHandlerAt(c,S);}
 
-bool CellHandler::updateCellHandlerAt(CellCoord const& c, Kind k)
-{return c!=CellCoord{0,0} and organ->propagate(c+pos,S);}
+bool CellHandler::updateCellHandlerAt(CellCoord const& c, Organ::Kind k)
+{return c!=CellCoord{0,0} and organ->propagate(c+pos,k);}

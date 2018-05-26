@@ -62,6 +62,11 @@ class CellLiver: public CellOrgan
      * \return valeur configuree
      */
 		virtual double getFractGlu() const;
+		
+    /**
+     * \return valeur configuree
+     */
+		virtual double getDivisionEnergy() const;
 
     /** \brief Consommation de glucose, creation d'atp
      *

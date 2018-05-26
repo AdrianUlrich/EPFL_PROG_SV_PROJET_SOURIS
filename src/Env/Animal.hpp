@@ -155,7 +155,7 @@ class Animal : public SimulatedEntity /// ABSTRACT
      * \param entite a traquer
      * \return void
      */
-		void setTarget(SimulatedEntity* a) {cible_actuelle=a;}
+		void setTarget(SimulatedEntity* a);
 
     /** \brief Methode d'affichache SFML de l'organe
      *

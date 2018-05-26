@@ -35,7 +35,7 @@ class Organ
     /** \brief Destructeur polymorphique (desalloue les cellules
      * allouees dynamiquement)
      */
-		virtual ~Organ() = default;
+		virtual ~Organ();
 
 
     /** \brief Passage du temps

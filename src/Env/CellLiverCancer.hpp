@@ -34,6 +34,11 @@ class CellLiverCancer : public CellLiver
      */
 		virtual double getFractGlu() const override;
 
+    /**
+     * \return redefinition de valeur configuree
+     */
+		virtual double getDivisionEnergy() const override;
+
     /** \brief Cycle de Krebs inactif pour la cellule cancereuse
      */
 		virtual void Krebs(sf::Time) override;
@@ -44,7 +49,7 @@ class CellLiverCancer : public CellLiver
      *
      * \return virtual void
      */
-    virtual void divide(Kind) override;
+    virtual void divide(Organ::Kind) override;
 };
 
 #endif // CELLLIVERCANCER_HPP

@@ -124,7 +124,7 @@ private:
 
 private:
 
-	static const double cMAX; /**< substance_max_value */
+	double cMAX; /**< substance_max_value */
 
 	double cVGEF; /**< quantite de VGEF */
 	double cGLU; /**< quantite de glucose */
