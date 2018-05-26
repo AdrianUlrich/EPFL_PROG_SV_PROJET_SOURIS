@@ -9,9 +9,10 @@
 CellBlood::CellBlood(CellHandler* h,TypeBloodCell t)
 	:	CellOrgan(h)
 	,	type(t)
-{
-	
-}
+{}
+
+TypeBloodCell CellBlood::getType() const
+{return type;}
 
 bool CellBlood::update(sf::Time dt)
 {
@@ -19,19 +20,25 @@ bool CellBlood::update(sf::Time dt)
 	{
 		CellCoord pos(handler->getPos());
 		int RAYON_DIFFUSION(getAppConfig().substance_diffusion_radius);
-		Substance C0(0,getAppConfig().base_glucose,getAppConfig().base_bromo);
+		double m(getAppConfig().substance_max_value);
+		Substance C0
+		(
+			std::min(m,std::max(-m,getAppEnv().getDelta(SubstanceId::VGEF))),
+			std::min(m,std::max(-m,getAppConfig().base_glucose+getAppEnv().getDelta(SubstanceId::GLUCOSE))),
+			std::min(m,std::max(-m,getAppConfig().base_bromo+getAppEnv().getDelta(SubstanceId::BROMOPYRUVATE)))
+		);
 		double D(getAppConfig().substance_diffusion_constant);
 		for (int i(-RAYON_DIFFUSION);i<=RAYON_DIFFUSION;++i)
 		{
 			for (int j(-RAYON_DIFFUSION);j<=RAYON_DIFFUSION;++j)
 			{
 				double r(Vec2d(i,j).length());
-				Substance C(C0*0.5*(1-std::erf(r/sqrt(4*D*dt.asSeconds()))));
-				handler->getOrgan()->updateCellHandlerAt(pos+CellCoord(i,j),C);
+				Substance C(C0*(0.5*(1-std::erf(r/sqrt(4*D*dt.asSeconds())))));
+				handler->updateCellHandlerAt(pos+CellCoord(i,j),C);
 			}
 		}
-		
+
 	}
-	return CellOrgan::update(dt);// or ; // return true if dead
+	return false;//CellOrgan::update(dt) would return true if dead (i.e of cancer)
 }
 

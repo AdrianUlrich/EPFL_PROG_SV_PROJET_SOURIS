@@ -11,8 +11,12 @@
 using namespace std;
 
 Lab::Lab()
-:	tracked(nullptr)
-,	cross(new sf::Sprite(buildSprite(Vec2d(0,0),40,getAppTexture(getAppConfig().entity_texture_tracked))))
+	:	tracked(nullptr)
+	,	cross(new sf::Sprite(buildSprite(Vec2d(0,0),40,getAppTexture(getAppConfig().entity_texture_tracked))))
+	,	currentSubstance(SubstanceId::GLUCOSE)
+	,	deltaGlucose(0)
+	,	deltaBromo(0)
+	,	deltaVGEF(0)
 {
 	makeBoxes(getAppConfig().simulation_lab_nb_boxes);
 }
@@ -228,3 +232,56 @@ void Lab::drawCurrentOrgan(sf::RenderTarget& target)
 
 void Lab::trackAnimal(Animal* n) 
 {tracked=n;}
+
+double Lab::getDelta(SubstanceId id) const
+{
+	switch (id)
+	{
+		case SubstanceId::GLUCOSE : return deltaGlucose;
+		case SubstanceId::BROMOPYRUVATE : return deltaBromo;
+		case SubstanceId::VGEF : return deltaVGEF;
+		default: return 0;
+	}
+}
+
+SubstanceId Lab::getCurrentSubst() const
+{return currentSubstance;}
+
+SubstanceId Lab::nextSubstance()
+{
+	switch (currentSubstance)
+	{
+		case SubstanceId::GLUCOSE : currentSubstance=SubstanceId::BROMOPYRUVATE;break;
+		case SubstanceId::BROMOPYRUVATE : currentSubstance=SubstanceId::VGEF;break;
+		case SubstanceId::VGEF : currentSubstance=SubstanceId::GLUCOSE;break;
+	}
+	tracked->updateCurrentSubstance(currentSubstance);
+	return currentSubstance;
+}
+
+void Lab::increaseCurrentSubst()
+{
+	switch (currentSubstance)
+	{
+		case SubstanceId::GLUCOSE: deltaGlucose+=getAppConfig().delta_glucose;break;
+		case SubstanceId::BROMOPYRUVATE: deltaBromo+=getAppConfig().delta_bromo;break;
+		case SubstanceId::VGEF: deltaVGEF+=getAppConfig().delta_vgef;break;
+	}
+}
+
+void Lab::decreaseCurrentSubst()
+{
+	switch (currentSubstance)
+	{
+		case SubstanceId::GLUCOSE: deltaGlucose-=getAppConfig().delta_glucose;break;
+		case SubstanceId::BROMOPYRUVATE: deltaBromo-=getAppConfig().delta_bromo;break;
+		case SubstanceId::VGEF: deltaVGEF-=getAppConfig().delta_vgef;break;
+	}
+}
+
+void Lab::setCancerAt(Vec2d const& pos)
+{tracked->setCancerAt(pos);}
+
+void Lab::printSubstanceAt(Vec2d const& pos) const
+{tracked->printSubstanceAt(currentSubstance,pos);}
+

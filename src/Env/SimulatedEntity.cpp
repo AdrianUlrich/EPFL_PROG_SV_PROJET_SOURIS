@@ -72,8 +72,16 @@ bool SimulatedEntity::isDead() const
 	);
 }
 
+Quantity SimulatedEntity::provideEnergy(Quantity)
+{return 0.;}
+
+
 void SimulatedEntity::isDead(SimulatedEntity*)
 {}
+
+void SimulatedEntity::resetBox()
+{box->reset();}
+
 
 bool SimulatedEntity::canBeConfinedIn(Box* box) const
 {

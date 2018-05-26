@@ -11,6 +11,7 @@
 #include <JSON/JSON.hpp>
 #include "Config.hpp"
 #include "Types.hpp"
+//#include <Utility/AnimalTracker.hpp>
 #include <Utility/Vec2d.hpp>
 
 #include <SFML/Graphics.hpp>
@@ -36,6 +37,7 @@
 class Application
 {
 public:
+	int mSimulationCycle;
     /*!
      * @brief Constructor
      *
@@ -152,7 +154,6 @@ public:
      */
     Vec2d getCursorPositionInView() const;
 
-	
 	void switchToView(View);
 
 	bool isConcentrationOn() const
@@ -273,7 +274,22 @@ protected:
 
     void drawOnHelp(sf::RenderWindow& window, bool micro) const;
 
-    
+    void drawControls(sf::RenderWindow& target);
+	
+	void drawOneControl(sf::RenderWindow& target
+						, std::string name
+						, double value
+						, sf::Color color
+						, size_t xcoord
+						, size_t ycoord
+						, size_t font_size
+						);
+	
+	void drawTitle(sf::RenderWindow& target, sf::Color color
+				  	, size_t xcoord
+				  , size_t ycoord
+				  , size_t font_size
+				  );
 	
 protected:
  /*!

@@ -18,7 +18,6 @@ void FinalApplication::onRun()
 {
     // Setup stats
 	Application::onRun();
-
 }
 
 void FinalApplication::onSimulationStart()
@@ -56,13 +55,65 @@ void FinalApplication::onEvent(sf::Event event, sf::RenderWindow&)
 				}
 			}
 				break;
+				
+				 // A DECOMMENTER QUAND NECESSAIRE	
+			case sf::Keyboard::X: 
+			{
+				if (isOrganViewOn()){
+					getAppEnv().setCancerAt(getCursorPositionInView());
+				}
 
+			}
+				break;
+				
+			case sf::Keyboard::N: // next substance
+			{
+				if (isOrganViewOn()){
+					getAppEnv().nextSubstance();
+				}
+			
+			}
+				break;
+
+			case sf::Keyboard::PageUp: // increase substance
+			{
+				if (isOrganViewOn()){
+					getAppEnv().increaseCurrentSubst();
+				}
+			}
+				break;
+
+			case sf::Keyboard::PageDown: // decrease substance
+			{
+				if (isOrganViewOn()){
+					getAppEnv().decreaseCurrentSubst();
+				}
+				
+			}
+				break;
 
 			case sf::Keyboard::Num1:
 			{
 				getAppEnv().updateTrackedAnimal();
 			}
 				break;
+
+			case sf::Keyboard::Num2:
+			{
+				if (isOrganViewOn()){
+					getAppEnv().increaseCurrentSubst();
+				}
+			}
+				break;
+
+			case sf::Keyboard::Num3:
+			{
+				if (isOrganViewOn()){
+					getAppEnv().decreaseCurrentSubst();
+				}
+			}
+				break;
+			
 
 			case sf::Keyboard::T:
 			{
