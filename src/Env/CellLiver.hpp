@@ -11,9 +11,15 @@ class CellLiver: public CellOrgan
 	public:
 		CellLiver(CellHandler*,double atp = 100);
 
+
+    /** \brief Passage du temps
+     *
+     * \param sf::Time Pas de temps
+     * \return void
+     */
 		virtual bool update(sf::Time) override;
 		void printAtp() const;
-	
+
 	protected:
 		virtual double getFractUptake() const;
 		virtual double getKrebsKm() const;

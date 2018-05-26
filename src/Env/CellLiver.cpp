@@ -27,7 +27,7 @@ bool CellLiver::update(sf::Time dt)
 }
 void CellLiver::ATPSynthesis(sf::Time dt)
 {
-	glycolysis(dt); 
+	glycolysis(dt);
 	Krebs(dt);
 }
 
@@ -78,6 +78,7 @@ void CellLiver::printAtp() const
 
 void CellLiver::divide(Kind k)
 {
-	// calcul de position etk etk
-	if (handler->updateCellHandlerAt(position,k))
+  CellCoord offset(uniform(-1,1),uniform(-1,1));
+	if (handler->updateCellHandlerAt(offset,k))
+    atp-=getAppConfig().;
 }

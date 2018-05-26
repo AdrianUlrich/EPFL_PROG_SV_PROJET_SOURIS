@@ -9,19 +9,24 @@ class CellOrgan ///ABSTRACT
 {
 	public:
 		CellOrgan(CellHandler*);
-		
+
 		virtual ~CellOrgan() = 0;
-		
+
 		void updateSubstance(Substance const&);
 		Quantity getQuantity(SubstanceId) const;
 		void uptakeOnGradient(double,CellOrgan*,SubstanceId);
-		
+
+    /** \brief Passage du temps
+     *
+     * \param sf::Time Pas de temps
+     * \return void
+     */
 		virtual bool update(sf::Time);
-			
+
 	protected:
 		Substance* substance;
-		
+
 		CellHandler* handler;
 };
 
-#endif // CELLORGAN_HPP 
+#endif // CELLORGAN_HPP

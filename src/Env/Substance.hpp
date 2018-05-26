@@ -7,7 +7,7 @@
 /** \brief Conteneur pour substances et methodes
  * utillitaires pour leur manipulation
  */
-class Substance
+class Substance final
 {
 public:
 

@@ -14,34 +14,46 @@ using std::vector;
 class CellHandler;
 
 
-class Organ 
+class Organ
 {
 	public:
 		enum class Kind : short {ECM,Liver,Artery,Capillary,CANCER};
-		
+
 	public:
 		Organ(bool generation);
-		
+
 		virtual ~Organ() = default;
-		
+
+
+    /** \brief Passage du temps
+     * Cree le pas de temps necessaire aux objets que Organ contient
+     *
+     * \return void
+     */
 		void update();
+
+    /** \brief Methode d'affichache SFML
+     *
+     * \param sf::RenderTarget& fenetre a afficher
+     * \return void
+     */
 		void drawOn(sf::RenderTarget& target);
-		
+
 		/** simply return config size of organ */
 		double getWidth() const;
 		double getHeight() const;
-		
+
 		bool isOut(CellCoord const&) const;
 		virtual CellCoord toCellCoord(Vec2d const&) const;
 
 		void updateRepresentation(bool b=true);
 		virtual void updateRepresentationAt(CellCoord const&);
-		
+
 		void updateCellHandlerAt(CellCoord const&, Substance const&);
 		double getConcentrationAt(CellCoord const&,SubstanceId) const;
-		
+
 		void setSubstance(SubstanceId const& id);
-		
+
 		void setCancerAt(Vec2d const& pos);
 		void printSubstanceAt(SubstanceId id, Vec2d const& pos) const;
 		bool propagate(CellCoord const&,Kind);
@@ -50,20 +62,20 @@ class Organ
 		virtual void generate();
 		void reloadConfig();
 		void reloadCacheStructure();
-		
+
 		void createLiver();
-		
+
 		void createBloodSystem(bool generateCapillaries=true);
 		virtual void generateArtery(int,int);
 		virtual bool generateCapillaryOneStep(CellCoord& p, CellCoord const& dir, int& NBcells, int const& maxLength);
 		virtual void generateCapillaryFromPosition(CellCoord& p, CellCoord dir);
-		
+
 		virtual bool updateCellHandler(CellCoord const&,Kind);
 
 	private:
 		void drawRepresentation();
 		void printAvgSubst(SubstanceId id) const;
-	private:		
+	private:
 		int nbCells;
 		float cellSize;
 		sf::RenderTexture renderingCache;
@@ -72,7 +84,7 @@ class Organ
 		vector<sf::Vertex> liverVertexes;
 		vector<sf::Vertex> concentrationVertexes;
 		vector<sf::Vertex> cancerVertexes;
-		
+
 		SubstanceId currentSubst;
 };
 

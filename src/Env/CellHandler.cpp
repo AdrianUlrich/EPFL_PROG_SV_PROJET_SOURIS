@@ -5,6 +5,7 @@
 #include "CellLiver.hpp"
 #include "CellLiverCancer.hpp"
 #include <Types.hpp>
+#include <Utility/Utility.hpp>
 
 #include <iostream>
 
@@ -16,7 +17,7 @@ CellHandler::CellHandler(CellCoord pos, Organ* o)
 	,	blood(nullptr)
 	,	cancer(false)
 {
-	
+
 }
 
 CellHandler::~CellHandler()
@@ -92,5 +93,5 @@ void CellHandler::printAtp() const
 void CellHandler::updateCellHandlerAt(CellCoord const& c, Substance const& S)
 {if (c==pos) updateSubstance(S); else organ->updateCellHandlerAt(c,S);}
 
-void CellHandler::updateCellHandlerAt(CellCoord const& c, Kind k)
-{if (c!=pos) organ->propagate(c,S);}
+bool CellHandler::updateCellHandlerAt(CellCoord const& c, Kind k)
+{return c!=CellCoord{0,0} and organ->propagate(c+pos,S);}

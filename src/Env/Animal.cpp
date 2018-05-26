@@ -41,9 +41,9 @@ Animal::~Animal()
 
 bool Animal::canBeConfinedIn(Box* b) const
 {return SimulatedEntity::canBeConfinedIn(b)&&b->isEmpty();}
-void Animal::setRotation(Angle a) 
+void Animal::setRotation(Angle a)
 {angle=a;}
-void Animal::setOrgan(Organ*o) 
+void Animal::setOrgan(Organ*o)
 {if(o!=nullptr){delete foie;foie=o;}}
 
 void Animal::update(sf::Time dt)
@@ -223,6 +223,23 @@ bool Animal::isTargetInSight(const Vec2d& position)
 	);
 }
 
+void Animal::setTarget(SimulatedEntity* a)
+{cible_actuelle=a;}
+
+double Animal::getViewRange() const
+{return AngleVision;}
+
+double Animal::getViewDistance() const
+{return DistanceVision;}
+
+Angle Animal::getNewRotation() const
+{return DEG_TO_RAD * piecewise_linear(intervals,probs);}
+
+Vec2d Animal::getSpeedVector() const
+{return getHeading()*velocite;}
+
+void Animal::fillBox()
+{box->addOccupant();}
 
 void Animal::drawCurrentOrgan(sf::RenderTarget& target)
 {foie->Organ::drawOn(target);}

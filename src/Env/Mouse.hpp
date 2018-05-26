@@ -3,31 +3,64 @@
 
 #include "Animal.hpp"
 
+/** \brief Entite Animale de type Souris
+ */
 class Mouse : public Animal
 {
 	public:
-		/** constructor */
+
+    /** \brief Constructeur
+     *
+     * \param position initiale desiree de la souris
+     */
 		Mouse(Vec2d const&);
 
-		/**	masked draw function*/
+    /** \brief Methode d'affichache SFML
+     *
+     * \param sf::RenderTarget& fenetre a afficher
+     * \return void
+     */
 		void drawOn(sf::RenderTarget&) override;
 
-		/** masking isDead pure virtual method */
+    /** \brief On peut enfin definir des facteurs de
+     * fin de vie specifiques aux souris
+     *
+     * \return vrai si en fin de vie
+     */
 		virtual bool isDead() const override;
 
-		/** eatable */
-		bool eatable(SimulatedEntity const* ntt) const override {return ntt->eatableBy(this);}
-		bool eatableBy(Cheese const*) const override {return false;}
-		bool eatableBy(Mouse const*) const override {return false;}
+    /**
+     * \return vrai si l'entite est mangeable par une souris
+     */
+		bool eatable(SimulatedEntity const* ntt) const override;
 
-		/** masking getter pure virtual methods */
+		/**
+		 * \return faux car les fromages ne mangent pas de souris
+		 */
+		bool eatableBy(Cheese const*) const override;
+
+		/**
+		 * \return faux car les souris ne mangent pas de souris
+		 */
+		bool eatableBy(Mouse const*) const override;
+
+    /** \brief definition de la vitesse maximale d'une souris
+     */
 		virtual double getMaxSpeed() const override;
+
+    /** \brief definition du facteur de pertes d'energie dues
+     * a l'effort d'une souris
+     */
 		virtual double getLossFactor() const override;
+
+    /** \brief definition du poids d'une souris
+     */
 		virtual double getMass() const override;
+
+    /** \brief definition de la taille de bouchées d'une souris
+     */
 		virtual Quantity getBite() const override;
 
-	//private:
-		//double mouseSize;
 };
 
 #endif // MOUSE_HPP
