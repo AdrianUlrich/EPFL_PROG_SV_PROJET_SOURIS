@@ -33,11 +33,11 @@ bool CellBlood::update(sf::Time dt)
 			for (int j(-RAYON_DIFFUSION);j<=RAYON_DIFFUSION;++j)
 			{
 				double r(Vec2d(i,j).length());
-				Substance C(C0*0.5*(1-std::erf(r/sqrt(4*D*dt.asSeconds()))));
+				Substance C(C0*(0.5*(1-std::erf(r/sqrt(4*D*dt.asSeconds())))));
 				handler->updateCellHandlerAt(pos+CellCoord(i,j),C);
 			}
 		}
-		
+
 	}
 	return false;//CellOrgan::update(dt) would return true if dead (i.e of cancer)
 }

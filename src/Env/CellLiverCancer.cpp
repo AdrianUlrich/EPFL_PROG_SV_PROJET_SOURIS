@@ -1,4 +1,5 @@
 #include "CellLiverCancer.hpp"
+#include "Organ.hpp"
 #include <Application.hpp>
 
 double CellLiverCancer::getFractUptake() const
@@ -13,6 +14,9 @@ double CellLiverCancer::getGlycoVmax() const
 double CellLiverCancer::getFractGlu() const
 {return getAppConfig().cancer_glucose_usage;}
 
+double CellLiverCancer::getDivisionEnergy() const
+{return getAppConfig().cancer_division_energy;}
+
 //void CellLiverCancer::ATPSynthesis(sf::Time dt)
 //{CellLiver::ATPSynthesis(dt);}
 
@@ -21,3 +25,6 @@ double CellLiverCancer::getFractGlu() const
 
 void CellLiverCancer::Krebs(sf::Time)
 {}
+
+void CellLiverCancer::divide(Kind)
+{CellLiver::divide(Organ::Kind::CANCER);}

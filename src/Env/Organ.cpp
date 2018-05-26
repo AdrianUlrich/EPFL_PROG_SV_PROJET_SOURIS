@@ -14,11 +14,22 @@ using std::vector;
 Organ::Organ(bool generation)
 	:	currentSubst(SubstanceId::GLUCOSE)
 {
-	if (generation) generate();	
+	if (generation) generate();
+}
+
+Organ::~Organ()
+{
+  for (auto& vec : cellHandlers)
+  {
+    for (auto val : vec)
+    {
+      delete val;
+    }
+  }
 }
 
 bool Organ::propagate(CellCoord const&c, Kind k)
-{return updateCellHandler(c,k);}
+{return !isOut(c) and updateCellHandler(c,k);}
 
 void Organ::setSubstance(SubstanceId const& id)
 {currentSubst=id;}
@@ -52,18 +63,18 @@ void Organ::update()
 	updateRepresentation(getApp().isConcentrationOn());
 	//printAvgSubst(SubstanceId::GLUCOSE);
 }
-	
+
 void Organ::drawOn(sf::RenderTarget& target)
 {
 	sf::Sprite image(renderingCache.getTexture()); // transforme l'image en texture
-	target.draw(image); // affiche la texture	
+	target.draw(image); // affiche la texture
 }
 
 
 void Organ::generate()
 {
 	reloadConfig();
-	reloadCacheStructure();	
+	reloadCacheStructure();
 	createLiver();
 	createBloodSystem();
 	updateRepresentation();
@@ -74,33 +85,24 @@ void Organ::reloadConfig()
 {
 	nbCells = getAppConfig().simulation_organ_nbCells;
 	cellSize = getWidth()/nbCells;
-	if (!cellHandlers.empty())
-	{
-		for (vector<CellHandler*>& vec : cellHandlers)
-		{
-			if (!vec.empty())
-			{
-				for (CellHandler* val : vec)
-					delete val;
-				vec.clear();
-			}
-			
-		}
-		cellHandlers.clear();					
-	}
-	else
-	{
-		cellHandlers=vector<vector<CellHandler*>>(nbCells,vector<CellHandler*>(nbCells,nullptr));
-		for (int i(0);i<nbCells;++i)
-			for (int j(0);j<nbCells;++j)
-				cellHandlers[i][j]=new CellHandler({i,j},this);
-	}
-	
+
+  for (vector<CellHandler*>& vec : cellHandlers)
+  {
+    for (CellHandler* val : vec)
+      delete val;
+    vec.clear();
+  }
+  cellHandlers.clear();
+
+  cellHandlers=vector<vector<CellHandler*>>(nbCells,vector<CellHandler*>(nbCells,nullptr));
+  for (int i(0);i<nbCells;++i)
+    for (int j(0);j<nbCells;++j)
+      cellHandlers[i][j]=new CellHandler({i,j},this);
 }
 
 void Organ::reloadCacheStructure()
 {
-	renderingCache.create(cellSize*nbCells, cellSize*nbCells);	
+	renderingCache.create(cellSize*nbCells, cellSize*nbCells);
 	liverVertexes = generateVertexes(getAppConfig().simulation_organ["textures"], nbCells, cellSize);
 	bloodVertexes = liverVertexes;
 	concentrationVertexes = liverVertexes;
@@ -114,16 +116,15 @@ void Organ::updateRepresentation(bool also_update)
 			for (int x(0); x<nbCells; ++x)
 				updateRepresentationAt({x,y}); // implicit constructor of CellCoord
 	drawRepresentation();
-	
-	renderingCache.display();	
-	
+
+	renderingCache.display();
 }
 
 void Organ::drawRepresentation ()
 {
 	sf::RenderStates rs;
 	auto textures = getAppConfig().simulation_organ["textures"];
-	
+
 	if (getApp().isConcentrationOn())
 	{
 		renderingCache.clear();
@@ -135,19 +136,19 @@ void Organ::drawRepresentation ()
 			case SubstanceId::VGEF : S="vgef";break;
 		}
 		rs.texture = &getAppTexture(textures[S].toString()); // ici pour la texture liee aux concentrations
-		renderingCache.draw(concentrationVertexes.data(), concentrationVertexes.size(), sf::Quads, rs); 
+		renderingCache.draw(concentrationVertexes.data(), concentrationVertexes.size(), sf::Quads, rs);
 	}
-	else 
+	else
 	{
 		renderingCache.clear(sf::Color(223,196,176));
 		rs.texture = &getAppTexture(textures["liver"].toString()); // ici pour la texture liee a une cellule hepatique
-		renderingCache.draw(liverVertexes.data(), liverVertexes.size(), sf::Quads, rs); 	
+		renderingCache.draw(liverVertexes.data(), liverVertexes.size(), sf::Quads, rs);
 		rs.texture = &getAppTexture(textures["cancer"].toString()); // ici pour la texture liee a une cellule hepatique cancereuse
 		renderingCache.draw(cancerVertexes.data(), cancerVertexes.size(), sf::Quads, rs);
 	}
-	
+
 	rs.texture = &getAppTexture(textures["blood"].toString()); // ici pour la texture liee a une cellule sanguine
-	renderingCache.draw(bloodVertexes.data(), bloodVertexes.size(), sf::Quads, rs); 
+	renderingCache.draw(bloodVertexes.data(), bloodVertexes.size(), sf::Quads, rs);
 }
 
 
@@ -155,7 +156,7 @@ void Organ::updateRepresentationAt(CellCoord const& c)
 {
 	int x(c.x),y(c.y);
 	auto i(indexesForCellVertexes(x,y,nbCells));
-	
+
 	if (getApp().isConcentrationOn())
 	{
 		concentrationVertexes[i[0]].color.a=
@@ -163,7 +164,7 @@ void Organ::updateRepresentationAt(CellCoord const& c)
 		concentrationVertexes[i[2]].color.a=
 		concentrationVertexes[i[3]].color.a=std::max(int(255*getConcentrationAt(c,currentSubst)/getAppConfig().substance_max_value),5);
 	}
-	
+
 	/// inefficient implementation but project is super inefficient anyways...
 	if (cellHandlers[x][y]->hasBlood())
 		bloodVertexes[i[0]].color.a=
@@ -175,8 +176,8 @@ void Organ::updateRepresentationAt(CellCoord const& c)
 		bloodVertexes[i[1]].color.a=
 		bloodVertexes[i[2]].color.a=
 		bloodVertexes[i[3]].color.a=0;
-	
-	if (cellHandlers[x][y]->hasLiver())	
+
+	if (cellHandlers[x][y]->hasLiver())
 		if (cellHandlers[x][y]->hasCancer())
 			cancerVertexes[i[0]].color.a=
 			cancerVertexes[i[1]].color.a=
@@ -206,30 +207,36 @@ void Organ::updateRepresentationAt(CellCoord const& c)
 	}
 }
 
-void Organ::updateCellHandler(CellCoord const& c, Kind k)
+bool Organ::updateCellHandler(CellCoord const& c, Kind k)
 {
+  bool ans(false);
 	switch (k)
 	{
 		case Kind::ECM :
-		return cellHandlers[c.x][c.y]->setECM();
-		
+		ans = cellHandlers[c.x][c.y]->setECM();
+		break;
+
 		case Kind::Liver :
-		return cellHandlers[c.x][c.y]->setLiver();
-		
+		ans = cellHandlers[c.x][c.y]->setLiver();
+		break;
+
 		case Kind::Artery :
-		return cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::ARTERY);
-		
+		ans = cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::ARTERY);
+		break;
+
 		case Kind::Capillary :
-		return cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::CAPILLARY);
-		
+		ans = cellHandlers[c.x][c.y]->setBlood(TypeBloodCell::CAPILLARY);
+		break;
+
 		case Kind::CANCER :
-		return cellHandlers[c.x][c.y]->setCANCER();
-		
+		ans = cellHandlers[c.x][c.y]->setCANCER();
+		break;
+
 		default:
-		//NOPE
-		return false;
+		break;
 	}
-	updateRepresentationAt(c);
+	if (ans) updateRepresentationAt(c);
+	return ans;
 }
 
 
@@ -254,7 +261,7 @@ void Organ::createBloodSystem(bool generateCapillaries)
 	int SIZE_ARTERY(std::max(.03*nbCells,1.));
 	int startX((nbCells-SIZE_ARTERY)/2),endX(startX+SIZE_ARTERY);
 	generateArtery(startX,endX);
-	
+
 	if (generateCapillaries)
 	{
 		/// Making Capillaries
@@ -301,8 +308,8 @@ void Organ::generateArtery(int startX, int endX)
 
 bool Organ::generateCapillaryOneStep(CellCoord& p, CellCoord const& dir, int& NBcells, int const& maxLength)
 {
-	if (NBcells>=maxLength) return false;
-	
+	if (NBcells>=maxLength) return false; // if length is exceeded
+
 	bool tried1(false),tried2(false);
 	while (not (tried1 and tried2))
 	{
@@ -347,7 +354,7 @@ bool Organ::generateCapillaryOneStep(CellCoord& p, CellCoord const& dir, int& NB
 			}
 		}
 	}
-	return false;
+	return false; // If path is blocked
 }
 
 void Organ::generateCapillaryFromPosition(CellCoord& p, CellCoord dir)

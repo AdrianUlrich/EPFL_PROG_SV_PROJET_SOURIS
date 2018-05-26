@@ -22,7 +22,7 @@ bool CellLiver::update(sf::Time dt)
 	ATPSynthesis(dt);
 	atp*=1-exp(-getAppConfig().liver_decay_atp*dt.asSeconds());
 	atp-=uniform(getAppConfig().base_atp_usage , getAppConfig().base_atp_usage+getAppConfig().range_atp_usage);
-	divide();
+	if (atp>getDivisionEnergy()) divide();
 	return atp<=0 or atp!=atp; ///< Checking for -nan value
 }
 void CellLiver::ATPSynthesis(sf::Time dt)
@@ -76,9 +76,9 @@ void CellLiver::printAtp() const
 	cout<<atp<<endl;
 }
 
-void CellLiver::divide(Kind k)
+void CellLiver::divide(Organ::Kind k)
 {
   CellCoord offset(uniform(-1,1),uniform(-1,1));
 	if (handler->updateCellHandlerAt(offset,k))
-    atp-=getAppConfig().;
+    atp-=getAppConfig().liver_division_cost;
 }

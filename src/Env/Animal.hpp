@@ -10,7 +10,7 @@ class Organ;
 
 class Organ;
 
-/** \brief Differens etats possibles de l'animal
+/** \brief Differents etats possibles de l'animal
  */
 enum State
 {

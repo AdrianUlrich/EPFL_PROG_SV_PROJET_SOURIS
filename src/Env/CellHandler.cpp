@@ -29,7 +29,7 @@ CellHandler::~CellHandler()
 
 CellCoord CellHandler::getPos() const
 {return pos;}
-Organ* CellHandler::getOrgan() const
+Organ* CellHandler::gesdtOrgan() const
 {return organ;}
 
 bool CellHandler::hasECM() const
