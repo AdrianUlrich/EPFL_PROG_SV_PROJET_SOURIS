@@ -97,3 +97,39 @@
 
 - Partie 3.4 continuation
 		 4.1 continuation
+
+*************************************************
+## 15.05 (mardi)
+
+- Partie 3.4 fin
+		 4.1 fin
+
+*************************************************
+## 18.05 (vendredi)
+
+- Partie 4.2 debut et fin
+		 4.3 debut et fin
+		 4.4 debut et fin
+
+*************************************************
+## 19.05 (samedidi)
+
+- Partie 5.1 debut et fin
+		 5.2 debut et fin
+		 6.1 debut
+
+*************************************************
+## 22.05 (mardi)
+
+- Partie 6.1 fin
+		 6.2 debut
+
+*************************************************
+## 25.05 (vendredi)
+
+- Partie mise en place des commentaire sur les hpp
+
+*************************************************
+## 26.05 (samedi)
+
+- Partie 6.2 "fin"
